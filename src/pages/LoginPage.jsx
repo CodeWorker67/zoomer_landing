@@ -1,0 +1,484 @@
+import { useEffect, useState, useCallback } from 'react';
+import { Helmet } from 'react-helmet-async';
+import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, ArrowLeft, KeyRound } from 'lucide-react';
+import useAuthStore from '@stores/authStore';
+import Button from '@components/ui/Button';
+import toast from 'react-hot-toast';
+import { ROUTES, GOOGLE_CLIENT_ID, TELEGRAM, BRAND_META } from '@utils/constants';
+
+const METHODS = [
+  {
+    id: 'email',
+    label: 'Почта',
+    icon: (
+      <svg className="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" aria-hidden="true">
+        <rect x="2" y="4" width="20" height="16" rx="2" />
+        <path d="m2 7 10 7 10-7" />
+      </svg>
+    ),
+  },
+  {
+    id: 'telegram',
+    label: 'Telegram',
+    icon: (
+      <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+      </svg>
+    ),
+  },
+  {
+    id: 'google',
+    label: 'Google',
+    icon: (
+      <svg className="w-7 h-7" viewBox="0 0 24 24" aria-hidden="true">
+        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
+        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+      </svg>
+    ),
+  },
+];
+
+export default function LoginPage() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const redirect = searchParams.get('redirect') || ROUTES.ONBOARDING;
+  const { isAuthenticated, sendCode, verifyCode, resendCode, googleLogin, checkEmail, passwordLogin, isLoading } = useAuthStore();
+  const [step, setStep] = useState('select');
+  const [email, setEmail] = useState('');
+  const [code, setCode] = useState('');
+  const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (isAuthenticated) navigate(redirect);
+  }, [isAuthenticated, navigate, redirect]);
+
+  const handleGoogleSuccess = useCallback(async (credential) => {
+    const result = await googleLogin(credential);
+    if (result.success) {
+      toast.success('Вы вошли через Google!');
+      navigate(redirect);
+    } else {
+      toast.error(result.error);
+    }
+  }, [googleLogin, navigate, redirect]);
+
+  const backToSelect = () => {
+    setStep('select');
+    setCode('');
+    setPassword('');
+  };
+
+  const handleEmailContinue = async (e) => {
+    e.preventDefault();
+    const check = await checkEmail(email);
+    if (!check.success) {
+      toast.error(check.error);
+      return;
+    }
+    if (check.hasPassword) {
+      setStep('password');
+      return;
+    }
+    const result = await sendCode(email);
+    if (result.success) {
+      toast.success('Код отправлен на почту');
+      setStep('code');
+    } else {
+      toast.error(result.error);
+    }
+  };
+
+  const handlePasswordLogin = async (e) => {
+    e.preventDefault();
+    const result = await passwordLogin(email, password);
+    if (result.success) {
+      toast.success('Вы вошли!');
+      navigate(redirect);
+    } else {
+      toast.error(result.error);
+    }
+  };
+
+  const handleSwitchToCode = async () => {
+    const result = await sendCode(email);
+    if (result.success) {
+      toast.success('Код отправлен на почту');
+      setStep('code');
+    } else {
+      toast.error(result.error);
+    }
+  };
+
+  const handleVerify = async (e) => {
+    e.preventDefault();
+    const result = await verifyCode(email, code);
+    if (result.success) {
+      toast.success('Вы вошли!');
+      navigate(redirect);
+    } else {
+      toast.error(result.error);
+    }
+  };
+
+  const handleResend = async () => {
+    const result = await resendCode(email);
+    if (result.success) toast.success('Код отправлен повторно');
+    else toast.error(result.error);
+  };
+
+  const handleMethodSelect = (methodId, triggerGoogle) => {
+    if (methodId === 'email') {
+      setStep('email');
+      return;
+    }
+    if (methodId === 'telegram') {
+      window.open(TELEGRAM.BOT_URL, '_blank', 'noopener,noreferrer');
+      return;
+    }
+    if (methodId === 'google') {
+      triggerGoogle?.();
+    }
+  };
+
+  return (
+    <>
+      <Helmet><title>Вход — {BRAND_META}</title></Helmet>
+      <section className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-16 relative">
+        <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
+
+        <div className="relative w-full max-w-md mx-4">
+          <AnimatePresence mode="wait">
+            {step === 'select' && (
+              <MethodSelect
+                key="select"
+                onSelect={handleMethodSelect}
+                onGoogleSuccess={handleGoogleSuccess}
+              />
+            )}
+
+            {(step === 'email' || step === 'code' || step === 'password') && (
+              <EmailFlow
+                key="email-flow"
+                step={step}
+                email={email}
+                code={code}
+                password={password}
+                isLoading={isLoading}
+                onBack={backToSelect}
+                onEmailChange={setEmail}
+                onCodeChange={setCode}
+                onPasswordChange={setPassword}
+                onEmailContinue={handleEmailContinue}
+                onPasswordLogin={handlePasswordLogin}
+                onSwitchToCode={handleSwitchToCode}
+                onVerify={handleVerify}
+                onResend={handleResend}
+                onGoogleSuccess={handleGoogleSuccess}
+              />
+            )}
+          </AnimatePresence>
+
+          {step !== 'select' && (
+            <p className="text-center text-sm text-gray-500 mt-6">
+              Нет аккаунта? Он создастся автоматически при первом входе.
+            </p>
+          )}
+
+          <p className="text-center text-xs text-gray-500 mt-6">
+            Продолжая, вы соглашаетесь с{' '}
+            <Link to={ROUTES.TERMS} className="text-zoomer-neon hover:underline">условиями</Link>
+            {' '}и{' '}
+            <Link to={ROUTES.PRIVACY} className="text-zoomer-neon hover:underline">политикой конфиденциальности</Link>
+          </p>
+        </div>
+      </section>
+    </>
+  );
+}
+
+function MethodSelect({ onSelect, onGoogleSuccess }) {
+  const triggerGoogle = useGoogleAuth(onGoogleSuccess);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -20 }}
+      className="text-center"
+    >
+      <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Личный кабинет</h1>
+      <p className="text-gray-400 text-sm mb-8">Войдите или создайте аккаунт</p>
+
+      <p className="text-gray-400 text-sm sm:text-base mb-10 leading-relaxed">
+        Всего 2 шага — выбрать способ входа и получить подписку
+      </p>
+
+      <div className="flex items-start justify-center gap-6 sm:gap-10">
+        {METHODS.map((method, i) => (
+          <motion.button
+            key={method.id}
+            type="button"
+            initial={{ opacity: 0, y: 24, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            transition={{ delay: 0.08 * i, duration: 0.35, ease: 'easeOut' }}
+            whileHover={{ scale: 1.06 }}
+            whileTap={{ scale: 0.96 }}
+            onClick={() => onSelect(method.id, triggerGoogle)}
+            className="group flex flex-col items-center gap-3 focus:outline-none"
+          >
+            <span className="w-[4.5rem] h-[4.5rem] sm:w-20 sm:h-20 rounded-2xl border border-zoomer-neon/25 bg-zoomer-card/80 flex items-center justify-center text-white shadow-[0_0_24px_rgba(57,255,120,0.08)] transition-all duration-300 group-hover:border-zoomer-neon/60 group-hover:shadow-[0_0_32px_rgba(57,255,120,0.18)] group-hover:bg-zoomer-neon/5">
+              {method.icon}
+            </span>
+            <span className="text-sm text-gray-400 group-hover:text-white transition-colors">{method.label}</span>
+          </motion.button>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
+function EmailFlow({
+  step,
+  email,
+  code,
+  password,
+  isLoading,
+  onBack,
+  onEmailChange,
+  onCodeChange,
+  onPasswordChange,
+  onEmailContinue,
+  onPasswordLogin,
+  onSwitchToCode,
+  onVerify,
+  onResend,
+  onGoogleSuccess,
+}) {
+  const triggerGoogle = useGoogleAuth(onGoogleSuccess);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -16 }}
+    >
+      <button
+        type="button"
+        onClick={onBack}
+        className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm mb-6 mx-auto"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Другой способ входа
+      </button>
+
+      <div className="text-center mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Личный кабинет</h1>
+        <p className="text-gray-400 text-sm">Войдите или создайте аккаунт</p>
+      </div>
+
+      <div className="card-dark">
+        {step === 'email' ? (
+          <form onSubmit={onEmailContinue} className="space-y-4">
+            <div className="text-center mb-2">
+              <div className="w-14 h-14 rounded-2xl border border-zoomer-neon/30 bg-zoomer-neon/10 flex items-center justify-center mx-auto mb-4 text-zoomer-neon">
+                <Mail className="w-7 h-7" />
+              </div>
+              <h2 className="text-lg font-bold text-white mb-1">Вход по почте</h2>
+              <p className="text-gray-400 text-sm">Введите email для входа</p>
+            </div>
+
+            <div>
+              <label htmlFor="login-email" className="block text-sm text-gray-400 mb-1.5">Электронная почта</label>
+              <input
+                id="login-email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => onEmailChange(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl bg-zoomer-dark border border-zoomer-border text-white text-sm focus:border-zoomer-neon focus:outline-none"
+                placeholder="name@example.com"
+                autoFocus
+              />
+            </div>
+
+            <Button type="submit" disabled={isLoading} className={`w-full text-sm ${isLoading ? 'opacity-50' : ''}`}>
+              {isLoading ? 'Проверяем...' : 'Продолжить →'}
+            </Button>
+
+            <OrDivider />
+            <AlternateMethods triggerGoogle={triggerGoogle} />
+          </form>
+        ) : step === 'password' ? (
+          <form onSubmit={onPasswordLogin} className="space-y-4">
+            <div className="text-center mb-2">
+              <div className="w-14 h-14 rounded-2xl border border-zoomer-neon/30 bg-zoomer-neon/10 flex items-center justify-center mx-auto mb-4 text-zoomer-neon">
+                <KeyRound className="w-7 h-7" />
+              </div>
+              <h2 className="text-lg font-bold text-white mb-1">Вход в аккаунт</h2>
+              <p className="text-gray-400 text-sm">{email}</p>
+            </div>
+
+            <div>
+              <label htmlFor="login-password" className="block text-sm text-gray-400 mb-1.5">Пароль</label>
+              <input
+                id="login-password"
+                type="password"
+                required
+                minLength={4}
+                value={password}
+                onChange={(e) => onPasswordChange(e.target.value)}
+                className="w-full px-4 py-3 rounded-xl bg-zoomer-dark border border-zoomer-border text-white text-sm focus:border-zoomer-neon focus:outline-none"
+                placeholder="Ваш пароль"
+                autoFocus
+                autoComplete="current-password"
+              />
+            </div>
+
+            <Button type="submit" disabled={isLoading || password.length < 4} className="w-full text-sm">
+              {isLoading ? 'Входим...' : 'Войти →'}
+            </Button>
+
+            <button
+              type="button"
+              onClick={onSwitchToCode}
+              disabled={isLoading}
+              className="w-full text-center text-sm text-gray-500 hover:text-zoomer-neon"
+            >
+              Забыли пароль? <span className="text-zoomer-neon">Войти по коду</span>
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={onVerify} className="space-y-4">
+            <div className="text-center mb-2">
+              <div className="w-14 h-14 rounded-2xl border border-zoomer-neon/30 bg-zoomer-neon/10 flex items-center justify-center mx-auto mb-4 text-zoomer-neon">
+                <Mail className="w-7 h-7" />
+              </div>
+              <h2 className="text-lg font-bold text-white mb-1">Введите код</h2>
+              <p className="text-gray-400 text-sm">
+                Код отправлен на <span className="text-white">{email}</span>
+              </p>
+            </div>
+
+            <input
+              type="text"
+              inputMode="numeric"
+              required
+              value={code}
+              onChange={(e) => onCodeChange(e.target.value.replace(/\D/g, ''))}
+              className="w-full px-4 py-4 rounded-xl bg-zoomer-dark border border-zoomer-border text-white text-center text-2xl tracking-widest focus:border-zoomer-neon focus:outline-none"
+              placeholder="000000"
+              maxLength={6}
+              autoFocus
+            />
+
+            <Button type="submit" disabled={isLoading || code.length !== 6} className="w-full text-sm">
+              {isLoading ? 'Проверяем...' : 'Войти →'}
+            </Button>
+
+            <button type="button" onClick={onResend} className="w-full text-center text-sm text-gray-500 hover:text-zoomer-neon">
+              Отправить код повторно
+            </button>
+
+            <OrDivider />
+            <AlternateMethods triggerGoogle={triggerGoogle} compact />
+          </form>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+function OrDivider() {
+  return (
+    <div className="flex items-center gap-3 py-1">
+      <div className="flex-1 h-px bg-zoomer-border" />
+      <span className="text-gray-500 text-xs">или</span>
+      <div className="flex-1 h-px bg-zoomer-border" />
+    </div>
+  );
+}
+
+function AlternateMethods({ triggerGoogle, compact = false }) {
+  return (
+    <div className={`space-y-3 ${compact ? 'pt-1' : ''}`}>
+      <button
+        type="button"
+        onClick={triggerGoogle}
+        className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl border border-zoomer-border bg-zoomer-dark hover:border-gray-500 transition-all text-sm font-medium text-white"
+      >
+        <GoogleIcon />
+        Продолжить с Google
+      </button>
+      <a
+        href={TELEGRAM.BOT_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl border border-zoomer-border bg-zoomer-dark hover:border-gray-500 transition-all text-sm font-medium text-white"
+      >
+        <TelegramIcon />
+        Telegram
+      </a>
+    </div>
+  );
+}
+
+function GoogleIcon() {
+  return (
+    <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" aria-hidden="true">
+      <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" />
+      <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+      <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+      <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+    </svg>
+  );
+}
+
+function TelegramIcon() {
+  return (
+    <svg className="w-5 h-5 shrink-0" viewBox="0 0 24 24" fill="#229ED9" aria-hidden="true">
+      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
+    </svg>
+  );
+}
+
+function useGoogleAuth(onSuccess) {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const handleCredential = (response) => {
+      onSuccess(response.credential);
+    };
+
+    const initGoogle = () => {
+      if (window.google?.accounts?.id && GOOGLE_CLIENT_ID) {
+        window.google.accounts.id.initialize({
+          client_id: GOOGLE_CLIENT_ID,
+          callback: handleCredential,
+        });
+        setReady(true);
+      }
+    };
+
+    if (window.google?.accounts?.id) {
+      initGoogle();
+    } else {
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.async = true;
+      script.onload = initGoogle;
+      document.head.appendChild(script);
+    }
+  }, [onSuccess]);
+
+  return useCallback(() => {
+    if (!ready) {
+      toast.error('Google вход временно недоступен');
+      return;
+    }
+    window.google?.accounts?.id?.prompt();
+  }, [ready]);
+}

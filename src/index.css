@@ -1,0 +1,50 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Inter', sans-serif;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-zoomer-dark text-white;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply font-semibold px-6 py-3 rounded-btn transition-all duration-300;
+    background: linear-gradient(95deg, #12a85c 0%, #3cff7a 42%, #8fffab 78%, #7af0d4 100%);
+    color: #061208;
+  }
+  .btn-secondary {
+    @apply border-2 border-zoomer-neon text-zoomer-neon hover:bg-zoomer-neon hover:text-zoomer-dark font-semibold px-6 py-3 rounded-btn transition-all duration-300;
+  }
+  .btn-ghost {
+    @apply text-gray-300 hover:text-white hover:bg-white/10 font-medium px-4 py-2 rounded-lg transition-all duration-200;
+  }
+  .card-dark {
+    @apply bg-zoomer-card rounded-card border border-zoomer-border p-6 shadow-card;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(95deg, #12a85c 0%, #3cff7a 50%, #4ae8c4 100%);
+    background-size: 280% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: titleShimmer 6s ease-in-out infinite;
+  }
+  .bg-grid {
+    background-image:
+      linear-gradient(rgba(57, 255, 120, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(57, 255, 120, 0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .bg-radial-glow {
+    background: radial-gradient(ellipse at 50% 0%, rgba(57, 255, 120, 0.12) 0%, transparent 60%);
+  }
+}
