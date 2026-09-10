@@ -374,7 +374,7 @@ function TariffRenewalSection({ showHeader = true, showPaymentMethod = true }) {
               )}
               <div className="text-white font-semibold">{tariff.label}</div>
               <div className="text-gray-500 text-xs mt-0.5">
-                {tariff.id === '5000' ? 'Бессрочный доступ' : `Продление на ${tariff.label.toLowerCase()}`}
+                {`Продление на ${tariff.label.toLowerCase()}`}
               </div>
             </div>
             <div className="text-right shrink-0">

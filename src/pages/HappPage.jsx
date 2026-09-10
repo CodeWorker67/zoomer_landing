@@ -84,7 +84,7 @@ export default function HappPage() {
           <div className="space-y-4 text-gray-400">
             <p><strong className="text-white">7 дней</strong> — 99 ₽. Краткий период для знакомства с сервисом.</p>
             <p><strong className="text-white">30 / 90 / 180 дней</strong> — основные тарифы для одного и нескольких устройств. Дешевле при длинных сроках.</p>
-            <p><strong className="text-white">365 дней и «Навсегда»</strong> — максимальный срок для активного использования.</p>
+            <p><strong className="text-white">365 дней и 2 года</strong> — максимальный срок для активного использования.</p>
             <p className="text-gray-500 text-sm">Все тарифы — без автосписаний. Продление только вручную.</p>
           </div>
         </div>

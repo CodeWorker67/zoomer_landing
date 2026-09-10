@@ -1,8 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import { ROUTES, BRAND, BRAND_META } from '@utils/constants';
+import { getSiteHost } from '@utils/site';
 
 export default function TermsPage() {
+  const siteHost = getSiteHost();
+
   return (
     <>
       <Helmet><title>Пользовательское соглашение — {BRAND_META}</title></Helmet>
@@ -12,7 +15,7 @@ export default function TermsPage() {
           <div className="space-y-6 text-gray-400 text-sm leading-relaxed">
             <p>
               Настоящее Соглашение определяет условия использования сервиса {BRAND}
-              (Telegram-бот @zoomerskyvpn_bot и сайт landing) между Администрацией и Пользователем.
+              (Telegram-бот @zoomerskyvpn_bot и сайт {siteHost || '—'}) между Администрацией и Пользователем.
             </p>
             <h2 className="text-white font-semibold text-lg">1. Предмет соглашения</h2>
             <p>

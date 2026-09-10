@@ -31,7 +31,6 @@ export const BRAND_META = 'Зумерский ВПН';
 
 /** Тарифы Zoomer (из dct_price бота), от большего срока к меньшему */
 export const TARIFFS = [
-  { id: '5000', label: 'Навсегда', price: 4990, days: 5000, devices: 5, traffic: 'Безлимит' },
   { id: '730', label: '2 года', price: 3699, days: 730, devices: 5, traffic: 'Безлимит' },
   { id: '365', label: '365 дней', price: 2399, days: 365, devices: 5, traffic: 'Безлимит' },
   { id: '180', label: '180 дней', price: 1349, days: 180, devices: 5, traffic: 'Безлимит' },

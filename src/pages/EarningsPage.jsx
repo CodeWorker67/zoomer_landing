@@ -20,6 +20,7 @@ import { partnerApi } from '@services/api';
 import useAuthStore from '@stores/authStore';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
 import { BRAND, BRAND_META, ROUTES, TELEGRAM } from '@utils/constants';
+import { resolvePartnerSiteLink } from '@utils/site';
 
 function maskEmail(email) {
   if (!email || !email.includes('@')) return 'Пользователь';
@@ -110,8 +111,9 @@ export default function EarningsPage() {
   useEffect(() => {
     partnerApi.stats()
       .then(({ data: stats }) => {
-        setData(stats);
-        setMessage(defaultShareMessage(stats.site_link, stats.telegram_link));
+        const siteLink = resolvePartnerSiteLink(stats.site_link, stats.partner_code);
+        setData({ ...stats, site_link: siteLink });
+        setMessage(defaultShareMessage(siteLink, stats.telegram_link));
       })
       .catch(() => toast.error('Не удалось загрузить данные'))
       .finally(() => setLoading(false));

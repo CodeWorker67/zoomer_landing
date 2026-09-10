@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Copy, Check, TrendingUp, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { partnerApi } from '@services/api';
+import { resolvePartnerSiteLink } from '@utils/site';
 
 export default function ReferralCard() {
   const [link, setLink] = useState('');
@@ -10,7 +11,9 @@ export default function ReferralCard() {
 
   useEffect(() => {
     partnerApi.stats()
-      .then(({ data }) => setLink(data.site_link || ''))
+      .then(({ data }) => {
+        setLink(resolvePartnerSiteLink(data.site_link, data.partner_code));
+      })
       .catch(() => setLink(''))
       .finally(() => setLoading(false));
   }, []);
