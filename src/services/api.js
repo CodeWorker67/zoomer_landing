@@ -40,6 +40,8 @@ export const authApi = {
   checkEmail: (data) => api.post('/auth/check-email', data),
   passwordLogin: (data) => api.post('/auth/password-login', data),
   googleLogin: (data) => api.post('/auth/google', data),
+  phoneStart: (data) => api.post('/auth/phone/start', data),
+  phoneStatus: (requestId) => api.get(`/auth/phone/status/${requestId}`),
   me: () => api.get('/auth/me'),
   logout: () => api.post('/auth/logout'),
 };

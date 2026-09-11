@@ -106,6 +106,41 @@ const useAuthStore = create((set, get) => ({
     }
   },
 
+  startPhoneAuth: async (phone) => {
+    set({ isLoading: true });
+    try {
+      const { data } = await authApi.phoneStart({ phone, ...partnerPayload() });
+      set({ isLoading: false });
+      return { success: true, ...data };
+    } catch (error) {
+      set({ isLoading: false });
+      return {
+        success: false,
+        error: error.response?.data?.detail || 'Не удалось начать авторизацию по телефону',
+      };
+    }
+  },
+
+  checkPhoneAuth: async (requestId) => {
+    try {
+      const response = await authApi.phoneStatus(requestId);
+      const { data } = response;
+      if (data.status === 'pending') {
+        return { success: true, pending: true };
+      }
+      const jwt = data.token || response.headers['x-auth-token'] || response.headers['X-Auth-Token'];
+      get()._setAuth(data.user, jwt);
+      return { success: true, pending: false };
+    } catch (error) {
+      const detail = error.response?.data?.detail;
+      const statusValue = error.response?.data?.status;
+      if (statusValue && statusValue !== 'pending') {
+        return { success: false, error: detail || 'Авторизация не удалась' };
+      }
+      return { success: false, error: detail || 'Ошибка проверки статуса' };
+    }
+  },
+
   logout: async () => {
     try { await authApi.logout(); } catch { /* ignore */ }
     localStorage.removeItem('landing_user');

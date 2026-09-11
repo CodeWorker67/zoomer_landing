@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, ArrowLeft, KeyRound } from 'lucide-react';
+import { Mail, ArrowLeft, KeyRound, Phone } from 'lucide-react';
 import useAuthStore from '@stores/authStore';
 import Button from '@components/ui/Button';
 import toast from 'react-hot-toast';
@@ -18,6 +18,11 @@ const METHODS = [
         <path d="m2 7 10 7 10-7" />
       </svg>
     ),
+  },
+  {
+    id: 'phone',
+    label: 'Телефон',
+    icon: <Phone className="w-7 h-7" strokeWidth={1.75} aria-hidden="true" />,
   },
   {
     id: 'telegram',
@@ -46,11 +51,24 @@ export default function LoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const redirect = searchParams.get('redirect') || ROUTES.ONBOARDING;
-  const { isAuthenticated, sendCode, verifyCode, resendCode, googleLogin, checkEmail, passwordLogin, isLoading } = useAuthStore();
+  const {
+    isAuthenticated,
+    sendCode,
+    verifyCode,
+    resendCode,
+    googleLogin,
+    checkEmail,
+    passwordLogin,
+    startPhoneAuth,
+    checkPhoneAuth,
+    isLoading,
+  } = useAuthStore();
   const [step, setStep] = useState('select');
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  const [phoneSession, setPhoneSession] = useState(null);
 
   useEffect(() => {
     if (isAuthenticated) navigate(redirect);
@@ -70,6 +88,7 @@ export default function LoginPage() {
     setStep('select');
     setCode('');
     setPassword('');
+    setPhoneSession(null);
   };
 
   const handleEmailContinue = async (e) => {
@@ -130,9 +149,39 @@ export default function LoginPage() {
     else toast.error(result.error);
   };
 
+  const handlePhoneContinue = async (e) => {
+    e.preventDefault();
+    const digits = phone.replace(/\D/g, '');
+    if (digits.length < 10) {
+      toast.error('Введите корректный номер телефона');
+      return;
+    }
+    const result = await startPhoneAuth(phone);
+    if (!result.success) {
+      toast.error(result.error);
+      return;
+    }
+    setPhoneSession({
+      requestId: result.request_id,
+      callToPhone: result.call_to_phone,
+      callToPhoneDisplay: result.call_to_phone_display,
+      timeout: result.timeout || 180,
+    });
+    setStep('phone-call');
+  };
+
+  const handlePhoneAuthComplete = useCallback(async () => {
+    toast.success('Вы вошли по телефону!');
+    navigate(redirect);
+  }, [navigate, redirect]);
+
   const handleMethodSelect = (methodId, triggerGoogle) => {
     if (methodId === 'email') {
       setStep('email');
+      return;
+    }
+    if (methodId === 'phone') {
+      setStep('phone');
       return;
     }
     if (methodId === 'telegram') {
@@ -178,6 +227,25 @@ export default function LoginPage() {
                 onVerify={handleVerify}
                 onResend={handleResend}
                 onGoogleSuccess={handleGoogleSuccess}
+                onSelectPhone={() => setStep('phone')}
+              />
+            )}
+
+            {(step === 'phone' || step === 'phone-call') && (
+              <PhoneFlow
+                key="phone-flow"
+                step={step}
+                phone={phone}
+                phoneSession={phoneSession}
+                isLoading={isLoading}
+                onBack={backToSelect}
+                onPhoneChange={setPhone}
+                onPhoneContinue={handlePhoneContinue}
+                onRetry={() => setStep('phone')}
+                checkPhoneAuth={checkPhoneAuth}
+                onSuccess={handlePhoneAuthComplete}
+                onGoogleSuccess={handleGoogleSuccess}
+                onSelectEmail={() => setStep('email')}
               />
             )}
           </AnimatePresence>
@@ -217,7 +285,7 @@ function MethodSelect({ onSelect, onGoogleSuccess }) {
         Всего 2 шага — выбрать способ входа и получить подписку
       </p>
 
-      <div className="flex items-start justify-center gap-6 sm:gap-10">
+      <div className="flex flex-wrap items-start justify-center gap-5 sm:gap-8">
         {METHODS.map((method, i) => (
           <motion.button
             key={method.id}
@@ -257,6 +325,7 @@ function EmailFlow({
   onVerify,
   onResend,
   onGoogleSuccess,
+  onSelectPhone,
 }) {
   const triggerGoogle = useGoogleAuth(onGoogleSuccess);
 
@@ -310,7 +379,7 @@ function EmailFlow({
             </Button>
 
             <OrDivider />
-            <AlternateMethods triggerGoogle={triggerGoogle} />
+            <AlternateMethods triggerGoogle={triggerGoogle} onSelectPhone={onSelectPhone} />
           </form>
         ) : step === 'password' ? (
           <form onSubmit={onPasswordLogin} className="space-y-4">
@@ -392,6 +461,175 @@ function EmailFlow({
   );
 }
 
+function PhoneFlow({
+  step,
+  phone,
+  phoneSession,
+  isLoading,
+  onBack,
+  onPhoneChange,
+  onPhoneContinue,
+  onRetry,
+  checkPhoneAuth,
+  onSuccess,
+  onGoogleSuccess,
+  onSelectEmail,
+}) {
+  const triggerGoogle = useGoogleAuth(onGoogleSuccess);
+  const [secondsLeft, setSecondsLeft] = useState(phoneSession?.timeout || 180);
+  const [waiting, setWaiting] = useState(false);
+
+  useEffect(() => {
+    if (step !== 'phone-call' || !phoneSession?.requestId) return undefined;
+    setSecondsLeft(phoneSession.timeout || 180);
+    setWaiting(true);
+    let cancelled = false;
+
+    const poll = async () => {
+      const result = await checkPhoneAuth(phoneSession.requestId);
+      if (cancelled) return;
+      if (result.success && !result.pending) {
+        setWaiting(false);
+        onSuccess();
+        return;
+      }
+      if (!result.success && !result.pending) {
+        setWaiting(false);
+        toast.error(result.error);
+      }
+    };
+
+    poll();
+    const pollInterval = setInterval(poll, 3000);
+    const timerInterval = setInterval(() => {
+      setSecondsLeft((prev) => (prev > 0 ? prev - 1 : 0));
+    }, 1000);
+
+    return () => {
+      cancelled = true;
+      clearInterval(pollInterval);
+      clearInterval(timerInterval);
+    };
+  }, [step, phoneSession, checkPhoneAuth, onSuccess]);
+
+  const formatTimer = (total) => {
+    const minutes = Math.floor(total / 60);
+    const seconds = total % 60;
+    return `${minutes}:${String(seconds).padStart(2, '0')}`;
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -16 }}
+    >
+      <button
+        type="button"
+        onClick={onBack}
+        className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm mb-6 mx-auto"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        Другой способ входа
+      </button>
+
+      <div className="text-center mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Личный кабинет</h1>
+        <p className="text-gray-400 text-sm">Войдите или создайте аккаунт</p>
+      </div>
+
+      <div className="card-dark">
+        {step === 'phone' ? (
+          <form onSubmit={onPhoneContinue} className="space-y-4">
+            <div className="text-center mb-2">
+              <div className="w-14 h-14 rounded-2xl border border-zoomer-neon/30 bg-zoomer-neon/10 flex items-center justify-center mx-auto mb-4 text-zoomer-neon">
+                <Phone className="w-7 h-7" />
+              </div>
+              <h2 className="text-lg font-bold text-white mb-1">Вход по телефону</h2>
+              <p className="text-gray-400 text-sm">Введите номер для подтверждения звонком</p>
+            </div>
+
+            <div>
+              <label htmlFor="login-phone" className="block text-sm text-gray-400 mb-1.5">Номер телефона</label>
+              <input
+                id="login-phone"
+                type="tel"
+                required
+                value={phone}
+                onChange={(e) => onPhoneChange(formatPhoneInput(e.target.value))}
+                className="w-full px-4 py-3 rounded-xl bg-zoomer-dark border border-zoomer-border text-white text-sm focus:border-zoomer-neon focus:outline-none"
+                placeholder="+7 (999) 123-45-67"
+                autoFocus
+              />
+            </div>
+
+            <Button type="submit" disabled={isLoading} className={`w-full text-sm ${isLoading ? 'opacity-50' : ''}`}>
+              {isLoading ? 'Подготавливаем...' : 'Продолжить →'}
+            </Button>
+
+            <OrDivider />
+            <AlternateMethods triggerGoogle={triggerGoogle} onSelectEmail={onSelectEmail} />
+          </form>
+        ) : (
+          <div className="space-y-4">
+            <div className="text-center mb-2">
+              <div className="w-14 h-14 rounded-2xl border border-zoomer-neon/30 bg-zoomer-neon/10 flex items-center justify-center mx-auto mb-4 text-zoomer-neon">
+                <Phone className="w-7 h-7" />
+              </div>
+              <h2 className="text-lg font-bold text-white mb-1">Позвоните для входа</h2>
+              <p className="text-gray-400 text-sm">
+                С номера <span className="text-white">{phone}</span>
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-zoomer-neon/30 bg-zoomer-neon/5 px-4 py-5 text-center">
+              <p className="text-xs uppercase tracking-wide text-gray-400 mb-2">Позвоните на номер</p>
+              <a
+                href={`tel:${phoneSession?.callToPhone || ''}`}
+                className="text-2xl sm:text-3xl font-bold text-zoomer-neon hover:underline"
+              >
+                {phoneSession?.callToPhoneDisplay || phoneSession?.callToPhone}
+              </a>
+              <p className="text-gray-500 text-xs mt-3">
+                Звонок сбросится автоматически. Поднимать трубку не нужно.
+              </p>
+            </div>
+
+            <div className="text-center text-sm text-gray-400">
+              {waiting ? (
+                <span>Ожидаем звонок... {formatTimer(secondsLeft)}</span>
+              ) : (
+                <span>Время ожидания истекло</span>
+              )}
+            </div>
+
+            {!waiting && (
+              <Button type="button" onClick={onRetry} className="w-full text-sm">
+                Попробовать снова
+              </Button>
+            )}
+          </div>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+function formatPhoneInput(value) {
+  const digits = value.replace(/\D/g, '').slice(0, 11);
+  if (!digits) return '';
+  let normalized = digits;
+  if (normalized.startsWith('8')) normalized = `7${normalized.slice(1)}`;
+  if (!normalized.startsWith('7')) normalized = `7${normalized}`;
+  const rest = normalized.slice(1);
+  let out = '+7';
+  if (rest.length > 0) out += ` (${rest.slice(0, 3)}`;
+  if (rest.length >= 3) out += `) ${rest.slice(3, 6)}`;
+  if (rest.length >= 6) out += `-${rest.slice(6, 8)}`;
+  if (rest.length >= 8) out += `-${rest.slice(8, 10)}`;
+  return out;
+}
+
 function OrDivider() {
   return (
     <div className="flex items-center gap-3 py-1">
@@ -402,9 +640,29 @@ function OrDivider() {
   );
 }
 
-function AlternateMethods({ triggerGoogle, compact = false }) {
+function AlternateMethods({ triggerGoogle, compact = false, onSelectPhone, onSelectEmail }) {
   return (
     <div className={`space-y-3 ${compact ? 'pt-1' : ''}`}>
+      {onSelectEmail && (
+        <button
+          type="button"
+          onClick={onSelectEmail}
+          className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl border border-zoomer-border bg-zoomer-dark hover:border-gray-500 transition-all text-sm font-medium text-white"
+        >
+          <Mail className="w-5 h-5 shrink-0 text-zoomer-neon" />
+          Продолжить с почтой
+        </button>
+      )}
+      {onSelectPhone && (
+        <button
+          type="button"
+          onClick={onSelectPhone}
+          className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl border border-zoomer-border bg-zoomer-dark hover:border-gray-500 transition-all text-sm font-medium text-white"
+        >
+          <Phone className="w-5 h-5 shrink-0 text-zoomer-neon" />
+          Продолжить с телефоном
+        </button>
+      )}
       <button
         type="button"
         onClick={triggerGoogle}
