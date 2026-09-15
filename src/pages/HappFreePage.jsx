@@ -5,7 +5,8 @@ import FaqSection from '@components/sections/FaqSection';
 import CtaBlock from '@components/sections/CtaBlock';
 import ComparisonTable from '@components/sections/ComparisonTable';
 import Button from '@components/ui/Button';
-import { BRAND, BRAND_META, ROUTES, TELEGRAM } from '@utils/constants';
+import { BRAND, BRAND_META, ROUTES } from '@utils/constants';
+import { buildTelegramBotUrl } from '@utils/botLink';
 
 const FAQ = [
   { q: 'Что такое пробная подписка Happ?', a: 'Пробная подписка — бесплатный доступ к VPN для Happ без оплаты и без привязки карты. Ключ выдаётся сразу после регистрации.' },
@@ -96,7 +97,7 @@ export default function HappFreePage() {
       <section className="py-16 bg-zoomer-card/20 text-center px-4">
         <h2 className="text-xl font-bold text-white mb-4">Бесплатная подписка через Telegram</h2>
         <p className="text-gray-400 mb-6">Хапп подписка бесплатно — получите ключ прямо в боте</p>
-        <a href={TELEGRAM.BOT_URL} target="_blank" rel="noopener noreferrer">
+        <a href={buildTelegramBotUrl()} target="_blank" rel="noopener noreferrer">
           <Button variant="secondary">Открыть Telegram бот</Button>
         </a>
       </section>

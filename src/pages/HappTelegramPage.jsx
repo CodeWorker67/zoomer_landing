@@ -2,7 +2,8 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import FaqSection from '@components/sections/FaqSection';
 import Button from '@components/ui/Button';
-import { BRAND, BRAND_META, ROUTES, TELEGRAM } from '@utils/constants';
+import { BRAND, BRAND_META, ROUTES } from '@utils/constants';
+import { buildTelegramBotUrl } from '@utils/botLink';
 
 const STEPS = [
   { title: 'Откройте бота', desc: 'Telegram-бот Зумерский VPN → «Старт»' },
@@ -42,7 +43,7 @@ export default function HappTelegramPage() {
             Telegram-бот открывает мини-приложение, где есть всё то же, что в личном кабинете —
             ключ, подписка, оплата и устройства. Пробный доступ без карты.
           </p>
-          <a href={TELEGRAM.BOT_URL} target="_blank" rel="noopener noreferrer">
+          <a href={buildTelegramBotUrl()} target="_blank" rel="noopener noreferrer">
             <Button className="px-10">Открыть Telegram бот</Button>
           </a>
         </div>
@@ -105,7 +106,7 @@ export default function HappTelegramPage() {
       </section>
 
       <section className="py-16 bg-zoomer-card/20 text-center px-4">
-        <a href={TELEGRAM.BOT_URL} target="_blank" rel="noopener noreferrer">
+        <a href={buildTelegramBotUrl()} target="_blank" rel="noopener noreferrer">
           <Button className="px-10">Открыть бота в Telegram</Button>
         </a>
         <p className="text-gray-400 mt-6 text-sm">

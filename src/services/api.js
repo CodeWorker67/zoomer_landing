@@ -42,6 +42,8 @@ export const authApi = {
   googleLogin: (data) => api.post('/auth/google', data),
   phoneStart: (data) => api.post('/auth/phone/start', data),
   phoneStatus: (requestId) => api.get(`/auth/phone/status/${requestId}`),
+  whatsappConfig: () => api.get('/auth/whatsapp/config'),
+  whatsappVerifyCode: (data) => api.post('/auth/whatsapp/verify-code', data),
   me: () => api.get('/auth/me'),
   logout: () => api.post('/auth/logout'),
 };

@@ -5,7 +5,8 @@ import PricingCards from '@components/sections/PricingCards';
 import FaqSection from '@components/sections/FaqSection';
 import CtaBlock from '@components/sections/CtaBlock';
 import Button from '@components/ui/Button';
-import { BRAND, BRAND_META, HOME_TARIFFS, ROUTES, SERVERS, TELEGRAM } from '@utils/constants';
+import { BRAND, BRAND_META, HOME_TARIFFS, ROUTES, SERVERS } from '@utils/constants';
+import { buildTelegramBotUrl } from '@utils/botLink';
 
 const FAQ = [
   { q: 'Что такое ключ и подписка для INCY (Инси)?', a: 'INCY — клиент. Зумерский VPN выдаёт ключ и подписку для импорта. Ключ — способ подключения, подписка — оплаченный период.' },
@@ -126,7 +127,7 @@ export default function IncyVpnPage() {
       <section className="py-16 bg-zoomer-card/20 text-center px-4">
         <h2 className="text-xl font-bold text-white mb-4">Доступ для INCY через Telegram</h2>
         <p className="text-gray-400 mb-6 text-sm">Получите ключ, ссылку и QR прямо в боте — без регистрации на сайте.</p>
-        <a href={TELEGRAM.BOT_URL} target="_blank" rel="noopener noreferrer">
+        <a href={buildTelegramBotUrl()} target="_blank" rel="noopener noreferrer">
           <Button variant="secondary">Открыть Telegram бот</Button>
         </a>
       </section>

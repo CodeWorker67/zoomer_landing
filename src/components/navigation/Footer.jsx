@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Shield } from 'lucide-react';
-import { BRAND, ROUTES, TELEGRAM } from '@utils/constants';
+import { BRAND, ROUTES } from '@utils/constants';
+import { buildTelegramBotUrl } from '@utils/botLink';
 
 const footerLinks = [
   { path: ROUTES.HAPP, label: 'Подписка' },
@@ -43,7 +44,7 @@ export default function Footer() {
               <li><Link to={ROUTES.PRIVACY} className="text-gray-400 hover:text-white text-sm">Политика конфиденциальности</Link></li>
               <li><Link to={ROUTES.TERMS} className="text-gray-400 hover:text-white text-sm">Условия использования</Link></li>
             </ul>
-            <a href={TELEGRAM.BOT_URL} target="_blank" rel="noopener noreferrer" className="inline-block mt-4 text-zoomer-neon text-sm hover:underline">
+            <a href={buildTelegramBotUrl()} target="_blank" rel="noopener noreferrer" className="inline-block mt-4 text-zoomer-neon text-sm hover:underline">
               Telegram бот
             </a>
           </div>

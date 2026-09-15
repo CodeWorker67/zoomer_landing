@@ -31,6 +31,7 @@ import {
   PAYMENT_METHODS,
   DOWNLOAD_LINKS,
 } from '@utils/constants';
+import { buildTelegramBotUrl } from '@utils/botLink';
 
 const RENEWAL_TARIFFS = TARIFFS;
 
@@ -440,7 +441,7 @@ function SupportTab() {
           Управляйте подпиской и получайте ключи прямо в боте.
         </p>
         <a
-          href={TELEGRAM.BOT_URL}
+          href={buildTelegramBotUrl()}
           target="_blank"
           rel="noopener noreferrer"
           className="text-zoomer-neon text-sm hover:underline"

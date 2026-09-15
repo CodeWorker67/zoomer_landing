@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { authApi, AUTH_TOKEN_STORAGE_KEY } from '@services/api';
-import { partnerPayload } from '@utils/partner';
+import { attributionPayload } from '@utils/partner';
 
 const useAuthStore = create((set, get) => ({
   user: null,
@@ -34,7 +34,7 @@ const useAuthStore = create((set, get) => ({
   sendCode: async (email) => {
     set({ isLoading: true });
     try {
-      const { data } = await authApi.sendCode({ email, ...partnerPayload() });
+      const { data } = await authApi.sendCode({ email, ...attributionPayload() });
       set({ isLoading: false });
       return { success: true, email: data.email };
     } catch (error) {
@@ -95,7 +95,7 @@ const useAuthStore = create((set, get) => ({
   googleLogin: async (credential) => {
     set({ isLoading: true });
     try {
-      const response = await authApi.googleLogin({ credential, ...partnerPayload() });
+      const response = await authApi.googleLogin({ credential, ...attributionPayload() });
       const { data } = response;
       const jwt = data.token || response.headers['x-auth-token'] || response.headers['X-Auth-Token'];
       get()._setAuth(data.user, jwt);
@@ -109,7 +109,7 @@ const useAuthStore = create((set, get) => ({
   startPhoneAuth: async (phone) => {
     set({ isLoading: true });
     try {
-      const { data } = await authApi.phoneStart({ phone, ...partnerPayload() });
+      const { data } = await authApi.phoneStart({ phone, ...attributionPayload() });
       set({ isLoading: false });
       return { success: true, ...data };
     } catch (error) {
@@ -138,6 +138,32 @@ const useAuthStore = create((set, get) => ({
         return { success: false, error: detail || 'Авторизация не удалась' };
       }
       return { success: false, error: detail || 'Ошибка проверки статуса' };
+    }
+  },
+
+  fetchWhatsAppConfig: async () => {
+    try {
+      const { data } = await authApi.whatsappConfig();
+      return { success: true, ...data };
+    } catch {
+      return { success: false, enabled: false, bot_url: null, code_ttl_seconds: 180 };
+    }
+  },
+
+  verifyWhatsAppCode: async (code) => {
+    set({ isLoading: true });
+    try {
+      const response = await authApi.whatsappVerifyCode({ code, ...attributionPayload() });
+      const { data } = response;
+      const jwt = data.token || response.headers['x-auth-token'] || response.headers['X-Auth-Token'];
+      get()._setAuth(data.user, jwt);
+      return { success: true };
+    } catch (error) {
+      set({ isLoading: false });
+      return {
+        success: false,
+        error: error.response?.data?.detail || 'Неверный код',
+      };
     }
   },
 

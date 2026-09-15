@@ -5,7 +5,8 @@ import PageHero from '@components/sections/PageHero';
 import FaqSection from '@components/sections/FaqSection';
 import CtaBlock from '@components/sections/CtaBlock';
 import Button from '@components/ui/Button';
-import { BRAND, BRAND_META, DOWNLOAD_LINKS, ROUTES, TELEGRAM } from '@utils/constants';
+import { BRAND, BRAND_META, DOWNLOAD_LINKS, ROUTES } from '@utils/constants';
+import { buildTelegramBotUrl } from '@utils/botLink';
 
 const FAQ = [
   { q: 'Где безопасно скачать Happ VPN?', a: 'Только из официальных магазинов: App Store для iPhone и macOS, Google Play для Android. APK — на GitHub разработчика.' },
@@ -92,7 +93,7 @@ export default function HappDownloadPage() {
           <p className="text-gray-400 leading-relaxed mb-4">
             Зарегистрируйтесь на Зумерский VPN — по email (код придёт на почту) или через Google.
             Также можно подключиться через{' '}
-            <a href={TELEGRAM.BOT_URL} target="_blank" rel="noopener noreferrer" className="text-zoomer-neon hover:underline">Telegram-бота</a>.
+            <a href={buildTelegramBotUrl()} target="_blank" rel="noopener noreferrer" className="text-zoomer-neon hover:underline">Telegram-бота</a>.
           </p>
         </div>
       </section>
