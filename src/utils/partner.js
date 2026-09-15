@@ -62,13 +62,23 @@ export function getAttributionDomain() {
   return window.location.hostname.replace(/^www\./i, '');
 }
 
-/** Значение для t.me/...?start= */
+/** Telegram не передаёт точки в start — заменяем на _. */
+export function formatStartForTelegram(value) {
+  const s = String(value ?? '').trim();
+  if (!s) return 'site';
+  return s.replace(/\./g, '_').slice(0, 64);
+}
+
+/** Значение для t.me/...?start= (всегда непустое). */
 export function getBotStartParam() {
+  if (typeof window !== 'undefined') {
+    capturePartnerFromUrl();
+  }
   const partner = getStoredPartnerRef();
-  if (partner) return `partner_${partner}`;
+  if (partner) return formatStartForTelegram(`partner_${partner}`);
   const stamp = getStoredStamp();
-  if (stamp) return stamp;
-  return getAttributionDomain();
+  if (stamp) return formatStartForTelegram(stamp);
+  return formatStartForTelegram(getAttributionDomain() || 'site');
 }
 
 export function partnerPayload() {

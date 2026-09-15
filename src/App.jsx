@@ -93,9 +93,11 @@ function AppShell() {
 }
 
 function App() {
+  if (typeof window !== 'undefined') {
+    capturePartnerFromUrl();
+  }
   const { loadFromStorage } = useAuthStore();
   useEffect(() => {
-    capturePartnerFromUrl();
     loadFromStorage();
   }, [loadFromStorage]);
 
