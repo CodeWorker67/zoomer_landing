@@ -1,3 +1,5 @@
+import { normalizeAttributionSiteUrl } from '@utils/site';
+
 const PARTNER_STORAGE_KEY = 'landing_partner_ref';
 const STAMP_STORAGE_KEY = 'landing_attribution_stamp';
 
@@ -33,6 +35,13 @@ export function capturePartnerFromUrl() {
   if (stamp) {
     localStorage.setItem(STAMP_STORAGE_KEY, stamp);
   }
+
+  const href = window.location.href;
+  const normalizedHref = normalizeAttributionSiteUrl(href);
+  if (normalizedHref !== href) {
+    window.history.replaceState(window.history.state, '', normalizedHref);
+  }
+
   return partner;
 }
 

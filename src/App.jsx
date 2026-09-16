@@ -48,6 +48,14 @@ const OnboardingGate = ({ children }) => {
   return children;
 };
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+}
+
 function AppShell() {
   const location = useLocation();
   const hideFooter = location.pathname === ROUTES.LOGIN
@@ -56,6 +64,7 @@ function AppShell() {
 
   return (
     <div className="min-h-screen bg-zoomer-dark bg-grid flex flex-col">
+      <ScrollToTop />
       <Header />
       <main className={`flex-1 pt-16`}>
         <Suspense fallback={<div className="min-h-screen" />}>

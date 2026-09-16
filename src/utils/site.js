@@ -8,6 +8,20 @@ export function getSiteHost() {
   return window.location.host;
 }
 
+/** Убирает «/» перед query: https://site.com/?x=1 → https://site.com?x=1 */
+export function normalizeAttributionSiteUrl(url) {
+  if (!url) return url || '';
+  try {
+    const parsed = new URL(url);
+    if (parsed.pathname === '/' && parsed.search) {
+      return `${parsed.origin}${parsed.search}${parsed.hash}`;
+    }
+    return url;
+  } catch {
+    return String(url).replace('/?', '?');
+  }
+}
+
 /** Подставляет домен, с которого открыт сайт (для мультидоменного деплоя). */
 export function localizeSiteLink(url) {
   if (!url || typeof window === 'undefined') return url || '';
@@ -15,18 +29,17 @@ export function localizeSiteLink(url) {
     const parsed = new URL(url);
     parsed.protocol = window.location.protocol;
     parsed.host = window.location.host;
-    return parsed.toString();
+    return normalizeAttributionSiteUrl(parsed.toString());
   } catch {
-    return url;
+    return normalizeAttributionSiteUrl(url);
   }
 }
 
 export function buildPartnerSiteLink(partnerCode) {
   if (!partnerCode || typeof window === 'undefined') return '';
-  const code = String(partnerCode).startsWith('partner_')
-    ? String(partnerCode)
-    : `partner_${partnerCode}`;
-  return `${getSiteOrigin()}/?start=${code}`;
+  const raw = String(partnerCode).trim();
+  const id = raw.startsWith('partner_') ? raw.slice('partner_'.length) : raw;
+  return `${getSiteOrigin()}?partner=${encodeURIComponent(id)}`;
 }
 
 export function resolvePartnerSiteLink(apiLink, partnerCode) {
