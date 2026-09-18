@@ -27,6 +27,7 @@ const METHODS = [
   },
   {
     id: 'whatsapp',
+    hiddenFromSelect: true,
     label: 'WhatsApp',
     icon: (
       <svg className="w-7 h-7" viewBox="0 0 24 24" fill="#25D366" aria-hidden="true">
@@ -337,7 +338,7 @@ function MethodSelect({ onSelect, onGoogleSuccess }) {
       </p>
 
       <div className="flex flex-wrap items-start justify-center gap-5 sm:gap-8">
-        {METHODS.map((method, i) => (
+        {METHODS.filter((method) => !method.hiddenFromSelect).map((method, i) => (
           <motion.button
             key={method.id}
             type="button"

@@ -18,7 +18,7 @@ import {
   HelpCircle,
 } from 'lucide-react';
 import useAuthStore from '@stores/authStore';
-import { userApi } from '@services/api';
+import { authApi, userApi } from '@services/api';
 import Button from '@components/ui/Button';
 import toast from 'react-hot-toast';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
@@ -32,6 +32,11 @@ import {
   DOWNLOAD_LINKS,
 } from '@utils/constants';
 import { buildTelegramBotUrl } from '@utils/botLink';
+import {
+  RAFFLE_RULES_URL,
+  parseRaffleTicketCount,
+  tariffLabelWithTickets,
+} from '@utils/raffle';
 
 const RENEWAL_TARIFFS = TARIFFS;
 
@@ -99,13 +104,27 @@ export default function ProfilePage() {
 
 function OverviewTab({ onGoTab }) {
   const [sub, setSub] = useState(null);
+  const [raffleTickets, setRaffleTickets] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    userApi.subscription()
-      .then(({ data }) => setSub(data))
-      .catch(() => setSub(null))
-      .finally(() => setLoading(false));
+    let tickets = 0;
+    Promise.all([
+      userApi.subscription()
+        .then(({ data }) => {
+          setSub(data);
+          tickets = Math.max(tickets, parseRaffleTicketCount(data));
+        })
+        .catch(() => setSub(null)),
+      authApi.me()
+        .then(({ data }) => {
+          tickets = Math.max(tickets, parseRaffleTicketCount(data));
+        })
+        .catch(() => {}),
+    ]).finally(() => {
+      setRaffleTickets(tickets);
+      setLoading(false);
+    });
   }, []);
 
   const isActive = sub?.active || sub?.pro?.active;
@@ -123,6 +142,23 @@ function OverviewTab({ onGoTab }) {
 
   return (
     <div className="space-y-5">
+      <div className="card-dark border-purple-500/25 bg-gradient-to-br from-purple-500/[0.07] to-transparent">
+        <h2 className="text-lg font-bold text-white mb-2">Розыгрыш</h2>
+        <p className="text-gray-300 text-sm mb-3">
+          Ваше количество билетов:{' '}
+          <span className="text-white font-semibold">{raffleTickets} 🎟️</span>
+        </p>
+        <a
+          href={RAFFLE_RULES_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm text-zoomer-neon hover:underline inline-flex items-center gap-1"
+        >
+          Условия участия в конкурсе
+          <ExternalLink className="w-3.5 h-3.5 shrink-0" aria-hidden />
+        </a>
+      </div>
+
       <Link
         to={`${ROUTES.ONBOARDING}?setup=1`}
         className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-zoomer-neon-dim to-zoomer-neon hover:opacity-95 transition-opacity group"
@@ -373,7 +409,9 @@ function TariffRenewalSection({ showHeader = true, showPaymentMethod = true }) {
               {tariff.popular && (
                 <span className="text-xs font-semibold text-zoomer-neon mb-1 block">Популярный</span>
               )}
-              <div className="text-white font-semibold">{tariff.label}</div>
+              <div className="text-white font-semibold">
+                {tariffLabelWithTickets(tariff.label, tariff.days)}
+              </div>
               <div className="text-gray-500 text-xs mt-0.5">
                 {`Продление на ${tariff.label.toLowerCase()}`}
               </div>
@@ -400,9 +438,13 @@ function BuyTab() {
     <div className="space-y-4">
       <div className="card-dark">
         <h2 className="text-lg font-bold text-white mb-2">Продление подписки</h2>
-        <p className="text-gray-400 text-sm">
+        <p className="text-gray-400 text-sm mb-3">
           Выберите срок продления текущей подписки. VLESS-ключ и ссылка в Happ останутся прежними —
           меняется только оплаченный период доступа.
+        </p>
+        <p className="text-sm text-gray-300 leading-relaxed border-t border-zoomer-border pt-3">
+          🎟️Покупая любой тариф от 1 месяца, вы автоматически участвуете в розыгрыше более 100
+          призов🎟️
         </p>
       </div>
       <TariffRenewalSection showHeader={false} />

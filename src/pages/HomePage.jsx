@@ -4,6 +4,7 @@ import Button from '@components/ui/Button';
 import PricingCards from '@components/sections/PricingCards';
 import FaqSection from '@components/sections/FaqSection';
 import CtaBlock from '@components/sections/CtaBlock';
+import HomeRaffleSection from '@components/sections/HomeRaffleSection';
 import { BRAND, BRAND_META, HOME_FAQ, HOME_TARIFFS, ROUTES } from '@utils/constants';
 
 export default function HomePage() {
@@ -14,7 +15,9 @@ export default function HomePage() {
         <meta name="description" content={`Готовый VLESS ключ после регистрации. Подключение за 1 минуту. Тарифы ${BRAND_META}.`} />
       </Helmet>
 
-      <section className="py-16 md:py-24 relative">
+      <HomeRaffleSection />
+
+      <section className="py-16 md:py-24 relative border-t border-zoomer-border">
         <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
         <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
           <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">
