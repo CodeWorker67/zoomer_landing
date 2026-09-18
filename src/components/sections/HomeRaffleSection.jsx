@@ -78,14 +78,8 @@ export default function HomeRaffleSection() {
   }, []);
 
   return (
-    <section className="relative pt-10 pb-14 md:pt-14 md:pb-20 overflow-hidden">
-      <div
-        className="absolute inset-0 pointer-events-none opacity-90"
-        style={{
-          background:
-            'radial-gradient(ellipse 80% 50% at 50% -10%, rgba(168, 85, 247, 0.15) 0%, transparent 55%), radial-gradient(ellipse 60% 40% at 50% 100%, rgba(57, 255, 120, 0.08) 0%, transparent 50%)',
-        }}
-      />
+    <section className="relative pt-10 pb-14 md:pt-14 md:pb-20">
+      <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
       <div className="relative max-w-2xl mx-auto px-4 sm:px-6">
         <div className="flex justify-center mb-4">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide bg-purple-500/15 text-purple-200 border border-purple-400/25">
@@ -170,7 +164,7 @@ export default function HomeRaffleSection() {
               </span>
               Как получить билетики?
             </p>
-            <Quote>Покупай или продлевай подписку, а также дари VPN близким через бота.</Quote>
+            <Quote>Покупай или продлевай подписку, а также дари VPN близким на сайте или через бота.</Quote>
             <Quote>
               <strong className="text-gray-100">За каждый оплаченный месяц — 1 билетик:</strong>
             </Quote>
