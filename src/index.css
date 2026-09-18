@@ -47,4 +47,33 @@
   .bg-radial-glow {
     background: radial-gradient(ellipse at 50% 0%, rgba(57, 255, 120, 0.12) 0%, transparent 60%);
   }
+  .video-volume-pill-slider {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 3px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.35);
+  }
+  .video-volume-pill-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  .video-volume-pill-slider::-moz-range-thumb {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  .video-volume-pill-slider::-moz-range-track {
+    height: 3px;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.35);
+  }
 }

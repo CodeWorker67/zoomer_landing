@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronDown, Gift, Volume2 } from 'lucide-react';
+import { ChevronDown, Gift, Volume2, VolumeX } from 'lucide-react';
 import Button from '@components/ui/Button';
 import { ROUTES } from '@utils/constants';
+
+const INITIAL_VOLUME = 0.5;
 
 const PRIZES = [
   { places: '1–2 места', prize: 'iPhone 18 Pro', icon: '🏆' },
@@ -34,42 +36,87 @@ function Quote({ children, className = '' }) {
 
 export default function HomeRaffleSection() {
   const videoRef = useRef(null);
-  const userUnmutedRef = useRef(false);
+  const userAdjustedSoundRef = useRef(false);
   const [prizesOpen, setPrizesOpen] = useState(false);
-  const [soundOn, setSoundOn] = useState(false);
+  const [volume, setVolume] = useState(INITIAL_VOLUME);
+  const [muted, setMuted] = useState(true);
+
+  const applySoundToVideo = (video, nextVolume, nextMuted) => {
+    video.volume = nextVolume;
+    video.muted = nextMuted;
+  };
 
   const startPlayback = async (video) => {
-    video.muted = false;
+    applySoundToVideo(video, INITIAL_VOLUME, false);
     try {
       await video.play();
-      setSoundOn(true);
+      setVolume(INITIAL_VOLUME);
+      setMuted(false);
       return;
     } catch {
       /* Без жеста пользователя браузер не даёт autoplay со звуком */
     }
-    video.muted = true;
+    applySoundToVideo(video, INITIAL_VOLUME, true);
+    setVolume(INITIAL_VOLUME);
+    setMuted(true);
     await video.play().catch(() => {});
   };
 
-  const enableSound = async () => {
+  const unmuteWithPlay = async () => {
     const video = videoRef.current;
     if (!video) return;
-    userUnmutedRef.current = true;
-    video.muted = false;
+    userAdjustedSoundRef.current = true;
+    const nextVolume = volume > 0 ? volume : INITIAL_VOLUME;
+    applySoundToVideo(video, nextVolume, false);
     try {
       await video.play();
-      setSoundOn(true);
+      setVolume(nextVolume);
+      setMuted(false);
     } catch {
-      video.muted = true;
-      userUnmutedRef.current = false;
+      applySoundToVideo(video, nextVolume, true);
+      setMuted(true);
     }
+  };
+
+  const toggleMute = () => {
+    if (muted) {
+      unmuteWithPlay();
+      return;
+    }
+    userAdjustedSoundRef.current = true;
+    setMuted(true);
+    const video = videoRef.current;
+    if (video) video.muted = true;
+  };
+
+  const onVolumeChange = (event) => {
+    const nextVolume = Number(event.target.value) / 100;
+    userAdjustedSoundRef.current = true;
+    setVolume(nextVolume);
+    const video = videoRef.current;
+    if (!video) return;
+    video.volume = nextVolume;
+    if (nextVolume === 0) {
+      setMuted(true);
+      video.muted = true;
+      return;
+    }
+    video.muted = false;
+    setMuted(false);
+    video.play().catch(() => {});
   };
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+    video.volume = INITIAL_VOLUME;
+  }, []);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
     const onReady = () => {
-      if (userUnmutedRef.current) return;
+      if (userAdjustedSoundRef.current) return;
       startPlayback(video);
     };
     onReady();
@@ -88,7 +135,7 @@ export default function HomeRaffleSection() {
           </span>
         </div>
 
-        <div className="relative rounded-2xl overflow-hidden border border-zoomer-border shadow-[0_0_40px_rgba(168,85,247,0.12)] mb-8 w-full leading-[0]">
+        <div className="relative overflow-hidden rounded-2xl border border-zoomer-border shadow-[0_0_40px_rgba(168,85,247,0.12)] mb-8 w-full leading-[0]">
           <video
             ref={videoRef}
             className="w-full h-auto block"
@@ -99,18 +146,34 @@ export default function HomeRaffleSection() {
             playsInline
             preload="auto"
             aria-label="Розыгрыш призов Зумерский VPN для Happ"
-            onClick={enableSound}
           />
-          {!soundOn && (
+          <div
+            className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-10 inline-flex items-center gap-1 rounded-full bg-[#222]/95 px-1.5 py-1 shadow-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
             <button
               type="button"
-              onClick={enableSound}
-              className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 inline-flex items-center gap-2 px-3 py-2 rounded-full text-xs sm:text-sm font-semibold bg-black/75 text-white border border-white/20 backdrop-blur-sm hover:bg-black/90 transition-colors shadow-lg"
+              onClick={toggleMute}
+              className="shrink-0 text-white hover:opacity-80 transition-opacity"
+              aria-label={muted ? 'Включить звук' : 'Выключить звук'}
             >
-              <Volume2 className="w-4 h-4 text-zoomer-neon shrink-0" aria-hidden />
-              Включить звук
+              {muted ? (
+                <VolumeX className="w-[18px] h-[18px]" aria-hidden />
+              ) : (
+                <Volume2 className="w-[18px] h-[18px]" aria-hidden />
+              )}
             </button>
-          )}
+            <input
+              type="range"
+              min={0}
+              max={100}
+              step={1}
+              value={Math.round(volume * 100)}
+              onChange={onVolumeChange}
+              className="video-volume-pill-slider w-[34px] shrink-0 cursor-pointer"
+              aria-label="Громкость"
+            />
+          </div>
         </div>
 
         <div className="card-dark text-left space-y-4 border-purple-500/20">
