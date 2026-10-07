@@ -1,4 +1,5 @@
-import { AUTH_URL, SUPPORT_URL } from '@utils/constants';
+import { Link } from 'react-router-dom';
+import { ROUTES, SUPPORT_URL } from '@utils/constants';
 
 export default function CtaSection() {
   return (
@@ -36,9 +37,9 @@ export default function CtaSection() {
           Регистрация за минуту. Аккаунт создаётся автоматически.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <a className="cta-white" href={AUTH_URL}>
+          <Link className="cta-white" to={ROUTES.LOGIN}>
             Попробовать бесплатно
-          </a>
+          </Link>
           <a className="cta-ghost" href={SUPPORT_URL} target="_blank" rel="noopener noreferrer">
             Написать в поддержку
           </a>

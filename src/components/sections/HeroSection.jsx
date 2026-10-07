@@ -1,4 +1,5 @@
-import { AUTH_URL } from '@utils/constants';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '@utils/constants';
 import HeroIllustration from './HeroIllustration';
 
 export default function HeroSection() {
@@ -95,18 +96,18 @@ export default function HeroSection() {
           </p>
 
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-            <a className="btn-primary" href={AUTH_URL}>
+            <Link className="btn-primary" to={ROUTES.LOGIN}>
               Получить ключ
-            </a>
-            <a className="btn-outline" href={AUTH_URL}>
+            </Link>
+            <Link className="btn-outline" to={ROUTES.LOGIN}>
               Попробовать
-            </a>
+            </Link>
           </div>
           <p style={{ marginTop: 22, fontSize: 14, color: '#8A8A99' }}>
             1 день бесплатно · аккаунт создаётся автоматически ·{' '}
-            <a href={AUTH_URL} style={{ fontWeight: 700, color: '#0A6CFF' }}>
+            <Link to={ROUTES.LOGIN} style={{ fontWeight: 700, color: '#0A6CFF' }}>
               уже есть аккаунт?
-            </a>
+            </Link>
           </p>
         </div>
 

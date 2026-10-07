@@ -1,4 +1,5 @@
-import { AUTH_URL } from '@utils/constants';
+import { Link } from 'react-router-dom';
+import { ROUTES } from '@utils/constants';
 
 function Rub({ children, color = '#5A5A6A' }) {
   return (
@@ -40,9 +41,9 @@ export default function PricingSection() {
               <div style={{ fontSize: 26, fontWeight: 800, letterSpacing: -1.5, lineHeight: 1 }}>бесплатно</div>
               <div style={{ fontSize: 12, color: '#9A9AAA', marginTop: 3 }}>за 1 день</div>
             </div>
-            <a className="price-btn" href={AUTH_URL}>
+            <Link className="price-btn" to={ROUTES.LOGIN}>
               Попробовать
-            </a>
+            </Link>
           </div>
 
           <div className="price-row">
@@ -56,9 +57,9 @@ export default function PricingSection() {
               </div>
               <div style={{ fontSize: 12, color: '#9A9AAA', marginTop: 3 }}>в месяц</div>
             </div>
-            <a className="price-btn" href={AUTH_URL}>
+            <Link className="price-btn" to={ROUTES.LOGIN}>
               Выбрать
-            </a>
+            </Link>
           </div>
 
           <div className="price-row price-row--hot">
@@ -102,9 +103,9 @@ export default function PricingSection() {
                 −17%
               </span>
             </div>
-            <a className="price-btn price-btn--hot" href={AUTH_URL}>
+            <Link className="price-btn price-btn--hot" to={ROUTES.LOGIN}>
               Выбрать
-            </a>
+            </Link>
           </div>
 
           <div className="price-row">
@@ -132,9 +133,9 @@ export default function PricingSection() {
                 −33%
               </span>
             </div>
-            <a className="price-btn" href={AUTH_URL}>
+            <Link className="price-btn" to={ROUTES.LOGIN}>
               Выбрать
-            </a>
+            </Link>
           </div>
         </div>
         <div style={{ display: 'flex', gap: 20, justifyContent: 'center', flexWrap: 'wrap', marginTop: 20 }}>

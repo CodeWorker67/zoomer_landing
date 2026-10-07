@@ -23,7 +23,6 @@ export const TELEGRAM = {
   SUPPORT_URL: 'https://t.me/suppzoomvpn',
 };
 
-export const AUTH_URL = import.meta.env.VITE_AUTH_URL || ROUTES.LOGIN;
 export const SUPPORT_URL = import.meta.env.VITE_SUPPORT_URL || TELEGRAM.SUPPORT_URL;
 
 export const DOWNLOADS = {
