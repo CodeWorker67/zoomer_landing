@@ -1,5 +1,5 @@
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { RouteMeta } from '@components/seo/PageMeta';
 import PageHero from '@components/sections/PageHero';
 import FaqSection from '@components/sections/FaqSection';
 import CtaBlock from '@components/sections/CtaBlock';
@@ -21,7 +21,7 @@ const FAQ = [
 export default function HappFreePage() {
   return (
     <>
-      <Helmet><title>Пробная подписка Happ — {BRAND_META}</title></Helmet>
+      <RouteMeta path={ROUTES.HAPP_FREE} />
       <PageHero
         title="Пробная подписка Happ — бесплатный старт"
         subtitle="Оформите пробную подписку Happ за 1 минуту. Полноценный доступ без оплаты — карта не нужна."
@@ -32,12 +32,12 @@ export default function HappFreePage() {
 
       <section className="py-16 border-t border-zoomer-border">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-white mb-6">Что такое пробная подписка Happ</h2>
-          <p className="text-gray-400 leading-relaxed mb-4">
+          <h2 className="text-2xl font-bold text-happ-ink mb-6">Что такое пробная подписка Happ</h2>
+          <p className="text-happ-muted leading-relaxed mb-4">
             Пробная подписка Happ — доступ к VPN-сервису бесплатно, без оплаты и без карты.
             Тот же VLESS-ключ, те же серверы и та же скорость. Единственная разница — срок.
           </p>
-          <p className="text-gray-400 leading-relaxed">
+          <p className="text-happ-muted leading-relaxed">
             Карту мы не запрашиваем — никаких автосписаний. Это сделано, чтобы вы проверили,
             подходит ли Happ для ваших задач, прежде чем выбирать тариф.
           </p>
@@ -46,18 +46,18 @@ export default function HappFreePage() {
 
       <section className="py-16 bg-zoomer-card/20">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-white mb-8">Как получить подписку Happ бесплатно</h2>
+          <h2 className="text-2xl font-bold text-happ-ink mb-8">Как получить подписку Happ бесплатно</h2>
           <ol className="space-y-4 mb-12">
             {['Нажмите «Получить бесплатную подписку»', 'Зарегистрируйтесь по email или Google', 'Активируйте пробный доступ в личном кабинете', 'Откройте Happ и импортируйте QR-код или ссылку'].map((s, i) => (
               <li key={s} className="flex gap-4">
                 <span className="w-8 h-8 rounded-full bg-zoomer-neon/20 text-zoomer-neon flex items-center justify-center font-bold shrink-0">{i + 1}</span>
-                <span className="text-gray-300 pt-1">{s}</span>
+                <span className="text-happ-muted pt-1">{s}</span>
               </li>
             ))}
           </ol>
 
-          <h3 className="text-xl font-bold text-white mb-4">Что входит в бесплатную подписку</h3>
-          <ul className="space-y-2 text-gray-400 mb-8">
+          <h3 className="text-xl font-bold text-happ-ink mb-4">Что входит в бесплатную подписку</h3>
+          <ul className="space-y-2 text-happ-muted mb-8">
             <li>• Полноценный доступ к VPN</li>
             <li>• Happ VPN ключ с QR-кодом и ссылкой</li>
             <li>• Серверы в нескольких странах</li>
@@ -65,8 +65,8 @@ export default function HappFreePage() {
             <li>• Карта не нужна</li>
           </ul>
 
-          <h3 className="text-xl font-bold text-white mb-4">Ограничения пробной подписки</h3>
-          <ul className="space-y-2 text-gray-400 mb-8">
+          <h3 className="text-xl font-bold text-happ-ink mb-4">Ограничения пробной подписки</h3>
+          <ul className="space-y-2 text-happ-muted mb-8">
             <li>• Ограниченный срок действия</li>
             <li>• Ограниченный выбор серверов</li>
             <li>• 1 устройство</li>
@@ -78,7 +78,7 @@ export default function HappFreePage() {
 
       <section className="py-16 border-t border-zoomer-border">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-white mb-8 text-center">Бесплатная подписка vs Платная</h2>
+          <h2 className="text-2xl font-bold text-happ-ink mb-8 text-center">Бесплатная подписка vs Платная</h2>
           <ComparisonTable
             columns={['Функция', 'Пробная', 'Платная']}
             rows={[
@@ -95,8 +95,8 @@ export default function HappFreePage() {
       </section>
 
       <section className="py-16 bg-zoomer-card/20 text-center px-4">
-        <h2 className="text-xl font-bold text-white mb-4">Бесплатная подписка через Telegram</h2>
-        <p className="text-gray-400 mb-6">Хапп подписка бесплатно — получите ключ прямо в боте</p>
+        <h2 className="text-xl font-bold text-happ-ink mb-4">Бесплатная подписка через Telegram</h2>
+        <p className="text-happ-muted mb-6">Хапп подписка бесплатно — получите ключ прямо в боте</p>
         <a href={buildTelegramBotUrl()} target="_blank" rel="noopener noreferrer">
           <Button variant="secondary">Открыть Telegram бот</Button>
         </a>
@@ -105,7 +105,7 @@ export default function HappFreePage() {
       <FaqSection items={FAQ} />
       <CtaBlock title="Получить подписку Happ" buttonLabel="Получить бесплатную подписку" />
 
-      <div className="pb-12 text-center text-sm text-gray-500">
+      <div className="pb-12 text-center text-sm text-happ-faint">
         <Link to={ROUTES.HAPP} className="hover:text-zoomer-neon">Получить подписку Happ</Link>
         <span className="mx-2">·</span>
         <Link to={ROUTES.HAPP_TELEGRAM} className="hover:text-zoomer-neon">Подписка через Telegram</Link>

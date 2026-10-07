@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { RouteMeta } from '@components/seo/PageMeta';
 import { Link, useNavigate } from 'react-router-dom';
 import {
   Users,
@@ -64,7 +64,7 @@ function CopyField({ label, value }) {
 
   return (
     <div>
-      <label className="block text-xs text-gray-500 mb-1.5">{label}</label>
+      <label className="block text-xs text-happ-faint mb-1.5">{label}</label>
       <div className="flex gap-2">
         <input
           readOnly
@@ -74,7 +74,7 @@ function CopyField({ label, value }) {
         <button
           type="button"
           onClick={copy}
-          className="shrink-0 w-11 h-11 flex items-center justify-center rounded-lg border border-zoomer-border text-gray-400 hover:text-white hover:border-zoomer-neon/40 transition-colors"
+          className="shrink-0 w-11 h-11 flex items-center justify-center rounded-lg border border-zoomer-border text-happ-muted hover:text-happ-ink hover:border-zoomer-neon/40 transition-colors"
           aria-label={`Скопировать ${label}`}
         >
           {copied ? <Check className="w-4 h-4 text-zoomer-neon" /> : <Copy className="w-4 h-4" />}
@@ -91,7 +91,7 @@ function StatCard({ icon: Icon, value, label }) {
         <Icon className="w-5 h-5 text-zoomer-neon" />
       </div>
       <div className="text-2xl font-bold text-white">{value}</div>
-      <div className="text-sm text-gray-500">{label}</div>
+      <div className="text-sm text-happ-faint">{label}</div>
     </div>
   );
 }
@@ -150,7 +150,7 @@ export default function EarningsPage() {
     return (
       <DashboardLayout activeId="earnings" onTabChange={handleNav}>
         <div className="card-dark text-center py-16">
-          <p className="text-gray-400">Не удалось загрузить партнёрскую программу</p>
+          <p className="text-happ-muted">Не удалось загрузить партнёрскую программу</p>
           <Link to={ROUTES.DASHBOARD} className="inline-block mt-4 text-zoomer-neon hover:underline text-sm">
             Вернуться в кабинет
           </Link>
@@ -161,14 +161,14 @@ export default function EarningsPage() {
 
   return (
     <>
-      <Helmet><title>Заработок — {BRAND_META}</title></Helmet>
+      <RouteMeta path={ROUTES.EARNINGS} />
       <DashboardLayout activeId="earnings" onTabChange={handleNav}>
         <div className="flex items-start justify-between gap-4 mb-6">
           <h1 className="text-xl sm:text-2xl font-bold text-white">Заработок</h1>
           <div className="flex items-center gap-2 shrink-0">
             <Link
               to={ROUTES.SETTINGS}
-              className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+              className="p-2 rounded-lg text-happ-muted hover:text-happ-ink hover:bg-white/5 transition-colors"
               title="Настройки"
               aria-label="Настройки"
             >
@@ -177,7 +177,7 @@ export default function EarningsPage() {
             <button
               type="button"
               onClick={logout}
-              className="p-2 rounded-lg text-gray-400 hover:text-red-400 transition-colors"
+              className="p-2 rounded-lg text-happ-muted hover:text-red-400 transition-colors"
               title="Выйти"
               aria-label="Выйти"
             >
@@ -187,7 +187,7 @@ export default function EarningsPage() {
         </div>
 
         {user?.email && (
-          <div className="mb-5 px-4 py-3 rounded-xl bg-zoomer-card border border-zoomer-border text-sm text-gray-300">
+          <div className="mb-5 px-4 py-3 rounded-xl bg-zoomer-card border border-zoomer-border text-sm text-happ-muted">
             {user.email}
           </div>
         )}
@@ -213,7 +213,7 @@ export default function EarningsPage() {
 
           <div className="card-dark space-y-4">
             <h2 className="text-lg font-bold text-white">Как это работает</h2>
-            <ol className="space-y-3 text-sm text-gray-400 list-decimal list-inside">
+            <ol className="space-y-3 text-sm text-happ-muted list-decimal list-inside">
               <li>Отправьте ссылку друзьям.</li>
               <li>Те, кто перейдёт по вашей ссылке, будут закреплены за вами.</li>
               <li>
@@ -250,14 +250,14 @@ export default function EarningsPage() {
             <CopyField label="Ссылка в Telegram" value={data.telegram_link} />
 
             <div>
-              <label className="block text-xs text-gray-500 mb-1.5">
+              <label className="block text-xs text-happ-faint mb-1.5">
                 Сообщение для отправки (можно редактировать)
               </label>
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 rows={6}
-                className="w-full bg-zoomer-dark border border-zoomer-border rounded-lg px-3 py-2.5 text-sm text-gray-300 resize-y min-h-[140px] focus:outline-none focus:border-zoomer-neon/40"
+                className="w-full bg-zoomer-dark border border-zoomer-border rounded-lg px-3 py-2.5 text-sm text-happ-muted resize-y min-h-[140px] focus:outline-none focus:border-zoomer-neon/40"
               />
             </div>
 
@@ -265,7 +265,7 @@ export default function EarningsPage() {
               <button
                 type="button"
                 onClick={copyMessage}
-                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-zoomer-border text-gray-300 hover:text-white hover:border-gray-500 transition-colors text-sm font-medium"
+                className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl border border-zoomer-border text-happ-muted hover:text-happ-ink hover:border-gray-500 transition-colors text-sm font-medium"
               >
                 <Copy className="w-4 h-4" />
                 Копировать
@@ -280,13 +280,13 @@ export default function EarningsPage() {
               </button>
             </div>
 
-            <p className="text-center text-xs text-gray-500">
+            <p className="text-center text-xs text-happ-faint">
               Код: <span className="text-white font-mono">{data.partner_code}</span>
             </p>
           </div>
 
           <div className="card-dark">
-            <h2 className="text-lg font-bold text-white mb-4">Приглашённые</h2>
+            <h2 className="text-lg font-bold text-happ-ink mb-4">Приглашённые</h2>
             {data.referrals_list?.length > 0 ? (
               <div className="space-y-2">
                 {data.referrals_list.map((ref) => (
@@ -296,11 +296,11 @@ export default function EarningsPage() {
                   >
                     <div className="min-w-0">
                       <div className="text-sm text-white truncate">{maskEmail(ref.email)}</div>
-                      <div className="text-xs text-gray-500">{formatDate(ref.registered_at)}</div>
+                      <div className="text-xs text-happ-faint">{formatDate(ref.registered_at)}</div>
                     </div>
                     <div className="text-right shrink-0">
                       <div className="text-sm text-white">{ref.payments_sum} ₽</div>
-                      <div className={`text-xs ${ref.has_subscription ? 'text-zoomer-neon' : 'text-gray-500'}`}>
+                      <div className={`text-xs ${ref.has_subscription ? 'text-zoomer-neon' : 'text-happ-faint'}`}>
                         {ref.has_subscription ? 'Подписка' : 'Без подписки'}
                       </div>
                     </div>
@@ -309,9 +309,9 @@ export default function EarningsPage() {
               </div>
             ) : (
               <div className="text-center py-10">
-                <UserPlus className="w-10 h-10 text-gray-600 mx-auto mb-3" />
-                <p className="text-gray-400 text-sm mb-1">Пока никого не пригласили</p>
-                <p className="text-gray-500 text-xs">Поделитесь ссылкой и начните зарабатывать</p>
+                <UserPlus className="w-10 h-10 text-happ-faint mx-auto mb-3" />
+                <p className="text-happ-muted text-sm mb-1">Пока никого не пригласили</p>
+                <p className="text-happ-faint text-xs">Поделитесь ссылкой и начните зарабатывать</p>
               </div>
             )}
           </div>

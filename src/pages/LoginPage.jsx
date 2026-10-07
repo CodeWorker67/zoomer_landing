@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { RouteMeta } from '@components/seo/PageMeta';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, ArrowLeft, KeyRound, Phone } from 'lucide-react';
@@ -39,7 +39,7 @@ const METHODS = [
     id: 'telegram',
     label: 'Telegram',
     icon: (
-      <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <svg className="w-7 h-7" viewBox="0 0 24 24" fill="#229ED9" aria-hidden="true">
         <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
       </svg>
     ),
@@ -233,7 +233,7 @@ export default function LoginPage() {
 
   return (
     <>
-      <Helmet><title>Вход — {BRAND_META}</title></Helmet>
+      <RouteMeta path={ROUTES.LOGIN} />
       <section className="min-h-[calc(100vh-4rem)] flex items-center justify-center py-16 relative">
         <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
 
@@ -303,12 +303,12 @@ export default function LoginPage() {
           </AnimatePresence>
 
           {step !== 'select' && (
-            <p className="text-center text-sm text-gray-500 mt-6">
+            <p className="text-center text-sm text-happ-faint mt-6">
               Нет аккаунта? Он создастся автоматически при первом входе.
             </p>
           )}
 
-          <p className="text-center text-xs text-gray-500 mt-6">
+          <p className="text-center text-xs text-happ-faint mt-6">
             Продолжая, вы соглашаетесь с{' '}
             <Link to={ROUTES.TERMS} className="text-zoomer-neon hover:underline">условиями</Link>
             {' '}и{' '}
@@ -330,10 +330,10 @@ function MethodSelect({ onSelect, onGoogleSuccess }) {
       exit={{ opacity: 0, y: -20 }}
       className="text-center"
     >
-      <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Личный кабинет</h1>
-      <p className="text-gray-400 text-sm mb-8">Войдите или создайте аккаунт</p>
+      <h1 className="text-2xl sm:text-3xl font-bold text-happ-ink mb-2">Личный кабинет</h1>
+      <p className="text-happ-muted text-sm mb-8">Войдите или создайте аккаунт</p>
 
-      <p className="text-gray-400 text-sm sm:text-base mb-10 leading-relaxed">
+      <p className="text-happ-muted text-sm sm:text-base mb-10 leading-relaxed">
         Всего 2 шага — выбрать способ входа и получить подписку
       </p>
 
@@ -350,10 +350,10 @@ function MethodSelect({ onSelect, onGoogleSuccess }) {
             onClick={() => onSelect(method.id, triggerGoogle)}
             className="group flex flex-col items-center gap-3 focus:outline-none"
           >
-            <span className="w-[4.5rem] h-[4.5rem] sm:w-20 sm:h-20 rounded-2xl border border-zoomer-neon/25 bg-zoomer-card/80 flex items-center justify-center text-white shadow-[0_0_24px_rgba(57,255,120,0.08)] transition-all duration-300 group-hover:border-zoomer-neon/60 group-hover:shadow-[0_0_32px_rgba(57,255,120,0.18)] group-hover:bg-zoomer-neon/5">
+            <span className="w-[4.5rem] h-[4.5rem] sm:w-20 sm:h-20 rounded-2xl border border-happ-blue/25 bg-white flex items-center justify-center text-happ-blue shadow-[0_4px_16px_rgba(10,108,255,0.08)] transition-all duration-300 group-hover:border-happ-blue/50 group-hover:shadow-[0_4px_20px_rgba(10,108,255,0.18)] group-hover:bg-happ-gray">
               {method.icon}
             </span>
-            <span className="text-sm text-gray-400 group-hover:text-white transition-colors">{method.label}</span>
+            <span className="text-sm text-happ-muted group-hover:text-happ-ink transition-colors">{method.label}</span>
           </motion.button>
         ))}
       </div>
@@ -390,15 +390,15 @@ function EmailFlow({
       <button
         type="button"
         onClick={onBack}
-        className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm mb-6 mx-auto"
+        className="flex items-center gap-1.5 text-happ-muted hover:text-happ-ink text-sm mb-6 mx-auto"
       >
         <ArrowLeft className="w-4 h-4" />
         Другой способ входа
       </button>
 
       <div className="text-center mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Личный кабинет</h1>
-        <p className="text-gray-400 text-sm">Войдите или создайте аккаунт</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-happ-ink mb-2">Личный кабинет</h1>
+        <p className="text-happ-muted text-sm">Войдите или создайте аккаунт</p>
       </div>
 
       <div className="card-dark">
@@ -408,19 +408,19 @@ function EmailFlow({
               <div className="w-14 h-14 rounded-2xl border border-zoomer-neon/30 bg-zoomer-neon/10 flex items-center justify-center mx-auto mb-4 text-zoomer-neon">
                 <Mail className="w-7 h-7" />
               </div>
-              <h2 className="text-lg font-bold text-white mb-1">Вход по почте</h2>
-              <p className="text-gray-400 text-sm">Введите email для входа</p>
+              <h2 className="text-lg font-bold text-happ-ink mb-1">Вход по почте</h2>
+              <p className="text-happ-muted text-sm">Введите email для входа</p>
             </div>
 
             <div>
-              <label htmlFor="login-email" className="block text-sm text-gray-400 mb-1.5">Электронная почта</label>
+              <label htmlFor="login-email" className="block text-sm text-happ-muted mb-1.5">Электронная почта</label>
               <input
                 id="login-email"
                 type="email"
                 required
                 value={email}
                 onChange={(e) => onEmailChange(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-zoomer-dark border border-zoomer-border text-white text-sm focus:border-zoomer-neon focus:outline-none"
+                className="w-full px-4 py-3 rounded-xl bg-happ-gray border border-black/[0.07] text-happ-ink text-sm focus:border-zoomer-neon focus:outline-none"
                 placeholder="name@example.com"
                 autoFocus
               />
@@ -439,12 +439,12 @@ function EmailFlow({
               <div className="w-14 h-14 rounded-2xl border border-zoomer-neon/30 bg-zoomer-neon/10 flex items-center justify-center mx-auto mb-4 text-zoomer-neon">
                 <KeyRound className="w-7 h-7" />
               </div>
-              <h2 className="text-lg font-bold text-white mb-1">Вход в аккаунт</h2>
-              <p className="text-gray-400 text-sm">{email}</p>
+              <h2 className="text-lg font-bold text-happ-ink mb-1">Вход в аккаунт</h2>
+              <p className="text-happ-muted text-sm">{email}</p>
             </div>
 
             <div>
-              <label htmlFor="login-password" className="block text-sm text-gray-400 mb-1.5">Пароль</label>
+              <label htmlFor="login-password" className="block text-sm text-happ-muted mb-1.5">Пароль</label>
               <input
                 id="login-password"
                 type="password"
@@ -452,7 +452,7 @@ function EmailFlow({
                 minLength={4}
                 value={password}
                 onChange={(e) => onPasswordChange(e.target.value)}
-                className="w-full px-4 py-3 rounded-xl bg-zoomer-dark border border-zoomer-border text-white text-sm focus:border-zoomer-neon focus:outline-none"
+                className="w-full px-4 py-3 rounded-xl bg-happ-gray border border-black/[0.07] text-happ-ink text-sm focus:border-zoomer-neon focus:outline-none"
                 placeholder="Ваш пароль"
                 autoFocus
                 autoComplete="current-password"
@@ -467,7 +467,7 @@ function EmailFlow({
               type="button"
               onClick={onSwitchToCode}
               disabled={isLoading}
-              className="w-full text-center text-sm text-gray-500 hover:text-zoomer-neon"
+              className="w-full text-center text-sm text-happ-faint hover:text-zoomer-neon"
             >
               Забыли пароль? <span className="text-zoomer-neon">Войти по коду</span>
             </button>
@@ -478,9 +478,9 @@ function EmailFlow({
               <div className="w-14 h-14 rounded-2xl border border-zoomer-neon/30 bg-zoomer-neon/10 flex items-center justify-center mx-auto mb-4 text-zoomer-neon">
                 <Mail className="w-7 h-7" />
               </div>
-              <h2 className="text-lg font-bold text-white mb-1">Введите код</h2>
-              <p className="text-gray-400 text-sm">
-                Код отправлен на <span className="text-white">{email}</span>
+              <h2 className="text-lg font-bold text-happ-ink mb-1">Введите код</h2>
+              <p className="text-happ-muted text-sm">
+                Код отправлен на <span className="text-happ-ink font-medium">{email}</span>
               </p>
             </div>
 
@@ -490,7 +490,7 @@ function EmailFlow({
               required
               value={code}
               onChange={(e) => onCodeChange(e.target.value.replace(/\D/g, ''))}
-              className="w-full px-4 py-4 rounded-xl bg-zoomer-dark border border-zoomer-border text-white text-center text-2xl tracking-widest focus:border-zoomer-neon focus:outline-none"
+              className="w-full px-4 py-4 rounded-xl bg-happ-gray border border-black/[0.07] text-happ-ink text-center text-2xl tracking-widest focus:border-zoomer-neon focus:outline-none"
               placeholder="000000"
               maxLength={6}
               autoFocus
@@ -500,7 +500,7 @@ function EmailFlow({
               {isLoading ? 'Проверяем...' : 'Войти →'}
             </Button>
 
-            <button type="button" onClick={onResend} className="w-full text-center text-sm text-gray-500 hover:text-zoomer-neon">
+            <button type="button" onClick={onResend} className="w-full text-center text-sm text-happ-faint hover:text-zoomer-neon">
               Отправить код повторно
             </button>
 
@@ -579,15 +579,15 @@ function PhoneFlow({
       <button
         type="button"
         onClick={onBack}
-        className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm mb-6 mx-auto"
+        className="flex items-center gap-1.5 text-happ-muted hover:text-happ-ink text-sm mb-6 mx-auto"
       >
         <ArrowLeft className="w-4 h-4" />
         Другой способ входа
       </button>
 
       <div className="text-center mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Личный кабинет</h1>
-        <p className="text-gray-400 text-sm">Войдите или создайте аккаунт</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-happ-ink mb-2">Личный кабинет</h1>
+        <p className="text-happ-muted text-sm">Войдите или создайте аккаунт</p>
       </div>
 
       <div className="card-dark">
@@ -597,19 +597,19 @@ function PhoneFlow({
               <div className="w-14 h-14 rounded-2xl border border-zoomer-neon/30 bg-zoomer-neon/10 flex items-center justify-center mx-auto mb-4 text-zoomer-neon">
                 <Phone className="w-7 h-7" />
               </div>
-              <h2 className="text-lg font-bold text-white mb-1">Вход по телефону</h2>
-              <p className="text-gray-400 text-sm">Введите номер для подтверждения звонком</p>
+              <h2 className="text-lg font-bold text-happ-ink mb-1">Вход по телефону</h2>
+              <p className="text-happ-muted text-sm">Введите номер для подтверждения звонком</p>
             </div>
 
             <div>
-              <label htmlFor="login-phone" className="block text-sm text-gray-400 mb-1.5">Номер телефона</label>
+              <label htmlFor="login-phone" className="block text-sm text-happ-muted mb-1.5">Номер телефона</label>
               <input
                 id="login-phone"
                 type="tel"
                 required
                 value={phone}
                 onChange={(e) => onPhoneChange(formatPhoneInput(e.target.value))}
-                className="w-full px-4 py-3 rounded-xl bg-zoomer-dark border border-zoomer-border text-white text-sm focus:border-zoomer-neon focus:outline-none"
+                className="w-full px-4 py-3 rounded-xl bg-happ-gray border border-black/[0.07] text-happ-ink text-sm focus:border-zoomer-neon focus:outline-none"
                 placeholder="+7 (999) 123-45-67"
                 autoFocus
               />
@@ -628,26 +628,26 @@ function PhoneFlow({
               <div className="w-14 h-14 rounded-2xl border border-zoomer-neon/30 bg-zoomer-neon/10 flex items-center justify-center mx-auto mb-4 text-zoomer-neon">
                 <Phone className="w-7 h-7" />
               </div>
-              <h2 className="text-lg font-bold text-white mb-1">Позвоните для входа</h2>
-              <p className="text-gray-400 text-sm">
-                С номера <span className="text-white">{phone}</span>
+              <h2 className="text-lg font-bold text-happ-ink mb-1">Позвоните для входа</h2>
+              <p className="text-happ-muted text-sm">
+                С номера <span className="text-happ-ink font-medium">{phone}</span>
               </p>
             </div>
 
             <div className="rounded-xl border border-zoomer-neon/30 bg-zoomer-neon/5 px-4 py-5 text-center">
-              <p className="text-xs uppercase tracking-wide text-gray-400 mb-2">Позвоните на номер</p>
+              <p className="text-xs uppercase tracking-wide text-happ-muted mb-2">Позвоните на номер</p>
               <a
                 href={`tel:${phoneSession?.callToPhone || ''}`}
                 className="text-2xl sm:text-3xl font-bold text-zoomer-neon hover:underline"
               >
                 {phoneSession?.callToPhoneDisplay || phoneSession?.callToPhone}
               </a>
-              <p className="text-gray-500 text-xs mt-3">
+              <p className="text-happ-faint text-xs mt-3">
                 Звонок сбросится автоматически. Поднимать трубку не нужно.
               </p>
             </div>
 
-            <div className="text-center text-sm text-gray-400">
+            <div className="text-center text-sm text-happ-muted">
               {waiting ? (
                 <span>Ожидаем звонок... {formatTimer(secondsLeft)}</span>
               ) : (
@@ -689,15 +689,15 @@ function WhatsAppFlow({
       <button
         type="button"
         onClick={onBack}
-        className="flex items-center gap-1.5 text-gray-400 hover:text-white text-sm mb-6 mx-auto"
+        className="flex items-center gap-1.5 text-happ-muted hover:text-happ-ink text-sm mb-6 mx-auto"
       >
         <ArrowLeft className="w-4 h-4" />
         Другой способ входа
       </button>
 
       <div className="text-center mb-6">
-        <h1 className="text-2xl sm:text-3xl font-bold text-white mb-2">Личный кабинет</h1>
-        <p className="text-gray-400 text-sm">Вход через WhatsApp</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-happ-ink mb-2">Личный кабинет</h1>
+        <p className="text-happ-muted text-sm">Вход через WhatsApp</p>
       </div>
 
       <div className="card-dark">
@@ -708,8 +708,8 @@ function WhatsAppFlow({
                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
               </svg>
             </div>
-            <h2 className="text-lg font-bold text-white mb-1">Получите код в WhatsApp</h2>
-            <p className="text-gray-400 text-sm">
+            <h2 className="text-lg font-bold text-happ-ink mb-1">Получите код в WhatsApp</h2>
+            <p className="text-happ-muted text-sm">
               Откройте чат с ботом и отправьте любое сообщение — придёт 6-значный код. Введите его ниже.
             </p>
           </div>
@@ -723,7 +723,7 @@ function WhatsAppFlow({
             Открыть WhatsApp
           </a>
 
-          <p className="text-center text-xs text-gray-500">Код действует {ttlMin} мин.</p>
+          <p className="text-center text-xs text-happ-faint">Код действует {ttlMin} мин.</p>
 
           <input
             type="text"
@@ -731,7 +731,7 @@ function WhatsAppFlow({
             required
             value={code}
             onChange={(e) => onCodeChange(e.target.value.replace(/\D/g, ''))}
-            className="w-full px-4 py-4 rounded-xl bg-zoomer-dark border border-zoomer-border text-white text-center text-2xl tracking-widest focus:border-zoomer-neon focus:outline-none"
+            className="w-full px-4 py-4 rounded-xl bg-happ-gray border border-black/[0.07] text-happ-ink text-center text-2xl tracking-widest focus:border-zoomer-neon focus:outline-none"
             placeholder="000000"
             maxLength={6}
             autoFocus
@@ -767,52 +767,40 @@ function formatPhoneInput(value) {
 function OrDivider() {
   return (
     <div className="flex items-center gap-3 py-1">
-      <div className="flex-1 h-px bg-zoomer-border" />
-      <span className="text-gray-500 text-xs">или</span>
-      <div className="flex-1 h-px bg-zoomer-border" />
+      <div className="flex-1 h-px bg-black/10" />
+      <span className="text-happ-faint text-xs shrink-0">или</span>
+      <div className="flex-1 h-px bg-black/10" />
     </div>
   );
 }
 
 function AlternateMethods({ triggerGoogle, compact = false, onSelectPhone, onSelectEmail }) {
   return (
-    <div className={`space-y-3 ${compact ? 'pt-1' : ''}`}>
+    <div className={`flex flex-col gap-3 w-full ${compact ? 'pt-1' : ''}`}>
       {onSelectEmail && (
-        <button
-          type="button"
-          onClick={onSelectEmail}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl border border-zoomer-border bg-zoomer-dark hover:border-gray-500 transition-all text-sm font-medium text-white"
-        >
-          <Mail className="w-5 h-5 shrink-0 text-zoomer-neon" />
-          Продолжить с почтой
+        <button type="button" onClick={onSelectEmail} className="auth-alt-btn">
+          <Mail className="w-5 h-5 shrink-0 text-happ-blue" aria-hidden />
+          <span>Продолжить с почтой</span>
         </button>
       )}
       {onSelectPhone && (
-        <button
-          type="button"
-          onClick={onSelectPhone}
-          className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl border border-zoomer-border bg-zoomer-dark hover:border-gray-500 transition-all text-sm font-medium text-white"
-        >
-          <Phone className="w-5 h-5 shrink-0 text-zoomer-neon" />
-          Продолжить с телефоном
+        <button type="button" onClick={onSelectPhone} className="auth-alt-btn">
+          <Phone className="w-5 h-5 shrink-0 text-happ-blue" aria-hidden />
+          <span>Продолжить с телефоном</span>
         </button>
       )}
-      <button
-        type="button"
-        onClick={triggerGoogle}
-        className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl border border-zoomer-border bg-zoomer-dark hover:border-gray-500 transition-all text-sm font-medium text-white"
-      >
+      <button type="button" onClick={triggerGoogle} className="auth-alt-btn">
         <GoogleIcon />
-        Продолжить с Google
+        <span>Продолжить с Google</span>
       </button>
       <a
         href={buildTelegramBotUrl()}
         target="_blank"
         rel="noopener noreferrer"
-        className="w-full flex items-center justify-center gap-3 px-4 py-3.5 rounded-xl border border-zoomer-border bg-zoomer-dark hover:border-gray-500 transition-all text-sm font-medium text-white"
+        className="auth-alt-btn"
       >
         <TelegramIcon />
-        Telegram
+        <span>Telegram</span>
       </a>
     </div>
   );

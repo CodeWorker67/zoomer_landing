@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { RouteMeta } from '@components/seo/PageMeta';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
   Shield,
@@ -56,7 +56,7 @@ export default function ProfilePage() {
 
   return (
     <>
-      <Helmet><title>Личный кабинет — {BRAND_META}</title></Helmet>
+      <RouteMeta path={ROUTES.PROFILE} />
       <DashboardLayout activeId={activeTab} onTabChange={setActiveTab}>
         <div className="flex items-start justify-between gap-4 mb-6">
           <h1 className="text-xl sm:text-2xl font-bold text-white">Личный кабинет</h1>
@@ -64,7 +64,7 @@ export default function ProfilePage() {
             {activeTab === 'overview' && (
               <Link
                 to={ROUTES.SETTINGS}
-                className="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/5 transition-colors"
+                className="p-2 rounded-lg text-happ-muted hover:text-happ-ink hover:bg-white/5 transition-colors"
                 title="Настройки"
                 aria-label="Настройки"
               >
@@ -74,7 +74,7 @@ export default function ProfilePage() {
             <button
               type="button"
               onClick={logout}
-              className="p-2 rounded-lg text-gray-400 hover:text-red-400 transition-colors"
+              className="p-2 rounded-lg text-happ-muted hover:text-red-400 transition-colors"
               title="Выйти"
               aria-label="Выйти"
             >
@@ -84,7 +84,7 @@ export default function ProfilePage() {
         </div>
 
         {user?.email && (
-          <div className="mb-5 px-4 py-3 rounded-xl bg-zoomer-card border border-zoomer-border text-sm text-gray-300">
+          <div className="mb-5 px-4 py-3 rounded-xl bg-zoomer-card border border-zoomer-border text-sm text-happ-muted">
             {user.email}
           </div>
         )}
@@ -143,10 +143,10 @@ function OverviewTab({ onGoTab }) {
   return (
     <div className="space-y-5">
       <div className="card-dark border-purple-500/25 bg-gradient-to-br from-purple-500/[0.07] to-transparent">
-        <h2 className="text-lg font-bold text-white mb-2">Розыгрыш</h2>
-        <p className="text-gray-300 text-sm mb-3">
+        <h2 className="text-lg font-bold text-happ-ink mb-2">Розыгрыш</h2>
+        <p className="text-happ-muted text-sm mb-3">
           Ваше количество билетов:{' '}
-          <span className="text-white font-semibold">{raffleTickets} 🎟️</span>
+          <span className="text-happ-ink font-semibold">{raffleTickets} 🎟️</span>
         </p>
         <a
           href={RAFFLE_RULES_URL}
@@ -177,8 +177,8 @@ function OverviewTab({ onGoTab }) {
 
       <div className="card-dark">
         <div className="flex items-center gap-2 mb-3">
-          <Shield className={`w-5 h-5 ${isActive ? 'text-zoomer-neon' : 'text-gray-500'}`} />
-          <span className="text-white font-semibold">{planName}</span>
+          <Shield className={`w-5 h-5 ${isActive ? 'text-zoomer-neon' : 'text-happ-faint'}`} />
+          <span className="text-happ-ink font-semibold">{planName}</span>
         </div>
         {isActive && expires ? (
           <p className="text-sm text-zoomer-neon/90 mb-4">Активна до {expires}</p>
@@ -187,7 +187,7 @@ function OverviewTab({ onGoTab }) {
         )}
         {isActive && (
           <div className="mb-5">
-            <div className="flex justify-between text-xs text-gray-500 mb-1.5">
+            <div className="flex justify-between text-xs text-happ-faint mb-1.5">
               <span>Трафик</span>
               <span>Безлимит</span>
             </div>
@@ -200,7 +200,7 @@ function OverviewTab({ onGoTab }) {
           <button
             type="button"
             onClick={() => onGoTab('subscription')}
-            className="flex-1 py-2.5 px-4 rounded-xl border border-zoomer-border text-gray-300 text-sm font-medium hover:bg-white/5 hover:text-white transition-colors"
+            className="flex-1 py-2.5 px-4 rounded-xl border border-zoomer-border text-happ-muted text-sm font-medium hover:bg-white/5 hover:text-happ-ink transition-colors"
           >
             Управлять
           </button>
@@ -215,13 +215,13 @@ function OverviewTab({ onGoTab }) {
       </div>
 
       <div>
-        <h2 className="text-lg font-bold text-white mb-3">Быстрые действия</h2>
+        <h2 className="text-lg font-bold text-happ-ink mb-3">Быстрые действия</h2>
         <div className="grid grid-cols-2 gap-3">
           {quickActions.map((item) => {
             const content = (
               <>
                 <item.icon className="w-6 h-6 text-zoomer-neon mb-2" />
-                <span className="text-white text-sm font-medium">{item.label}</span>
+                <span className="text-happ-ink text-sm font-medium">{item.label}</span>
               </>
             );
             const className = 'card-dark flex flex-col items-center justify-center text-center py-5 hover:border-zoomer-neon/30 transition-colors min-h-[100px]';
@@ -277,20 +277,20 @@ function SubscriptionTab() {
   return (
     <div className="space-y-4">
       <div className="card-dark">
-        <h2 className="text-lg font-bold text-white mb-4">Ваша подписка</h2>
+        <h2 className="text-lg font-bold text-happ-ink mb-4">Ваша подписка</h2>
         <div className="space-y-3 text-sm">
           <div className="flex justify-between gap-4 py-2 border-b border-zoomer-border">
-            <span className="text-gray-400">Статус</span>
+            <span className="text-happ-muted">Статус</span>
             <span className={isActive ? 'text-zoomer-neon font-medium' : 'text-red-400 font-medium'}>
               {isActive ? 'Активна' : 'Не активна'}
             </span>
           </div>
           <div className="flex justify-between gap-4 py-2 border-b border-zoomer-border">
-            <span className="text-gray-400">Срок действия</span>
-            <span className="text-white text-right">{expires || '—'}</span>
+            <span className="text-happ-muted">Срок действия</span>
+            <span className="text-happ-ink text-right">{expires || '—'}</span>
           </div>
           <div className="flex justify-between gap-4 py-2">
-            <span className="text-gray-400">Устройств</span>
+            <span className="text-happ-muted">Устройств</span>
             <span className="text-white">до 5</span>
           </div>
         </div>
@@ -298,12 +298,12 @@ function SubscriptionTab() {
 
       {subUrl ? (
         <div className="card-dark">
-          <h3 className="text-white font-semibold mb-3">Ссылка-подписка</h3>
-          <p className="text-gray-500 text-sm mb-4">
+          <h3 className="text-happ-ink font-semibold mb-3">Ссылка-подписка</h3>
+          <p className="text-happ-faint text-sm mb-4">
             Скопируйте ссылку или откройте её в Happ. При продлении подписки ключ не меняется.
           </p>
-          <div className="p-3 bg-zoomer-dark rounded-lg mb-4">
-            <code className="text-xs text-gray-400 break-all">{subUrl}</code>
+          <div className="p-3 bg-happ-gray rounded-lg mb-4">
+            <code className="text-xs text-happ-muted break-all">{subUrl}</code>
           </div>
           <div className="flex gap-2">
             <Button type="button" variant="secondary" className="flex-1 text-sm" onClick={copyUrl}>
@@ -323,15 +323,15 @@ function SubscriptionTab() {
         </div>
       ) : (
         <div className="card-dark text-center py-10">
-          <Shield className="w-10 h-10 text-gray-600 mx-auto mb-3" />
-          <p className="text-gray-400 text-sm mb-1">Подписка ещё не активирована</p>
-          <p className="text-gray-500 text-xs">Продлите подписку в разделе «Купить»</p>
+          <Shield className="w-10 h-10 text-happ-faint mx-auto mb-3" />
+          <p className="text-happ-muted text-sm mb-1">Подписка ещё не активирована</p>
+          <p className="text-happ-faint text-xs">Продлите подписку в разделе «Купить»</p>
         </div>
       )}
 
       <div className="card-dark">
-        <h3 className="text-white font-semibold mb-3">Как добавить в Happ</h3>
-        <ol className="space-y-2 text-sm text-gray-400 list-decimal list-inside">
+        <h3 className="text-happ-ink font-semibold mb-3">Как добавить в Happ</h3>
+        <ol className="space-y-2 text-sm text-happ-muted list-decimal list-inside">
           <li>Скачайте Happ на своё устройство</li>
           <li>Нажмите «Открыть» или вставьте ссылку-подписку</li>
           <li>Выберите сервер и подключитесь</li>
@@ -368,8 +368,8 @@ function TariffRenewalSection({ showHeader = true, showPaymentMethod = true }) {
     <div className="space-y-4">
       {showHeader && (
         <div className="card-dark">
-          <h2 className="text-lg font-bold text-white mb-2">Тарифы</h2>
-          <p className="text-gray-400 text-sm">
+          <h2 className="text-lg font-bold text-happ-ink mb-2">Тарифы</h2>
+          <p className="text-happ-muted text-sm">
             Выберите срок подписки. VLESS-ключ и ссылка в Happ останутся прежними —
             меняется только оплаченный период доступа.
           </p>
@@ -378,7 +378,7 @@ function TariffRenewalSection({ showHeader = true, showPaymentMethod = true }) {
 
       {showPaymentMethod && (
         <div className="card-dark">
-          <p className="text-gray-400 text-sm mb-3">Способ оплаты</p>
+          <p className="text-happ-muted text-sm mb-3">Способ оплаты</p>
           <div className="flex gap-2">
             {PAYMENT_METHODS.map((pm) => (
               <button
@@ -388,7 +388,7 @@ function TariffRenewalSection({ showHeader = true, showPaymentMethod = true }) {
                 className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium border transition-all ${
                   method === pm.id
                     ? 'border-zoomer-neon bg-zoomer-neon/10 text-white'
-                    : 'border-zoomer-border text-gray-400 hover:border-gray-500'
+                    : 'border-zoomer-border text-happ-muted hover:border-gray-500'
                 }`}
               >
                 {pm.id === 'card' && <CreditCard className="w-4 h-4 inline mr-1 -mt-0.5" />}
@@ -409,10 +409,10 @@ function TariffRenewalSection({ showHeader = true, showPaymentMethod = true }) {
               {tariff.popular && (
                 <span className="text-xs font-semibold text-zoomer-neon mb-1 block">Популярный</span>
               )}
-              <div className="text-white font-semibold">
+              <div className="text-happ-ink font-semibold">
                 {tariffLabelWithTickets(tariff.label, tariff.days)}
               </div>
-              <div className="text-gray-500 text-xs mt-0.5">
+              <div className="text-happ-faint text-xs mt-0.5">
                 {`Продление на ${tariff.label.toLowerCase()}`}
               </div>
             </div>
@@ -426,7 +426,7 @@ function TariffRenewalSection({ showHeader = true, showPaymentMethod = true }) {
         ))}
       </div>
 
-      <p className="text-center text-xs text-gray-500">
+      <p className="text-center text-xs text-happ-faint">
         Оплата через СБП или карту РФ. Без автосписаний.
       </p>
     </div>
@@ -437,12 +437,12 @@ function BuyTab() {
   return (
     <div className="space-y-4">
       <div className="card-dark">
-        <h2 className="text-lg font-bold text-white mb-2">Продление подписки</h2>
-        <p className="text-gray-400 text-sm mb-3">
+        <h2 className="text-lg font-bold text-happ-ink mb-2">Продление подписки</h2>
+        <p className="text-happ-muted text-sm mb-3">
           Выберите срок продления текущей подписки. VLESS-ключ и ссылка в Happ останутся прежними —
           меняется только оплаченный период доступа.
         </p>
-        <p className="text-sm text-gray-300 leading-relaxed border-t border-zoomer-border pt-3">
+        <p className="text-sm text-happ-muted leading-relaxed border-t border-zoomer-border pt-3">
           🎟️Покупая любой тариф от 1 месяца, вы автоматически участвуете в розыгрыше более 100
           призов🎟️
         </p>
@@ -462,7 +462,7 @@ function SupportTab() {
           </div>
           <h2 className="text-lg font-bold text-white">Поддержка</h2>
         </div>
-        <p className="text-gray-400 text-sm mb-6">
+        <p className="text-happ-muted text-sm mb-6">
           Если возникли вопросы по подключению, оплате или работе VPN — напишите нам в Telegram.
           Среднее время ответа — несколько минут.
         </p>
@@ -478,8 +478,8 @@ function SupportTab() {
       </div>
 
       <div className="card-dark">
-        <h3 className="text-white font-semibold mb-2">Telegram-бот</h3>
-        <p className="text-gray-500 text-sm mb-4">
+        <h3 className="text-happ-ink font-semibold mb-2">Telegram-бот</h3>
+        <p className="text-happ-faint text-sm mb-4">
           Управляйте подпиской и получайте ключи прямо в боте.
         </p>
         <a

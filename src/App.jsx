@@ -49,10 +49,11 @@ const OnboardingGate = ({ children }) => {
 };
 
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
   useEffect(() => {
+    capturePartnerFromUrl();
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [pathname, search]);
   return null;
 }
 
@@ -63,10 +64,10 @@ function AppShell() {
     || location.pathname === ROUTES.PROFILE;
 
   return (
-    <div className="min-h-screen bg-zoomer-dark bg-grid flex flex-col">
+    <div className="min-h-screen flex flex-col" style={{ background: '#fff', color: '#0F0F0F' }}>
       <ScrollToTop />
       <Header />
-      <main className={`flex-1 pt-16`}>
+      <main className="flex-1">
         <Suspense fallback={<div className="min-h-screen" />}>
           <Routes>
             <Route path={ROUTES.HOME} element={<HomePage />} />
@@ -127,7 +128,7 @@ function NotFoundPage() {
     <div className="min-h-[60vh] flex items-center justify-center">
       <div className="text-center">
         <div className="text-6xl font-bold text-gradient mb-4">404</div>
-        <p className="text-gray-400 mb-8">Страница не найдена</p>
+        <p className="text-happ-muted mb-8">Страница не найдена</p>
         <Link to={ROUTES.HOME}><Button>На главную</Button></Link>
       </div>
     </div>

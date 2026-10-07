@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { RouteMeta } from '@components/seo/PageMeta';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { paymentApi } from '@services/api';
@@ -54,22 +54,22 @@ export default function CheckoutPage() {
 
   return (
     <>
-      <Helmet><title>Оплата — {BRAND_META}</title></Helmet>
+      <RouteMeta path={ROUTES.CHECKOUT} />
       <section className="py-20 min-h-screen flex items-center justify-center">
         <div className="card-dark max-w-md mx-4 text-center">
           {status === 'creating' && (
             <>
               <Loader2 className="w-12 h-12 text-zoomer-neon mx-auto mb-4 animate-spin" />
-              <h1 className="text-xl font-bold text-white mb-2">Создаём платёж</h1>
-              <p className="text-gray-400 text-sm">
+              <h1 className="text-xl font-bold text-happ-ink mb-2">Создаём платёж</h1>
+              <p className="text-happ-muted text-sm">
                 {tariff ? `${tariff.label} — ${tariff.price} ₽` : 'Загрузка...'}
               </p>
-              <p className="text-gray-500 text-xs mt-4">Перенаправляем на страницу оплаты...</p>
+              <p className="text-happ-faint text-xs mt-4">Перенаправляем на страницу оплаты...</p>
             </>
           )}
           {status === 'error' && (
             <>
-              <h1 className="text-xl font-bold text-white mb-2">Ошибка</h1>
+              <h1 className="text-xl font-bold text-happ-ink mb-2">Ошибка</h1>
               <p className="text-red-400 text-sm mb-6">{errorMsg}</p>
               <Button onClick={() => navigate(ROUTES.HOME)} className="w-full">На главную</Button>
             </>

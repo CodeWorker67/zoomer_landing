@@ -1,18 +1,31 @@
 import { Link } from 'react-router-dom';
-import Button from '@components/ui/Button';
 import { ROUTES } from '@utils/constants';
 
-export default function PageHero({ title, subtitle, primaryLabel = 'Получить ключ', primaryTo = ROUTES.LOGIN, secondaryLabel, secondaryTo }) {
+export default function PageHero({
+  title,
+  subtitle,
+  primaryLabel = 'Получить ключ',
+  primaryTo = ROUTES.LOGIN,
+  secondaryLabel,
+  secondaryTo,
+}) {
   return (
-    <section className="py-16 md:py-24 relative">
-      <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
-      <div className="relative max-w-3xl mx-auto px-4 sm:px-6 text-center">
-        <h1 className="text-3xl md:text-5xl font-bold text-white mb-6 leading-tight">{title}</h1>
-        {subtitle && <p className="text-gray-400 text-lg mb-8 leading-relaxed">{subtitle}</p>}
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
-          <Link to={primaryTo}><Button>{primaryLabel}</Button></Link>
+    <section className="section" style={{ background: '#fff', paddingTop: 'clamp(48px, 6vw, 80px)' }}>
+      <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
+        <h1 className="h2" style={{ marginBottom: 20 }}>
+          {title}
+        </h1>
+        {subtitle && (
+          <p style={{ fontSize: 18, color: '#5A5A6A', lineHeight: 1.6, marginBottom: 32 }}>{subtitle}</p>
+        )}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'center' }}>
+          <Link className="btn-primary" to={primaryTo}>
+            {primaryLabel}
+          </Link>
           {secondaryLabel && secondaryTo && (
-            <Link to={secondaryTo}><Button variant="secondary">{secondaryLabel}</Button></Link>
+            <Link className="btn-outline" to={secondaryTo}>
+              {secondaryLabel}
+            </Link>
           )}
         </div>
       </div>

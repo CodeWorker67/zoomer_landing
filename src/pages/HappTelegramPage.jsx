@@ -1,5 +1,5 @@
-import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { RouteMeta } from '@components/seo/PageMeta';
 import FaqSection from '@components/sections/FaqSection';
 import Button from '@components/ui/Button';
 import { BRAND, BRAND_META, ROUTES } from '@utils/constants';
@@ -34,12 +34,12 @@ const FAQ = [
 export default function HappTelegramPage() {
   return (
     <>
-      <Helmet><title>Happ VPN в Telegram — {BRAND_META}</title></Helmet>
+      <RouteMeta path={ROUTES.HAPP_TELEGRAM} />
       <section className="py-16 md:py-24 relative">
         <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
         <div className="relative max-w-3xl mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-6">Happ VPN в Telegram</h1>
-          <p className="text-gray-400 text-lg mb-8">
+          <h1 className="text-3xl md:text-5xl font-bold text-happ-ink mb-6">Happ VPN в Telegram</h1>
+          <p className="text-happ-muted text-lg mb-8">
             Telegram-бот открывает мини-приложение, где есть всё то же, что в личном кабинете —
             ключ, подписка, оплата и устройства. Пробный доступ без карты.
           </p>
@@ -51,13 +51,13 @@ export default function HappTelegramPage() {
 
       <section className="py-16 border-t border-zoomer-border">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-white mb-10 text-center">Как получить ключ Happ через Telegram</h2>
+          <h2 className="text-2xl font-bold text-happ-ink mb-10 text-center">Как получить ключ Happ через Telegram</h2>
           <div className="grid gap-6 sm:grid-cols-2">
             {STEPS.map((s, i) => (
               <div key={s.title} className="card-dark">
                 <div className="text-zoomer-neon font-bold mb-2">{i + 1}</div>
-                <h3 className="text-white font-semibold mb-1">{s.title}</h3>
-                <p className="text-gray-400 text-sm">{s.desc}</p>
+                <h3 className="text-happ-ink font-semibold mb-1">{s.title}</h3>
+                <p className="text-happ-muted text-sm">{s.desc}</p>
               </div>
             ))}
           </div>
@@ -66,13 +66,13 @@ export default function HappTelegramPage() {
 
       <section className="py-16 bg-zoomer-card/20">
         <div className="max-w-4xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-white mb-4 text-center">В Telegram доступно всё то же, что в кабинете</h2>
-          <p className="text-gray-400 text-center mb-8 text-sm">Одна учётная запись и один ключ. Разница только во входе.</p>
+          <h2 className="text-2xl font-bold text-happ-ink mb-4 text-center">В Telegram доступно всё то же, что в кабинете</h2>
+          <p className="text-happ-muted text-center mb-8 text-sm">Одна учётная запись и один ключ. Разница только во входе.</p>
           <div className="grid gap-4 sm:grid-cols-2">
             {FEATURES.map((f) => (
               <div key={f.title} className="card-dark">
-                <h3 className="text-white font-semibold mb-2">{f.title}</h3>
-                <p className="text-gray-400 text-sm">{f.desc}</p>
+                <h3 className="text-happ-ink font-semibold mb-2">{f.title}</h3>
+                <p className="text-happ-muted text-sm">{f.desc}</p>
               </div>
             ))}
           </div>
@@ -81,8 +81,8 @@ export default function HappTelegramPage() {
 
       <section className="py-16 border-t border-zoomer-border">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-white mb-4">Бот не заменяет приложение Happ</h2>
-          <p className="text-gray-400 leading-relaxed mb-4">
+          <h2 className="text-2xl font-bold text-happ-ink mb-4">Бот не заменяет приложение Happ</h2>
+          <p className="text-happ-muted leading-relaxed mb-4">
             Happ — отдельное приложение, его нужно скачать из App Store, Google Play или с сайта разработчика.
             Бот выдаёт ключ-подписку, который в это приложение добавляется.
             Тот же ключ работает в INCY, v2rayTun, Streisand.
@@ -97,8 +97,8 @@ export default function HappTelegramPage() {
               { title: 'Пробный доступ', desc: 'Без карты — сразу после запуска бота.' },
             ].map((x) => (
               <div key={x.title} className="card-dark">
-                <h3 className="text-white font-semibold mb-2 text-sm">{x.title}</h3>
-                <p className="text-gray-400 text-xs">{x.desc}</p>
+                <h3 className="text-happ-ink font-semibold mb-2 text-sm">{x.title}</h3>
+                <p className="text-happ-muted text-xs">{x.desc}</p>
               </div>
             ))}
           </div>
@@ -109,7 +109,7 @@ export default function HappTelegramPage() {
         <a href={buildTelegramBotUrl()} target="_blank" rel="noopener noreferrer">
           <Button className="px-10">Открыть бота в Telegram</Button>
         </a>
-        <p className="text-gray-400 mt-6 text-sm">
+        <p className="text-happ-muted mt-6 text-sm">
           Предпочитаете сайт?{' '}
           <Link to={ROUTES.HAPP_FREE} className="text-zoomer-neon hover:underline">Получить бесплатно на сайте</Link>
           {' · '}

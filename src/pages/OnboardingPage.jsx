@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import PageMeta from '@components/seo/PageMeta';
 import {
   Shield,
   Monitor,
@@ -14,12 +14,13 @@ import {
 import toast from 'react-hot-toast';
 import useAuthStore from '@stores/authStore';
 import { userApi, trialApi } from '@services/api';
-import { BRAND_META, ROUTES, APP_DOWNLOAD, happImportUrl, incyImportUrl } from '@utils/constants';
+import { ROUTES, APP_DOWNLOAD, happImportUrl, incyImportUrl } from '@utils/constants';
+import { SITE_NAME } from '@utils/seo';
 import { detectPlatform } from '@utils/platform';
 import { markOnboardingComplete } from '@utils/onboarding';
 
 const secondaryBtnClass =
-  'w-full flex items-center justify-center gap-2.5 py-3.5 px-5 rounded-xl bg-white/5 border border-zoomer-border text-gray-300 font-medium hover:bg-white/10 hover:text-white transition-colors';
+  'w-full flex items-center justify-center gap-2.5 py-3.5 px-5 rounded-xl bg-white/5 border border-zoomer-border text-happ-muted font-medium hover:bg-white/10 hover:text-happ-ink transition-colors';
 
 const primaryBtnClass =
   'w-full flex items-center justify-center gap-2.5 py-4 px-5 rounded-xl font-semibold bg-gradient-to-r from-zoomer-neon-dim to-zoomer-neon text-zoomer-dark hover:opacity-90 transition-opacity';
@@ -103,12 +104,12 @@ export default function OnboardingPage() {
   if (step === 'loading') {
     return (
       <>
-        <Helmet><title>Загрузка — {BRAND_META}</title></Helmet>
+        <PageMeta path={ROUTES.ONBOARDING} title={`Загрузка — ${SITE_NAME}`} noindex />
         <section className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
           <div className="card-dark text-center py-16 px-8 max-w-md w-full">
             <Loader2 className="w-10 h-10 text-zoomer-neon animate-spin mx-auto mb-4" />
-            <p className="text-white font-semibold mb-1">Подготовка личного кабинета</p>
-            <p className="text-gray-500 text-sm">Активируем пробный доступ...</p>
+            <p className="text-happ-ink font-semibold mb-1">Подготовка личного кабинета</p>
+            <p className="text-happ-faint text-sm">Активируем пробный доступ...</p>
           </div>
         </section>
       </>
@@ -118,20 +119,26 @@ export default function OnboardingPage() {
   if (step === 'install') {
     return (
       <>
-        <Helmet><title>Установка приложения — {BRAND_META}</title></Helmet>
+        <PageMeta path={ROUTES.ONBOARDING} title={`Установка приложения — ${SITE_NAME}`} noindex />
         <section className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
           <div className="card-dark max-w-md w-full text-center">
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl bg-zoomer-dark border border-zoomer-border flex items-center justify-center">
-              <span className="text-2xl font-black text-white">H</span>
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl border border-black/[0.08] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)] bg-white">
+              <img
+                src="/icon-192.png"
+                alt="Happ"
+                width={64}
+                height={64}
+                className="w-full h-full object-cover"
+              />
             </div>
 
-            <h1 className="text-xl sm:text-2xl font-bold text-white mb-3">
+            <h1 className="text-xl sm:text-2xl font-bold text-happ-ink mb-3">
               Установите приложение
             </h1>
-            <p className="text-gray-400 text-sm leading-relaxed mb-8">
+            <p className="text-happ-muted text-sm leading-relaxed mb-8">
               Ваш VPN работает в двух приложениях —{' '}
               <span className="text-zoomer-neon font-medium">Happ</span> (рекомендуем) или{' '}
-              <span className="text-white font-medium">INCY</span>.
+              <span className="text-happ-ink font-medium">INCY</span>.
               Установите любое на это устройство и вернитесь сюда.
             </p>
 
@@ -174,7 +181,11 @@ export default function OnboardingPage() {
 
   return (
     <>
-      <Helmet><title>{isActive ? 'VPN активен' : 'VPN неактивен'} — {BRAND_META}</title></Helmet>
+      <PageMeta
+        path={ROUTES.ONBOARDING}
+        title={`${isActive ? 'VPN активен' : 'VPN неактивен'} — ${SITE_NAME}`}
+        noindex
+      />
       <section className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
         <div className="max-w-md w-full">
           <div className="card-dark text-center">
@@ -186,13 +197,13 @@ export default function OnboardingPage() {
               <Shield className={`w-7 h-7 ${isActive ? 'text-zoomer-neon' : 'text-red-400'}`} />
             </div>
 
-            <h1 className="text-xl sm:text-2xl font-bold text-white mb-2">
+            <h1 className="text-xl sm:text-2xl font-bold text-happ-ink mb-2">
               Основной VPN
             </h1>
 
             {isActive ? (
-              <p className="text-gray-400 text-sm mb-8">
-                Действует до <span className="text-white font-medium">{expires}</span>
+              <p className="text-happ-muted text-sm mb-8">
+                Действует до <span className="text-happ-ink font-medium">{expires}</span>
               </p>
             ) : (
               <p className="text-red-400 text-sm font-medium mb-8">
@@ -213,15 +224,15 @@ export default function OnboardingPage() {
                 </a>
 
                 <div className="text-left pt-2">
-                  <p className="text-gray-500 text-xs mb-2">
+                  <p className="text-happ-faint text-xs mb-2">
                     Или скопируйте ссылку-ключ и добавьте вручную в Happ или INCY:
                   </p>
-                  <div className="flex items-center gap-2 p-3 bg-zoomer-dark rounded-lg border border-zoomer-border">
-                    <code className="text-xs text-gray-400 break-all flex-1 text-left">{subUrl}</code>
+                  <div className="flex items-center gap-2 p-3 bg-happ-gray rounded-lg border border-zoomer-border">
+                    <code className="text-xs text-happ-muted break-all flex-1 text-left">{subUrl}</code>
                     <button
                       type="button"
                       onClick={copyUrl}
-                      className="shrink-0 p-1.5 rounded-lg text-gray-400 hover:text-zoomer-neon hover:bg-white/5 transition-colors"
+                      className="shrink-0 p-1.5 rounded-lg text-happ-muted hover:text-zoomer-neon hover:bg-white/5 transition-colors"
                       aria-label="Копировать"
                     >
                       {copied ? <Check className="w-4 h-4 text-zoomer-neon" /> : <Copy className="w-4 h-4" />}
@@ -246,7 +257,7 @@ export default function OnboardingPage() {
           <button
             type="button"
             onClick={() => setStep('install')}
-            className="block w-full text-center text-xs text-gray-500 hover:text-gray-400 transition-colors mt-6"
+            className="block w-full text-center text-xs text-happ-faint hover:text-happ-muted transition-colors mt-6"
           >
             Ещё не установил приложение? Вернуться к установке
           </button>

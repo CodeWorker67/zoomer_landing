@@ -1,4 +1,4 @@
-import { Helmet } from 'react-helmet-async';
+import { RouteMeta } from '@components/seo/PageMeta';
 import { Link } from 'react-router-dom';
 import { ExternalLink } from 'lucide-react';
 import PageHero from '@components/sections/PageHero';
@@ -20,7 +20,7 @@ const FAQ = [
 export default function HappDownloadPage() {
   return (
     <>
-      <Helmet><title>Скачать Happ VPN — {BRAND_META}</title></Helmet>
+      <RouteMeta path={ROUTES.HAPP_DOWNLOAD} />
       <PageHero
         title="Скачать Happ VPN и подключить подписку"
         subtitle="Официальные ссылки на Happ для iPhone, Android, macOS и Windows. После установки зарегистрируйтесь по email или Google — ключ в личном кабинете. Пробный доступ без карты."
@@ -29,14 +29,14 @@ export default function HappDownloadPage() {
         secondaryTo={ROUTES.HAPP_FREE}
       />
 
-      <p className="text-center text-gray-500 text-sm px-4 max-w-2xl mx-auto -mt-8 mb-8">
+      <p className="text-center text-happ-faint text-sm px-4 max-w-2xl mx-auto -mt-8 mb-8">
         {BRAND} не является разработчиком Happ. Мы даём доступ к подписке — она добавляется в Happ из личного кабинета.
         Сам Happ скачивается из официальных магазинов — ссылки ниже.
       </p>
 
       <section className="py-16 border-t border-zoomer-border">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-white mb-8 text-center">Где скачать Happ VPN</h2>
+          <h2 className="text-2xl font-bold text-happ-ink mb-8 text-center">Где скачать Happ VPN</h2>
           <div className="space-y-4">
             {DOWNLOAD_LINKS.map((d) => (
               <a
@@ -47,20 +47,20 @@ export default function HappDownloadPage() {
                 className="card-dark flex items-center justify-between hover:border-zoomer-neon/30 transition-colors"
               >
                 <div>
-                  <div className="text-white font-medium">{d.platform}</div>
-                  <div className="text-gray-500 text-sm">{d.label}</div>
+                  <div className="text-happ-ink font-medium">{d.platform}</div>
+                  <div className="text-happ-faint text-sm">{d.label}</div>
                 </div>
                 <ExternalLink className="w-5 h-5 text-zoomer-neon" />
               </a>
             ))}
           </div>
-          <p className="text-gray-500 text-sm text-center mt-6">Все ссылки ведут на официальные ресурсы разработчика Happ.</p>
+          <p className="text-happ-faint text-sm text-center mt-6">Все ссылки ведут на официальные ресурсы разработчика Happ.</p>
         </div>
       </section>
 
       <section className="py-16 bg-zoomer-card/20 text-center px-4">
-        <h2 className="text-xl font-bold text-white mb-4">Что нужно после установки Happ</h2>
-        <p className="text-gray-400 mb-6 max-w-xl mx-auto">
+        <h2 className="text-xl font-bold text-happ-ink mb-4">Что нужно после установки Happ</h2>
+        <p className="text-happ-muted mb-6 max-w-xl mx-auto">
           Сам Happ — клиент. Чтобы он заработал, нужна подписка. Зарегистрируйтесь по email или Google —
           ключ появится в личном кабинете.
         </p>
@@ -69,7 +69,7 @@ export default function HappDownloadPage() {
 
       <section className="py-16 border-t border-zoomer-border">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-white mb-8">Как подключить подписку в Happ</h2>
+          <h2 className="text-2xl font-bold text-happ-ink mb-8">Как подключить подписку в Happ</h2>
           <ol className="space-y-4">
             {[
               'Зарегистрируйтесь на Зумерский VPN по email или Google — пробный доступ активируется',
@@ -80,7 +80,7 @@ export default function HappDownloadPage() {
             ].map((s, i) => (
               <li key={s} className="flex gap-4 items-start">
                 <span className="w-8 h-8 rounded-full bg-zoomer-neon/20 text-zoomer-neon flex items-center justify-center font-bold shrink-0">{i + 1}</span>
-                <span className="text-gray-300 pt-1">{s}</span>
+                <span className="text-happ-muted pt-1">{s}</span>
               </li>
             ))}
           </ol>
@@ -89,8 +89,8 @@ export default function HappDownloadPage() {
 
       <section className="py-16 bg-zoomer-card/20">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-white mb-4">Как получить доступ к VPN</h2>
-          <p className="text-gray-400 leading-relaxed mb-4">
+          <h2 className="text-2xl font-bold text-happ-ink mb-4">Как получить доступ к VPN</h2>
+          <p className="text-happ-muted leading-relaxed mb-4">
             Зарегистрируйтесь на Зумерский VPN — по email (код придёт на почту) или через Google.
             Также можно подключиться через{' '}
             <a href={buildTelegramBotUrl()} target="_blank" rel="noopener noreferrer" className="text-zoomer-neon hover:underline">Telegram-бота</a>.
@@ -99,14 +99,14 @@ export default function HappDownloadPage() {
       </section>
 
       <section className="py-16 border-t border-zoomer-border text-center px-4">
-        <h2 className="text-xl font-bold text-white mb-4">Пробный доступ</h2>
-        <p className="text-gray-400 mb-6 max-w-xl mx-auto">Бесплатный доступ без карты. Проверьте скорость Happ перед оплатой.</p>
+        <h2 className="text-xl font-bold text-happ-ink mb-4">Пробный доступ</h2>
+        <p className="text-happ-muted mb-6 max-w-xl mx-auto">Бесплатный доступ без карты. Проверьте скорость Happ перед оплатой.</p>
         <Link to={ROUTES.HAPP_FREE}><Button variant="secondary">Попробовать бесплатно</Button></Link>
       </section>
 
       <FaqSection items={FAQ} />
 
-      <div className="pb-4 text-center text-sm text-gray-500">
+      <div className="pb-4 text-center text-sm text-happ-faint">
         <Link to={ROUTES.HAPP} className="hover:text-zoomer-neon">Оформить подписку Happ</Link>
         <span className="mx-2">·</span>
         <Link to={ROUTES.HAPP_FREE} className="hover:text-zoomer-neon">Пробная подписка Happ</Link>

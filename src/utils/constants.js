@@ -23,6 +23,15 @@ export const TELEGRAM = {
   SUPPORT_URL: 'https://t.me/suppzoomvpn',
 };
 
+export const AUTH_URL = import.meta.env.VITE_AUTH_URL || ROUTES.LOGIN;
+export const SUPPORT_URL = import.meta.env.VITE_SUPPORT_URL || TELEGRAM.SUPPORT_URL;
+
+export const DOWNLOADS = {
+  ios: 'https://apps.apple.com/app/happ-proxy-utility/id6504287215',
+  android: 'https://play.google.com/store/apps/details?id=com.happproxy',
+  desktop: 'https://www.happ.su/main',
+};
+
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api/landing';
 export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 

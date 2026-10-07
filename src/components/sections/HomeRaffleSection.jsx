@@ -27,7 +27,7 @@ const PRIZES = [
 function Quote({ children, className = '' }) {
   return (
     <div
-      className={`border-l-[3px] border-zoomer-neon/40 bg-white/[0.04] rounded-r-xl px-4 py-3 text-gray-300 text-sm md:text-[15px] leading-relaxed ${className}`}
+      className={`border-l-[3px] border-happ-blue/40 bg-happ-gray rounded-r-xl px-4 py-3 text-happ-muted text-sm md:text-[15px] leading-relaxed ${className}`}
     >
       {children}
     </div>
@@ -125,7 +125,7 @@ export default function HomeRaffleSection() {
   }, []);
 
   return (
-    <section className="relative pt-10 pb-14 md:pt-14 md:pb-20">
+    <section className="relative pt-10 pb-14 md:pt-14 md:pb-20" style={{ background: '#fff' }}>
       <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
       <div className="relative max-w-2xl mx-auto px-4 sm:px-6">
         <div className="flex justify-center mb-4">
@@ -177,30 +177,30 @@ export default function HomeRaffleSection() {
         </div>
 
         <div className="card-dark text-left space-y-4 border-purple-500/20">
-          <p className="text-white text-base md:text-lg leading-relaxed">
+          <p className="text-happ-ink text-base md:text-lg leading-relaxed">
             <span className="mr-1" aria-hidden>
               🎁
             </span>
-            <strong className="font-bold text-white">ЗУМЕРСКИЙ ДАРИТ — 100 ПРИЗОВЫХ МЕСТ! iPhone 18 pro</strong>
+            <strong className="font-bold text-happ-ink">ЗУМЕРСКИЙ ДАРИТ — 100 ПРИЗОВЫХ МЕСТ! iPhone 18 pro</strong>
             , iPhone duo и еще 98 ценных призов!
             <span className="ml-0.5" aria-hidden>
               ⚡️
             </span>
           </p>
 
-          <p className="text-gray-400 text-sm md:text-base leading-relaxed">
+          <p className="text-happ-muted text-sm md:text-base leading-relaxed">
             Нам 2 года! В честь дня рождения разыгрываем технику, игры, денежные призы и годовые подписки{' '}
             <span aria-hidden>🔥</span>
           </p>
 
-          <div className="rounded-xl border border-zoomer-border/80 overflow-hidden bg-zoomer-dark/50">
+          <div className="rounded-xl border border-zoomer-border/80 overflow-hidden bg-happ-gray/80">
             <button
               type="button"
               onClick={() => setPrizesOpen((v) => !v)}
               className="w-full flex items-center justify-between gap-3 px-4 py-3.5 text-left hover:bg-white/[0.03] transition-colors"
               aria-expanded={prizesOpen}
             >
-              <span className="text-white font-semibold text-sm md:text-base">Что можно выиграть:</span>
+              <span className="text-happ-ink font-semibold text-sm md:text-base">Что можно выиграть:</span>
               <ChevronDown
                 className={`w-5 h-5 text-zoomer-neon shrink-0 transition-transform duration-200 ${prizesOpen ? 'rotate-180' : ''}`}
                 aria-hidden
@@ -209,11 +209,11 @@ export default function HomeRaffleSection() {
             {prizesOpen && (
               <ul className="px-4 pb-4 space-y-2.5 border-t border-zoomer-border/60 pt-3">
                 {PRIZES.map(({ places, prize, icon }) => (
-                  <li key={places} className="text-sm md:text-[15px] text-gray-300 leading-snug">
+                  <li key={places} className="text-sm md:text-[15px] text-happ-muted leading-snug">
                     <span className="mr-1.5" aria-hidden>
                       {icon}
                     </span>
-                    <strong className="text-gray-100 font-semibold">{places}:</strong> {prize}
+                    <strong className="text-happ-ink font-semibold">{places}:</strong> {prize}
                   </li>
                 ))}
               </ul>
@@ -221,7 +221,7 @@ export default function HomeRaffleSection() {
           </div>
 
           <div className="space-y-3 pt-1">
-            <p className="text-white font-semibold text-sm md:text-base">
+            <p className="text-happ-ink font-semibold text-sm md:text-base">
               <span className="mr-1" aria-hidden>
                 🎟
               </span>
@@ -229,10 +229,10 @@ export default function HomeRaffleSection() {
             </p>
             <Quote>Покупай или продлевай подписку, а также дари VPN близким на сайте или через бота.</Quote>
             <Quote>
-              <strong className="text-gray-100">За каждый оплаченный месяц — 1 билетик:</strong>
+              <strong className="text-happ-ink">За каждый оплаченный месяц — 1 билетик:</strong>
             </Quote>
             <Quote>3 месяца = 3 билета, год = 12 билетов.</Quote>
-            <p className="text-gray-400 text-sm md:text-[15px] leading-relaxed pt-1">
+            <p className="text-happ-muted text-sm md:text-[15px] leading-relaxed pt-1">
               Все билетики складываются. Количество покупок и подарков не ограничено!
             </p>
           </div>

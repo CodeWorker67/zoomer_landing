@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Helmet } from 'react-helmet-async';
+import { RouteMeta } from '@components/seo/PageMeta';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, KeyRound, Loader2 } from 'lucide-react';
 import { userApi } from '@services/api';
@@ -96,18 +96,18 @@ export default function SettingsPage() {
 
   return (
     <>
-      <Helmet><title>Настройки — {BRAND_META}</title></Helmet>
+      <RouteMeta path={ROUTES.SETTINGS} />
       <section className="py-12 sm:py-16 min-h-[calc(100vh-4rem)]">
         <div className="max-w-lg mx-auto px-4">
           <Link
             to={ROUTES.DASHBOARD}
-            className="inline-flex items-center gap-1.5 text-gray-400 hover:text-white text-sm mb-6"
+            className="inline-flex items-center gap-1.5 text-happ-muted hover:text-happ-ink text-sm mb-6"
           >
             <ArrowLeft className="w-4 h-4" />
             Назад
           </Link>
 
-          <h1 className="text-2xl font-bold text-white mb-8">Настройки</h1>
+          <h1 className="text-2xl font-bold text-happ-ink mb-8">Настройки</h1>
 
           {loading ? (
             <div className="card-dark flex justify-center py-16">
@@ -127,7 +127,7 @@ export default function SettingsPage() {
 
               {hasPassword ? (
                 <>
-                  <p className="text-gray-400 text-sm mb-6">
+                  <p className="text-happ-muted text-sm mb-6">
                     Вы входите по паролю. Вход по коду из письма продолжает работать — на случай,
                     если пароль забудется.
                   </p>
@@ -165,7 +165,7 @@ export default function SettingsPage() {
                         type="button"
                         onClick={handleRemovePassword}
                         disabled={saving}
-                        className="text-sm text-gray-400 hover:text-red-400 transition-colors px-4 py-2"
+                        className="text-sm text-happ-muted hover:text-red-400 transition-colors px-4 py-2"
                       >
                         Убрать
                       </button>
@@ -174,7 +174,7 @@ export default function SettingsPage() {
                 </>
               ) : (
                 <>
-                  <p className="text-gray-400 text-sm mb-6">
+                  <p className="text-happ-muted text-sm mb-6">
                     Задайте пароль от 4 символов — вход станет быстрее и не будет зависеть
                     от доставки письма.
                   </p>
@@ -203,7 +203,7 @@ export default function SettingsPage() {
               )}
 
               {user?.email && (
-                <p className="text-gray-500 text-xs mt-6 pt-4 border-t border-zoomer-border">
+                <p className="text-happ-faint text-xs mt-6 pt-4 border-t border-zoomer-border">
                   Аккаунт: {user.email}
                 </p>
               )}
@@ -218,14 +218,14 @@ export default function SettingsPage() {
 function PasswordField({ label, value, onChange, placeholder }) {
   return (
     <div>
-      <label className="block text-sm text-gray-400 mb-1.5">{label}</label>
+      <label className="block text-sm text-happ-muted mb-1.5">{label}</label>
       <input
         type="password"
         required
         minLength={4}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-4 py-3 rounded-xl bg-zoomer-dark border border-zoomer-border text-white text-sm focus:border-zoomer-neon focus:outline-none"
+        className="w-full px-4 py-3 rounded-xl bg-happ-gray border border-black/[0.07] text-happ-ink text-sm focus:border-zoomer-neon focus:outline-none"
         placeholder={placeholder}
         autoComplete={label.includes('Текущ') ? 'current-password' : 'new-password'}
       />

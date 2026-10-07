@@ -2,6 +2,7 @@ import { normalizeAttributionSiteUrl } from '@utils/site';
 
 const PARTNER_STORAGE_KEY = 'landing_partner_ref';
 const STAMP_STORAGE_KEY = 'landing_attribution_stamp';
+const YANDEX_ID_STORAGE_KEY = 'landing_yandex_client_id';
 
 export function parsePartnerFromStart(value) {
   if (!value) return null;
@@ -17,7 +18,15 @@ function normalizeStamp(value) {
   if (!value) return null;
   const raw = String(value).trim();
   if (!raw || raw.startsWith('partner_')) return null;
+  if (raw.startsWith('YD')) return null;
   if (parsePartnerFromStart(raw)) return null;
+  return raw.slice(0, 100);
+}
+
+function normalizeYandexId(value) {
+  if (!value) return null;
+  const raw = String(value).trim();
+  if (!raw) return null;
   return raw.slice(0, 100);
 }
 
@@ -34,6 +43,12 @@ export function capturePartnerFromUrl() {
   const stamp = normalizeStamp(startRaw);
   if (stamp) {
     localStorage.setItem(STAMP_STORAGE_KEY, stamp);
+  }
+  const yandexId =
+    normalizeYandexId(params.get('ClientIDYandex'))
+    || normalizeYandexId(params.get('clientIDYandex'));
+  if (yandexId) {
+    localStorage.setItem(YANDEX_ID_STORAGE_KEY, yandexId);
   }
 
   const href = window.location.href;
@@ -55,6 +70,11 @@ export function getStoredStamp() {
   return localStorage.getItem(STAMP_STORAGE_KEY);
 }
 
+export function getStoredYandexId() {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem(YANDEX_ID_STORAGE_KEY);
+}
+
 export function clearStoredPartnerRef() {
   if (typeof window === 'undefined') return;
   localStorage.removeItem(PARTNER_STORAGE_KEY);
@@ -63,6 +83,11 @@ export function clearStoredPartnerRef() {
 export function clearStoredStamp() {
   if (typeof window === 'undefined') return;
   localStorage.removeItem(STAMP_STORAGE_KEY);
+}
+
+export function clearStoredYandexId() {
+  if (typeof window === 'undefined') return;
+  localStorage.removeItem(YANDEX_ID_STORAGE_KEY);
 }
 
 /** Домен без www — fallback для ?start= в ссылке на бота. */
@@ -78,6 +103,14 @@ export function formatStartForTelegram(value) {
   return s.replace(/\./g, '_').slice(0, 64);
 }
 
+/** start для бота: YD{stamp}_{yandex_id} при наличии обоих значений. */
+export function buildYandexTelegramStart(stamp, yandexId) {
+  const s = formatStartForTelegram(stamp);
+  const y = String(yandexId ?? '').trim();
+  if (!s || !y || s === 'site') return null;
+  return `YD${s}_${y}`.slice(0, 64);
+}
+
 /** Значение для t.me/...?start= (всегда непустое). */
 export function getBotStartParam() {
   if (typeof window !== 'undefined') {
@@ -86,6 +119,9 @@ export function getBotStartParam() {
   const partner = getStoredPartnerRef();
   if (partner) return formatStartForTelegram(`partner_${partner}`);
   const stamp = getStoredStamp();
+  const yandexId = getStoredYandexId();
+  const ydStart = buildYandexTelegramStart(stamp, yandexId);
+  if (ydStart) return ydStart;
   if (stamp) return formatStartForTelegram(stamp);
   return formatStartForTelegram(getAttributionDomain() || 'site');
 }
@@ -98,6 +134,8 @@ export function partnerPayload() {
 export function attributionPayload() {
   const payload = { ...partnerPayload() };
   const stamp = getStoredStamp();
+  const yandexId = getStoredYandexId();
   if (stamp) payload.stamp = stamp;
+  if (yandexId) payload.yandex_id = yandexId;
   return payload;
 }

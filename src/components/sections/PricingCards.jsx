@@ -30,22 +30,22 @@ export default function PricingCards({ tariffs, columns = 3 }) {
           {t.popular && (
             <span className="text-xs font-semibold text-zoomer-neon mb-2">Популярный</span>
           )}
-          <h3 className="text-xl font-bold text-white mb-1">{t.label}</h3>
+          <h3 className="text-xl font-bold text-happ-ink mb-1">{t.label}</h3>
           <div className="text-3xl font-bold text-gradient mb-4">{t.price}₽</div>
           <ul className="space-y-2 mb-6 flex-1">
-            <li className="flex items-center gap-2 text-gray-400 text-sm">
+            <li className="flex items-center gap-2 text-happ-muted text-sm">
               <Check className="w-4 h-4 text-zoomer-neon shrink-0" />
               {t.traffic || 'Безлимит трафика'}
             </li>
-            <li className="flex items-center gap-2 text-gray-400 text-sm">
+            <li className="flex items-center gap-2 text-happ-muted text-sm">
               <Check className="w-4 h-4 text-zoomer-neon shrink-0" />
               VLESS ключ
             </li>
-            <li className="flex items-center gap-2 text-gray-400 text-sm">
+            <li className="flex items-center gap-2 text-happ-muted text-sm">
               <Check className="w-4 h-4 text-zoomer-neon shrink-0" />
               До {t.devices} устройств
             </li>
-            <li className="flex items-center gap-2 text-gray-400 text-sm">
+            <li className="flex items-center gap-2 text-happ-muted text-sm">
               <Check className="w-4 h-4 text-zoomer-neon shrink-0" />
               Все серверы
             </li>

@@ -4,43 +4,37 @@ export default {
   theme: {
     extend: {
       colors: {
+        happ: {
+          blue: '#0A6CFF',
+          'blue-hover': '#0052CC',
+          ink: '#0F0F0F',
+          muted: '#5A5A6A',
+          faint: '#8A8A99',
+          gray: '#F4F5F9',
+          dark: '#0F1116',
+          footer: '#0B0D12',
+        },
+        /* Алиасы для существующих классов zoomer-* */
         zoomer: {
-          neon: '#3cff7a',
-          'neon-bright': '#8fffab',
-          'neon-dim': '#12a85c',
-          green: '#39ff6e',
-          cyan: '#4ae8c4',
-          dark: '#080b0e',
-          card: '#0f1419',
-          border: 'rgba(57, 255, 120, 0.1)',
+          neon: '#0A6CFF',
+          'neon-bright': '#4A8CFF',
+          'neon-dim': '#0052CC',
+          green: '#0A6CFF',
+          cyan: '#0A6CFF',
+          dark: '#FFFFFF',
+          card: '#F4F5F9',
+          border: 'rgba(0, 0, 0, 0.07)',
         },
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Manrope', '-apple-system', 'Helvetica Neue', 'sans-serif'],
       },
       borderRadius: {
-        card: '28px',
-        btn: '14px',
-      },
-      boxShadow: {
-        card: '0 0 0 1px rgba(57, 255, 120, 0.1), 0 24px 48px rgba(0, 0, 0, 0.5)',
-        neon: '0 4px 24px rgba(57, 255, 120, 0.32)',
-      },
-      animation: {
-        'bg-shimmer': 'bgShimmer 22s ease-in-out infinite',
-        'title-shimmer': 'titleShimmer 6s ease-in-out infinite',
-      },
-      keyframes: {
-        bgShimmer: {
-          '0%, 100%': { backgroundPosition: '0% 40%' },
-          '50%': { backgroundPosition: '100% 55%' },
-        },
-        titleShimmer: {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
-        },
+        pill: '980px',
+        card: '22px',
+        btn: '16px',
       },
     },
   },
   plugins: [],
-}
+};

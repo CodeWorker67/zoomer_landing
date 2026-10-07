@@ -43,11 +43,11 @@ export default function ReferralCard() {
           <TrendingUp className="w-5 h-5 text-zoomer-neon" />
         </div>
         <div>
-          <h3 className="text-white font-semibold">Приглашайте друзей</h3>
-          <p className="text-gray-500 text-sm mt-0.5">Получайте 50% с каждой оплаты</p>
+          <h3 className="text-happ-ink font-semibold">Приглашайте друзей</h3>
+          <p className="text-happ-faint text-sm mt-0.5">Получайте 50% с каждой оплаты</p>
         </div>
       </div>
-      <div className="flex items-center gap-2 p-3 bg-zoomer-dark rounded-xl border border-zoomer-border">
+      <div className="flex items-center gap-2 p-3 bg-happ-gray rounded-xl border border-zoomer-border">
         <span className="text-sm text-zoomer-neon font-mono break-all flex-1 min-w-0">{link}</span>
         <button
           type="button"
