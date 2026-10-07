@@ -13,14 +13,16 @@ export default function Header() {
   const { isAuthenticated } = useAuthStore();
   const location = useLocation();
   const onHome = location.pathname === ROUTES.HOME;
+  const onLogin = location.pathname === ROUTES.LOGIN;
   const authTo = isAuthenticated ? ROUTES.DASHBOARD : ROUTES.LOGIN;
+  const brandTitle = onLogin ? 'Happ' : BRAND;
 
   return (
     <header className="site-header">
       <Link to={ROUTES.HOME} className="brand">
         <span className="brand-mark">H</span>
         <span className="brand-text">
-          <span className="brand-name">{BRAND}</span>
+          <span className="brand-name">{brandTitle}</span>
           <span className="brand-sub">Быстрый &amp; безопасный</span>
         </span>
       </Link>
