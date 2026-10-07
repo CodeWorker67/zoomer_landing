@@ -200,7 +200,7 @@ function OverviewTab({ onGoTab }) {
           <button
             type="button"
             onClick={() => onGoTab('subscription')}
-            className="flex-1 py-2.5 px-4 rounded-xl border border-zoomer-border text-happ-muted text-sm font-medium hover:bg-white/5 hover:text-happ-ink transition-colors"
+            className="flex-1 py-2.5 px-4 rounded-xl border-2 border-happ-blue/45 bg-happ-blue/[0.07] text-happ-blue text-sm font-semibold hover:bg-happ-blue/10 hover:border-happ-blue/70 transition-colors"
           >
             Управлять
           </button>
@@ -291,7 +291,7 @@ function SubscriptionTab() {
           </div>
           <div className="flex justify-between gap-4 py-2">
             <span className="text-happ-muted">Устройств</span>
-            <span className="text-white">до 5</span>
+            <span className="text-happ-ink">до 5</span>
           </div>
         </div>
       </div>
@@ -302,21 +302,25 @@ function SubscriptionTab() {
           <p className="text-happ-faint text-sm mb-4">
             Скопируйте ссылку или откройте её в Happ. При продлении подписки ключ не меняется.
           </p>
-          <div className="p-3 bg-happ-gray rounded-lg mb-4">
-            <code className="text-xs text-happ-muted break-all">{subUrl}</code>
+          <div className="p-3 bg-happ-gray rounded-xl border border-black/[0.07] mb-3">
+            <code className="text-xs text-happ-blue font-mono break-all block">{subUrl}</code>
           </div>
-          <div className="flex gap-2">
-            <Button type="button" variant="secondary" className="flex-1 text-sm" onClick={copyUrl}>
-              {copied ? <Check className="w-4 h-4 inline mr-1" /> : <Copy className="w-4 h-4 inline mr-1" />}
+          <div className="flex flex-col gap-2 sm:flex-row sm:gap-3">
+            <button
+              type="button"
+              onClick={copyUrl}
+              className="w-full sm:flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border-2 border-happ-blue/45 bg-happ-blue/[0.07] text-happ-blue text-sm font-semibold hover:bg-happ-blue/10 hover:border-happ-blue/70 transition-colors"
+            >
+              {copied ? <Check className="w-4 h-4 shrink-0" /> : <Copy className="w-4 h-4 shrink-0" />}
               {copied ? 'Скопировано' : 'Копировать'}
-            </Button>
+            </button>
             <a
               href={subUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 btn-secondary text-sm flex items-center justify-center gap-1"
+              className="w-full sm:flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-sm font-semibold bg-happ-blue text-white hover:bg-happ-blue-hover transition-colors"
             >
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink className="w-4 h-4 shrink-0" />
               Открыть
             </a>
           </div>
@@ -379,22 +383,27 @@ function TariffRenewalSection({ showHeader = true, showPaymentMethod = true }) {
       {showPaymentMethod && (
         <div className="card-dark">
           <p className="text-happ-muted text-sm mb-3">Способ оплаты</p>
-          <div className="flex gap-2">
-            {PAYMENT_METHODS.map((pm) => (
-              <button
-                key={pm.id}
-                type="button"
-                onClick={() => setMethod(pm.id)}
-                className={`flex-1 py-2.5 px-3 rounded-xl text-sm font-medium border transition-all ${
-                  method === pm.id
-                    ? 'border-zoomer-neon bg-zoomer-neon/10 text-white'
-                    : 'border-zoomer-border text-happ-muted hover:border-gray-500'
-                }`}
-              >
-                {pm.id === 'card' && <CreditCard className="w-4 h-4 inline mr-1 -mt-0.5" />}
-                {pm.label}
-              </button>
-            ))}
+          <div className="flex gap-2.5">
+            {PAYMENT_METHODS.map((pm) => {
+              const selected = method === pm.id;
+              return (
+                <button
+                  key={pm.id}
+                  type="button"
+                  onClick={() => setMethod(pm.id)}
+                  className={`flex-1 flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-sm font-semibold border-2 transition-all ${
+                    selected
+                      ? 'border-happ-blue bg-happ-blue text-white shadow-[0_4px_14px_rgba(10,108,255,0.35)]'
+                      : 'border-happ-blue/30 bg-happ-gray text-happ-ink hover:border-happ-blue/55 hover:bg-white'
+                  }`}
+                >
+                  {pm.id === 'card' && (
+                    <CreditCard className={`w-4 h-4 shrink-0 ${selected ? 'text-white' : 'text-happ-blue'}`} />
+                  )}
+                  {pm.label}
+                </button>
+              );
+            })}
           </div>
         </div>
       )}

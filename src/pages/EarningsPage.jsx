@@ -69,7 +69,7 @@ function CopyField({ label, value }) {
         <input
           readOnly
           value={value || ''}
-          className="flex-1 min-w-0 bg-zoomer-dark border border-zoomer-border rounded-lg px-3 py-2.5 text-sm text-zoomer-neon font-mono truncate"
+          className="flex-1 min-w-0 bg-happ-gray border border-black/[0.07] rounded-lg px-3 py-2.5 text-sm text-happ-blue font-mono truncate"
         />
         <button
           type="button"
@@ -86,12 +86,12 @@ function CopyField({ label, value }) {
 
 function StatCard({ icon: Icon, value, label }) {
   return (
-    <div className="card-dark flex flex-col gap-2">
-      <div className="w-9 h-9 rounded-lg bg-zoomer-neon/10 flex items-center justify-center">
-        <Icon className="w-5 h-5 text-zoomer-neon" />
+    <div className="card-dark flex flex-col gap-2.5">
+      <div className="w-9 h-9 rounded-lg bg-happ-blue/10 flex items-center justify-center">
+        <Icon className="w-5 h-5 text-happ-blue" />
       </div>
-      <div className="text-2xl font-bold text-white">{value}</div>
-      <div className="text-sm text-happ-faint">{label}</div>
+      <div className="text-2xl font-bold text-happ-ink leading-tight">{value ?? '—'}</div>
+      <div className="text-sm text-happ-muted">{label}</div>
     </div>
   );
 }
@@ -164,7 +164,7 @@ export default function EarningsPage() {
       <RouteMeta path={ROUTES.EARNINGS} />
       <DashboardLayout activeId="earnings" onTabChange={handleNav}>
         <div className="flex items-start justify-between gap-4 mb-6">
-          <h1 className="text-xl sm:text-2xl font-bold text-white">Заработок</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-happ-ink">Заработок</h1>
           <div className="flex items-center gap-2 shrink-0">
             <Link
               to={ROUTES.SETTINGS}
@@ -212,7 +212,7 @@ export default function EarningsPage() {
           )}
 
           <div className="card-dark space-y-4">
-            <h2 className="text-lg font-bold text-white">Как это работает</h2>
+            <h2 className="text-lg font-bold text-happ-ink">Как это работает</h2>
             <ol className="space-y-3 text-sm text-happ-muted list-decimal list-inside">
               <li>Отправьте ссылку друзьям.</li>
               <li>Те, кто перейдёт по вашей ссылке, будут закреплены за вами.</li>
@@ -232,8 +232,8 @@ export default function EarningsPage() {
                 {' '}(от 2000 руб).
               </li>
             </ol>
-            <div className="flex gap-2 items-start p-3 rounded-lg bg-amber-500/10 border border-amber-500/20 text-xs text-amber-200/90">
-              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+            <div className="flex gap-2 items-start p-3 rounded-xl bg-amber-50 border border-amber-300/70 text-xs text-amber-950 leading-relaxed">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5 text-amber-700" />
               <span>
                 Приглашать самого себя нельзя — если у приглашённого те же устройства, бонус не засчитается.
               </span>
@@ -243,7 +243,7 @@ export default function EarningsPage() {
           <div className="card-dark space-y-5">
             <div className="flex items-center gap-2">
               <Link2 className="w-5 h-5 text-zoomer-neon" />
-              <h2 className="text-lg font-bold text-white">Ваши ссылки</h2>
+              <h2 className="text-lg font-bold text-happ-ink">Ваши ссылки</h2>
             </div>
 
             <CopyField label="Ссылка на сайт" value={data.site_link} />
@@ -257,7 +257,7 @@ export default function EarningsPage() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 rows={6}
-                className="w-full bg-zoomer-dark border border-zoomer-border rounded-lg px-3 py-2.5 text-sm text-happ-muted resize-y min-h-[140px] focus:outline-none focus:border-zoomer-neon/40"
+                className="w-full bg-happ-gray border border-black/[0.07] rounded-lg px-3 py-2.5 text-sm text-happ-ink resize-y min-h-[140px] focus:outline-none focus:border-happ-blue/40"
               />
             </div>
 
@@ -281,7 +281,7 @@ export default function EarningsPage() {
             </div>
 
             <p className="text-center text-xs text-happ-faint">
-              Код: <span className="text-white font-mono">{data.partner_code}</span>
+              Код: <span className="text-happ-ink font-mono">{data.partner_code}</span>
             </p>
           </div>
 
@@ -295,11 +295,11 @@ export default function EarningsPage() {
                     className="flex items-center justify-between gap-3 py-3 border-b border-zoomer-border last:border-0"
                   >
                     <div className="min-w-0">
-                      <div className="text-sm text-white truncate">{maskEmail(ref.email)}</div>
+                      <div className="text-sm text-happ-ink truncate">{maskEmail(ref.email)}</div>
                       <div className="text-xs text-happ-faint">{formatDate(ref.registered_at)}</div>
                     </div>
                     <div className="text-right shrink-0">
-                      <div className="text-sm text-white">{ref.payments_sum} ₽</div>
+                      <div className="text-sm text-happ-ink">{ref.payments_sum} ₽</div>
                       <div className={`text-xs ${ref.has_subscription ? 'text-zoomer-neon' : 'text-happ-faint'}`}>
                         {ref.has_subscription ? 'Подписка' : 'Без подписки'}
                       </div>

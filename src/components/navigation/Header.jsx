@@ -14,8 +14,16 @@ export default function Header() {
   const location = useLocation();
   const onHome = location.pathname === ROUTES.HOME;
   const onLogin = location.pathname === ROUTES.LOGIN;
+  const onOnboarding = location.pathname === ROUTES.ONBOARDING;
   const authTo = isAuthenticated ? ROUTES.DASHBOARD : ROUTES.LOGIN;
-  const brandTitle = onLogin ? 'Happ' : BRAND;
+  const inCabinet =
+    location.pathname === ROUTES.DASHBOARD
+    || location.pathname === ROUTES.PROFILE
+    || location.pathname.startsWith('/dashboard');
+  const brandTitle = onLogin || onOnboarding || inCabinet ? 'Happ' : BRAND;
+  const hideGuestHeaderActions = onLogin && !isAuthenticated;
+  const hideTrialCta = hideGuestHeaderActions || onOnboarding || isAuthenticated;
+  const hideCabinetLink = isAuthenticated && inCabinet;
 
   return (
     <header className="site-header">
@@ -42,12 +50,17 @@ export default function Header() {
       </nav>
 
       <div className="header-actions">
-        <Link className="nav-login" to={authTo}>
-          {isAuthenticated ? 'Личный кабинет' : 'Войти'}
-        </Link>
-        <Link className="nav-cta" to={authTo}>
-          Попробовать бесплатно
-        </Link>
+        {!hideGuestHeaderActions && !hideCabinetLink && (
+          <Link className="nav-login" to={authTo}>
+            {isAuthenticated ? 'Личный кабинет' : 'Войти'}
+          </Link>
+        )}
+        {!hideTrialCta && (
+          <Link className="nav-cta" to={authTo}>
+            <span className="nav-cta__full">Попробовать бесплатно</span>
+            <span className="nav-cta__short">Бесплатно</span>
+          </Link>
+        )}
       </div>
     </header>
   );

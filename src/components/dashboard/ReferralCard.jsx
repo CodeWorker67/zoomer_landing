@@ -47,17 +47,17 @@ export default function ReferralCard() {
           <p className="text-happ-faint text-sm mt-0.5">Получайте 50% с каждой оплаты</p>
         </div>
       </div>
-      <div className="flex items-center gap-2 p-3 bg-happ-gray rounded-xl border border-zoomer-border">
-        <span className="text-sm text-zoomer-neon font-mono break-all flex-1 min-w-0">{link}</span>
-        <button
-          type="button"
-          onClick={copy}
-          className="shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-lg border border-zoomer-neon/40 text-zoomer-neon text-xs font-medium hover:bg-zoomer-neon/10 transition-colors"
-        >
-          {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-          {copied ? 'Скопировано' : 'Копировать'}
-        </button>
+      <div className="p-3 bg-happ-gray rounded-xl border border-zoomer-border">
+        <span className="text-sm text-happ-blue font-mono break-all block">{link}</span>
       </div>
+      <button
+        type="button"
+        onClick={copy}
+        className="mt-3 w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border-2 border-happ-blue/45 bg-happ-blue/[0.07] text-happ-blue text-sm font-semibold hover:bg-happ-blue/10 hover:border-happ-blue/70 transition-colors"
+      >
+        {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+        {copied ? 'Скопировано' : 'Копировать'}
+      </button>
     </div>
   );
 }

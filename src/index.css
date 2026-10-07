@@ -182,20 +182,68 @@ button {
   white-space: nowrap;
 }
 
+.nav-cta__short {
+  display: none;
+}
+
 .nav-cta:hover {
   background: #0052cc;
   color: #fff;
 }
 
 @media (max-width: 640px) {
+  .site-header {
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .brand {
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .brand-mark {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+
+  .brand-name {
+    font-size: 17px;
+  }
+
   .brand-sub {
     display: none;
   }
+
   .nav-login {
-    padding: 10px 12px;
+    padding: 10px 10px;
+    font-size: 13px;
   }
+
   .nav-cta {
-    padding: 10px 16px;
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+
+  .header-actions {
+    gap: 4px;
+    flex-shrink: 0;
+  }
+}
+
+@media (max-width: 400px) {
+  .nav-cta__full {
+    display: none;
+  }
+
+  .nav-cta__short {
+    display: inline;
+  }
+
+  .nav-cta {
+    padding: 10px 12px;
   }
 }
 
