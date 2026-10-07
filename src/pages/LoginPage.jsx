@@ -6,8 +6,13 @@ import { Mail, ArrowLeft, KeyRound, Phone } from 'lucide-react';
 import useAuthStore from '@stores/authStore';
 import Button from '@components/ui/Button';
 import toast from 'react-hot-toast';
-import { ROUTES, GOOGLE_CLIENT_ID, BRAND_META } from '@utils/constants';
+import { ROUTES, BRAND_META } from '@utils/constants';
 import { buildTelegramBotUrl } from '@utils/botLink';
+import {
+  initGoogleAuth,
+  isGoogleAuthConfigured,
+  triggerGoogleSignIn,
+} from '@utils/googleAuth';
 
 const METHODS = [
   {
@@ -98,6 +103,26 @@ export default function LoginPage() {
       toast.error(result.error);
     }
   }, [googleLogin, navigate, redirect]);
+
+  useEffect(() => {
+    initGoogleAuth(handleGoogleSuccess);
+  }, [handleGoogleSuccess]);
+
+  const triggerGoogle = useCallback(async () => {
+    if (!isGoogleAuthConfigured()) {
+      toast.error('Google вход не настроен (VITE_GOOGLE_CLIENT_ID)');
+      return;
+    }
+    const result = await triggerGoogleSignIn();
+    if (result.ok) return;
+    if (result.reason === 'missing_client_id') {
+      toast.error('Google вход не настроен (VITE_GOOGLE_CLIENT_ID)');
+    } else if (result.reason === 'not_displayed' || result.reason === 'skipped') {
+      toast.error('Не удалось открыть окно Google. Разрешите всплывающие окна или войдите по почте.');
+    } else {
+      toast.error('Google вход временно недоступен');
+    }
+  }, []);
 
   const backToSelect = () => {
     setStep('select');
@@ -243,7 +268,7 @@ export default function LoginPage() {
               <MethodSelect
                 key="select"
                 onSelect={handleMethodSelect}
-                onGoogleSuccess={handleGoogleSuccess}
+                triggerGoogle={triggerGoogle}
               />
             )}
 
@@ -264,7 +289,7 @@ export default function LoginPage() {
                 onSwitchToCode={handleSwitchToCode}
                 onVerify={handleVerify}
                 onResend={handleResend}
-                onGoogleSuccess={handleGoogleSuccess}
+                triggerGoogle={triggerGoogle}
                 onSelectPhone={() => setStep('phone')}
               />
             )}
@@ -282,7 +307,7 @@ export default function LoginPage() {
                 onRetry={() => setStep('phone')}
                 checkPhoneAuth={checkPhoneAuth}
                 onSuccess={handlePhoneAuthComplete}
-                onGoogleSuccess={handleGoogleSuccess}
+                triggerGoogle={triggerGoogle}
                 onSelectEmail={() => setStep('email')}
               />
             )}
@@ -296,7 +321,7 @@ export default function LoginPage() {
                 onBack={backToSelect}
                 onCodeChange={setWhatsappCode}
                 onVerify={handleWhatsappVerify}
-                onGoogleSuccess={handleGoogleSuccess}
+                triggerGoogle={triggerGoogle}
                 onSelectEmail={() => setStep('email')}
               />
             )}
@@ -320,9 +345,7 @@ export default function LoginPage() {
   );
 }
 
-function MethodSelect({ onSelect, onGoogleSuccess }) {
-  const triggerGoogle = useGoogleAuth(onGoogleSuccess);
-
+function MethodSelect({ onSelect, triggerGoogle }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -376,11 +399,9 @@ function EmailFlow({
   onSwitchToCode,
   onVerify,
   onResend,
-  onGoogleSuccess,
+  triggerGoogle,
   onSelectPhone,
 }) {
-  const triggerGoogle = useGoogleAuth(onGoogleSuccess);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -524,10 +545,9 @@ function PhoneFlow({
   onRetry,
   checkPhoneAuth,
   onSuccess,
-  onGoogleSuccess,
+  triggerGoogle,
   onSelectEmail,
 }) {
-  const triggerGoogle = useGoogleAuth(onGoogleSuccess);
   const [secondsLeft, setSecondsLeft] = useState(phoneSession?.timeout || 180);
   const [waiting, setWaiting] = useState(false);
 
@@ -674,10 +694,9 @@ function WhatsAppFlow({
   onBack,
   onCodeChange,
   onVerify,
-  onGoogleSuccess,
+  triggerGoogle,
   onSelectEmail,
 }) {
-  const triggerGoogle = useGoogleAuth(onGoogleSuccess);
   const ttlMin = Math.max(1, Math.round((config.code_ttl_seconds || 180) / 60));
 
   return (
@@ -825,40 +844,3 @@ function TelegramIcon() {
   );
 }
 
-function useGoogleAuth(onSuccess) {
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    const handleCredential = (response) => {
-      onSuccess(response.credential);
-    };
-
-    const initGoogle = () => {
-      if (window.google?.accounts?.id && GOOGLE_CLIENT_ID) {
-        window.google.accounts.id.initialize({
-          client_id: GOOGLE_CLIENT_ID,
-          callback: handleCredential,
-        });
-        setReady(true);
-      }
-    };
-
-    if (window.google?.accounts?.id) {
-      initGoogle();
-    } else {
-      const script = document.createElement('script');
-      script.src = 'https://accounts.google.com/gsi/client';
-      script.async = true;
-      script.onload = initGoogle;
-      document.head.appendChild(script);
-    }
-  }, [onSuccess]);
-
-  return useCallback(() => {
-    if (!ready) {
-      toast.error('Google вход временно недоступен');
-      return;
-    }
-    window.google?.accounts?.id?.prompt();
-  }, [ready]);
-}
