@@ -129,7 +129,12 @@ function OverviewTab({ onGoTab }) {
 
   const isActive = sub?.active || sub?.pro?.active;
   const expires = sub?.expires || sub?.pro?.expires;
-  const planName = sub?.plan_name || sub?.pro?.plan_name || (isActive ? 'Пробный' : 'Подписка');
+  const hasPaid =
+    sub?.has_paid_subscription === true || sub?.pro?.has_paid_subscription === true;
+  const planName =
+    sub?.plan_name
+    || sub?.pro?.plan_name
+    || (isActive && !hasPaid ? 'Пробный' : 'Подписка');
 
   if (loading) return <LoadingBlock />;
 

@@ -14,6 +14,8 @@ export function parseRaffleTicketCount(payload) {
     payload.raffle_tickets
     ?? payload.raffleTickets
     ?? payload.tickets
+    ?? payload.user?.tickets
+    ?? payload.user?.raffle_tickets
     ?? payload.raffle?.tickets
     ?? payload.raffle?.count;
   const n = Number(raw);
