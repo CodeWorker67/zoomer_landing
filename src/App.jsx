@@ -1,5 +1,5 @@
 import { useEffect, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link, useLocation, useNavigate } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HelmetProvider } from 'react-helmet-async';
 import { Toaster } from 'react-hot-toast';
@@ -49,11 +49,20 @@ const OnboardingGate = ({ children }) => {
 };
 
 function ScrollToTop() {
-  const { pathname, search } = useLocation();
+  const { pathname, search, hash } = useLocation();
+  const navigate = useNavigate();
   useEffect(() => {
-    capturePartnerFromUrl();
+    const { campaignLandingPath } = capturePartnerFromUrl();
+    if (
+      campaignLandingPath
+      && pathname === ROUTES.HOME
+      && campaignLandingPath !== pathname
+    ) {
+      navigate(`${campaignLandingPath}${search}${hash}`, { replace: true });
+      return;
+    }
     window.scrollTo(0, 0);
-  }, [pathname, search]);
+  }, [pathname, search, hash, navigate]);
   return null;
 }
 

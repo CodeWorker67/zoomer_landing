@@ -4,6 +4,18 @@ const PARTNER_STORAGE_KEY = 'landing_partner_ref';
 const STAMP_STORAGE_KEY = 'landing_attribution_stamp';
 const YANDEX_ID_STORAGE_KEY = 'landing_yandex_client_id';
 
+/** Метки кампаний → целевая SEO-страница (редирект только с главной). */
+export const CAMPAIGN_LANDING_PATHS = {
+  happ_lab: '/happ/vpn',
+  incy_lab: '/incy-vpn',
+};
+
+export function getCampaignLandingPath(stamp) {
+  if (!stamp) return null;
+  const key = String(stamp).trim();
+  return CAMPAIGN_LANDING_PATHS[key] ?? null;
+}
+
 export function parsePartnerFromStart(value) {
   if (!value) return null;
   const raw = String(value).trim();
@@ -40,9 +52,9 @@ export function capturePartnerFromUrl() {
   if (partner) {
     localStorage.setItem(PARTNER_STORAGE_KEY, partner);
   }
-  const stamp = normalizeStamp(startRaw);
-  if (stamp) {
-    localStorage.setItem(STAMP_STORAGE_KEY, stamp);
+  const stampFromUrl = normalizeStamp(startRaw);
+  if (stampFromUrl) {
+    localStorage.setItem(STAMP_STORAGE_KEY, stampFromUrl);
   }
   const yandexId =
     normalizeYandexId(params.get('ClientIDYandex'))
@@ -57,7 +69,12 @@ export function capturePartnerFromUrl() {
     window.history.replaceState(window.history.state, '', normalizedHref);
   }
 
-  return partner;
+  return {
+    partner,
+    stamp: stampFromUrl,
+    yandexId,
+    campaignLandingPath: getCampaignLandingPath(stampFromUrl),
+  };
 }
 
 export function getStoredPartnerRef() {
