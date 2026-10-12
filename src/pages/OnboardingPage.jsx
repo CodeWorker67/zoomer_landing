@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import TariffRenewalSection from '@components/subscription/TariffRenewalSection';
 import PageMeta from '@components/seo/PageMeta';
 import {
   Shield,
@@ -110,6 +111,32 @@ export default function OnboardingPage() {
             <Loader2 className="w-10 h-10 text-zoomer-neon animate-spin mx-auto mb-4" />
             <p className="text-happ-ink font-semibold mb-1">Подготовка личного кабинета</p>
             <p className="text-happ-faint text-sm">Активируем пробный доступ...</p>
+          </div>
+        </section>
+      </>
+    );
+  }
+
+  if (step === 'renew') {
+    return (
+      <>
+        <PageMeta path={ROUTES.ONBOARDING} title={`Продление подписки — ${SITE_NAME}`} noindex />
+        <section className="min-h-[calc(100vh-4rem)] px-4 py-12">
+          <div className="max-w-md mx-auto space-y-4">
+            <div className="card-dark text-center">
+              <h1 className="text-xl sm:text-2xl font-bold text-happ-ink mb-2">Продление подписки</h1>
+              <p className="text-happ-muted text-sm">
+                Выберите срок. VLESS-ключ и ссылка в Happ останутся прежними.
+              </p>
+            </div>
+            <TariffRenewalSection showHeader={false} />
+            <button
+              type="button"
+              onClick={() => setStep('vpn')}
+              className={secondaryBtnClass}
+            >
+              Назад
+            </button>
           </div>
         </section>
       </>
@@ -242,9 +269,9 @@ export default function OnboardingPage() {
               </div>
             ) : (
               <div className="space-y-3 mb-6">
-                <Link to={`${ROUTES.CHECKOUT}?tariff=30&method=sbp`} className={primaryBtnClass}>
+                <button type="button" onClick={() => setStep('renew')} className={primaryBtnClass}>
                   Продлить подписку
-                </Link>
+                </button>
               </div>
             )}
 
