@@ -657,7 +657,7 @@ function PhoneFlow({
             <div className="rounded-xl border border-zoomer-neon/30 bg-zoomer-neon/5 px-4 py-5 text-center">
               <p className="text-xs uppercase tracking-wide text-happ-muted mb-2">Позвоните на номер</p>
               <a
-                href={`tel:${phoneSession?.callToPhone || ''}`}
+                href={`tel:${phoneToTelUri(phoneSession?.callToPhone || phoneSession?.callToPhoneDisplay)}`}
                 className="text-2xl sm:text-3xl font-bold text-zoomer-neon hover:underline"
               >
                 {phoneSession?.callToPhoneDisplay || phoneSession?.callToPhone}
@@ -766,6 +766,16 @@ function WhatsAppFlow({
       </div>
     </motion.div>
   );
+}
+
+/** E.164 for tel: — API may return digits without leading + */
+function phoneToTelUri(phone) {
+  if (!phone) return '';
+  const raw = String(phone).trim();
+  const withPlus = raw.replace(/[^\d+]/g, '');
+  if (withPlus.startsWith('+')) return withPlus;
+  const digits = withPlus.replace(/\D/g, '');
+  return digits ? `+${digits}` : '';
 }
 
 function formatPhoneInput(value) {
