@@ -15,6 +15,7 @@ import {
   Download,
   TrendingUp,
   HelpCircle,
+  CreditCard,
 } from 'lucide-react';
 import useAuthStore from '@stores/authStore';
 import { authApi, userApi } from '@services/api';
