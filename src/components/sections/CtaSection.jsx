@@ -4,43 +4,49 @@ import { ROUTES, SUPPORT_URL } from '@utils/constants';
 export default function CtaSection() {
   return (
     <section
+      className="mt-24"
       style={{
-        background: '#0A6CFF',
-        padding: 'clamp(64px,8vw,104px) clamp(20px,4vw,56px)',
+        background: 'var(--gradient-accent)',
+        borderRadius: 26,
+        padding: 'clamp(2.5rem, 6vw, 4rem) clamp(1.25rem, 4vw, 2rem)',
         textAlign: 'center',
         position: 'relative',
         overflow: 'hidden',
+        border: '1px solid var(--color-line-strong)',
       }}
     >
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,255,255,.16), transparent 70%)',
+          background: 'radial-gradient(ellipse 80% 60% at 50% 0%, rgba(255,255,255,.2), transparent 70%)',
         }}
       />
       <div style={{ position: 'relative' }}>
         <h2
           style={{
-            fontSize: 'clamp(30px,4vw,52px)',
+            fontSize: 'clamp(1.6rem, 4vw, 2.4rem)',
             fontWeight: 800,
-            letterSpacing: -1.6,
-            color: '#fff',
+            letterSpacing: '-0.03em',
+            color: '#04140a',
             marginBottom: 14,
           }}
         >
-          Один день бесплатно.
-          <br />
-          Прямо сейчас.
+          Ключ для INCY — один день бесплатно
         </h2>
-        <p style={{ fontSize: 17, color: 'rgba(255,255,255,.75)', marginBottom: 32 }}>
-          Регистрация за минуту. Аккаунт создаётся автоматически.
+        <p style={{ fontSize: 17, color: 'rgba(4,20,10,.75)', marginBottom: 32 }}>
+          Регистрация за минуту. Вставьте ключ в INCY и подключайтесь.
         </p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-          <Link className="cta-white" to={ROUTES.LOGIN}>
-            Попробовать бесплатно
+          <Link className="btn btn-ghost" to={ROUTES.LOGIN} style={{ background: '#04140a', color: '#eefcf2', borderColor: '#04140a' }}>
+            Получить ключ бесплатно
           </Link>
-          <a className="cta-ghost" href={SUPPORT_URL} target="_blank" rel="noopener noreferrer">
+          <a
+            className="btn btn-ghost cta-support-outline"
+            href={SUPPORT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Написать в поддержку
           </a>
         </div>

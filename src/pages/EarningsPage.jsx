@@ -64,12 +64,12 @@ function CopyField({ label, value }) {
 
   return (
     <div>
-      <label className="block text-xs text-happ-faint mb-1.5">{label}</label>
+      <label className="block text-sm font-medium text-happ-muted mb-1.5">{label}</label>
       <div className="flex gap-2">
         <input
           readOnly
           value={value || ''}
-          className="flex-1 min-w-0 bg-happ-gray border border-black/[0.07] rounded-lg px-3 py-2.5 text-sm text-happ-blue font-mono truncate"
+          className="flex-1 min-w-0 bg-happ-gray border border-zoomer-border rounded-lg px-3 py-2.5 text-sm text-zoomer-neon font-mono truncate"
         />
         <button
           type="button"
@@ -250,14 +250,14 @@ export default function EarningsPage() {
             <CopyField label="Ссылка в Telegram" value={data.telegram_link} />
 
             <div>
-              <label className="block text-xs text-happ-faint mb-1.5">
+              <label className="block text-sm font-medium text-happ-muted mb-1.5">
                 Сообщение для отправки (можно редактировать)
               </label>
               <textarea
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 rows={6}
-                className="w-full bg-happ-gray border border-black/[0.07] rounded-lg px-3 py-2.5 text-sm text-happ-ink resize-y min-h-[140px] focus:outline-none focus:border-happ-blue/40"
+                className="w-full bg-happ-gray border border-zoomer-border rounded-lg px-3 py-2.5 text-sm text-happ-ink resize-y min-h-[140px] focus:outline-none focus:border-zoomer-neon/50"
               />
             </div>
 
@@ -280,7 +280,7 @@ export default function EarningsPage() {
               </button>
             </div>
 
-            <p className="text-center text-xs text-happ-faint">
+            <p className="text-center text-xs text-happ-muted">
               Код: <span className="text-happ-ink font-mono">{data.partner_code}</span>
             </p>
           </div>

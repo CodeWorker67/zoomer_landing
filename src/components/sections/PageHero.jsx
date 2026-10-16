@@ -10,7 +10,7 @@ export default function PageHero({
   secondaryTo,
 }) {
   return (
-    <section className="section" style={{ background: '#fff', paddingTop: 'clamp(48px, 6vw, 80px)' }}>
+    <section className="section shell" style={{ paddingTop: 'clamp(48px, 6vw, 80px)' }}>
       <div style={{ maxWidth: 720, margin: '0 auto', textAlign: 'center' }}>
         <h1 className="h2" style={{ marginBottom: 20 }}>
           {title}

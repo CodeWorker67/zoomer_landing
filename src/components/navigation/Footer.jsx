@@ -1,149 +1,111 @@
 import { Link } from 'react-router-dom';
-import { DOWNLOADS, ROUTES, SUPPORT_URL } from '@utils/constants';
+import { INCY_DOWNLOADS, ROUTES, SUPPORT_URL, TELEGRAM } from '@utils/constants';
 
 const footerLinks = [
   { path: ROUTES.HAPP, label: 'Подписка' },
   { path: ROUTES.HAPP_FREE, label: 'Бесплатно' },
-  { path: ROUTES.HAPP_VPN, label: 'VPN' },
-  { path: ROUTES.HAPP_DOWNLOAD, label: 'Скачать' },
-  { path: ROUTES.HAPP_TELEGRAM, label: 'Telegram' },
-  { path: ROUTES.INCY_VPN, label: 'INCY' },
+  { path: ROUTES.INCY_VPN, label: 'INCY vs Happ' },
+  { path: ROUTES.LOGIN, label: 'Личный кабинет' },
 ];
 
 export default function Footer() {
   return (
-    <footer style={{ background: '#0B0D12', padding: '52px clamp(20px,4vw,56px) 28px' }}>
-      <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 36,
-            marginBottom: 36,
-          }}
-        >
+    <footer style={{ background: '#050805', borderTop: '1px solid var(--color-line)' }}>
+      <div className="shell" style={{ paddingTop: '2.75rem', paddingBottom: '2.75rem', fontSize: '0.9rem' }}>
+        <div className="grid-footer">
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 12 }}>
-              <span
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 11,
-                  background: '#fff',
-                  color: '#0B0D12',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: 18,
-                  fontWeight: 800,
-                  fontStyle: 'italic',
-                }}
-              >
-                H
-              </span>
-              <span style={{ fontSize: 18, fontWeight: 800, color: '#fff' }}>Happ</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.5rem' }}>
+              <img className="brand-logo" src="/favicon.svg" alt="INCY" width={36} height={36} />
+              <span className="brand-wm">INCY</span>
             </div>
-            <p style={{ fontSize: 13, color: '#3F424D', lineHeight: 1.9 }}>
-              Конфигурацию предоставляет Zoomersky FZE
-              <br />
-              License No. UAE-FZE-2023-38521
-              <br />
-              Business Bay, Dubai, UAE
+            <p style={{ fontSize: '0.82rem', color: 'var(--color-ink-faint)', maxWidth: '28ch' }}>
+              Клиент для VPN по ключу-подписке. Ключи и подписка — в сервисе Зумерский VPN.
             </p>
           </div>
           <div>
-            <h4
-              style={{
-                fontSize: 11,
-                fontWeight: 800,
-                textTransform: 'uppercase',
-                letterSpacing: 1,
-                color: '#3F424D',
-                marginBottom: 14,
-              }}
-            >
-              Скачать Happ
-            </h4>
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+            <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--color-ink)' }}>Скачать INCY</p>
+            <ul className="mt-2" style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
               <li>
-                <a className="ftr-link" href={DOWNLOADS.ios} target="_blank" rel="noopener noreferrer">
+                <a href={INCY_DOWNLOADS.ios} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-ink-soft)' }}>
                   App Store (iOS)
                 </a>
               </li>
               <li>
-                <a className="ftr-link" href={DOWNLOADS.android} target="_blank" rel="noopener noreferrer">
+                <a href={INCY_DOWNLOADS.android} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-ink-soft)' }}>
                   Google Play (Android)
                 </a>
               </li>
               <li>
-                <a className="ftr-link" href={DOWNLOADS.desktop} target="_blank" rel="noopener noreferrer">
-                  Windows / macOS
+                <a href={INCY_DOWNLOADS.desktop} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-ink-soft)' }}>
+                  GitHub (ПК)
                 </a>
               </li>
             </ul>
           </div>
           <div>
-            <h4
-              style={{
-                fontSize: 11,
-                fontWeight: 800,
-                textTransform: 'uppercase',
-                letterSpacing: 1,
-                color: '#3F424D',
-                marginBottom: 14,
-              }}
-            >
-              Сервис
-            </h4>
-            <ul style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+            <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--color-ink)' }}>Сервис</p>
+            <ul className="mt-2" style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
               {footerLinks.map((l) => (
                 <li key={l.path}>
-                  <Link className="ftr-link" to={l.path}>
+                  <Link to={l.path} style={{ color: 'var(--color-ink-soft)' }}>
                     {l.label}
                   </Link>
                 </li>
               ))}
               <li>
-                <a className="ftr-link" href={SUPPORT_URL} target="_blank" rel="noopener noreferrer">
+                <a href={SUPPORT_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-ink-soft)' }}>
                   Поддержка
                 </a>
               </li>
               <li>
-                <a className="ftr-link" href="/#pricing">
-                  Тарифы
-                </a>
-              </li>
-              <li>
-                <a className="ftr-link" href="/#faq">
-                  FAQ
+                <a href={TELEGRAM.BOT_URL} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-ink-soft)' }}>
+                  Telegram-бот
                 </a>
               </li>
             </ul>
           </div>
+          <div>
+            <p style={{ fontFamily: 'var(--font-display)', fontWeight: 700, color: 'var(--color-ink)' }}>На главной</p>
+            <ul className="mt-2" style={{ display: 'flex', flexDirection: 'column', gap: '0.375rem' }}>
+              <li>
+                <a href="/#download" style={{ color: 'var(--color-ink-soft)' }}>
+                  Скачать
+                </a>
+              </li>
+              <li>
+                <a href="/#key" style={{ color: 'var(--color-ink-soft)' }}>
+                  Ключи
+                </a>
+              </li>
+              <li>
+                <a href="/#pricing" style={{ color: 'var(--color-ink-soft)' }}>
+                  Тарифы
+                </a>
+              </li>
+              <li>
+                <Link to={ROUTES.PRIVACY} style={{ color: 'var(--color-ink-soft)' }}>
+                  Конфиденциальность
+                </Link>
+              </li>
+              <li>
+                <Link to={ROUTES.TERMS} style={{ color: 'var(--color-ink-soft)' }}>
+                  Соглашение
+                </Link>
+              </li>
+            </ul>
+          </div>
         </div>
-        <div
+        <p
+          className="mt-6"
           style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: 10,
-            paddingTop: 20,
-            borderTop: '1px solid #1A1D24',
-            fontSize: 12,
-            color: '#3F424D',
+            paddingTop: '1.25rem',
+            borderTop: '1px solid var(--color-line)',
+            fontSize: '0.78rem',
+            color: 'var(--color-ink-faint)',
           }}
         >
-          <span>© {new Date().getFullYear()} Zoomersky FZE</span>
-          <span style={{ display: 'flex', gap: 20, flexWrap: 'wrap' }}>
-            <Link className="ftr-legal" to={ROUTES.PRIVACY}>
-              Политика конфиденциальности
-            </Link>
-            <Link className="ftr-legal" to={ROUTES.TERMS}>
-              Пользовательское соглашение
-            </Link>
-          </span>
-        </div>
+          © {new Date().getFullYear()} Zoomersky FZE · INCY — клиент на Xray-core
+        </p>
       </div>
     </footer>
   );

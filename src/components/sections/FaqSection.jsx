@@ -5,12 +5,12 @@ export default function FaqSection({ items, title = 'Частые вопросы
   const [open, setOpen] = useState(null);
 
   return (
-    <section id="faq" className="section" style={{ background: '#0F1116' }}>
+    <section id="faq" className="mt-24">
       <div style={{ maxWidth: 820, margin: '0 auto' }}>
-        <p className="kicker" style={{ color: '#4A8CFF' }}>
+        <span className="chip" style={{ textTransform: 'none' }}>
           FAQ
-        </p>
-        <h2 className="h2" style={{ color: '#fff', marginBottom: 36 }}>
+        </span>
+        <h2 className="mt-3" style={{ fontSize: 'clamp(1.45rem, 3vw, 1.85rem)', marginBottom: 36 }}>
           {title}
         </h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

@@ -149,10 +149,10 @@ export default function OnboardingPage() {
         <PageMeta path={ROUTES.ONBOARDING} title={`Установка приложения — ${SITE_NAME}`} noindex />
         <section className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
           <div className="card-dark max-w-md w-full text-center">
-            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl border border-black/[0.08] overflow-hidden shadow-[0_4px_16px_rgba(0,0,0,0.06)] bg-white">
+            <div className="w-16 h-16 mx-auto mb-6 rounded-2xl border border-zoomer-border overflow-hidden shadow-[0_4px_16px_rgba(47,224,106,0.12)] bg-zoomer-card">
               <img
-                src="/icon-192.png"
-                alt="Happ"
+                src="/favicon.svg"
+                alt="INCY"
                 width={64}
                 height={64}
                 className="w-full h-full object-cover"
@@ -160,34 +160,34 @@ export default function OnboardingPage() {
             </div>
 
             <h1 className="text-xl sm:text-2xl font-bold text-happ-ink mb-3">
-              Установите приложение
+              Установите INCY
             </h1>
             <p className="text-happ-muted text-sm leading-relaxed mb-8">
               Ваш VPN работает в двух приложениях —{' '}
-              <span className="text-zoomer-neon font-medium">Happ</span> (рекомендуем) или{' '}
-              <span className="text-happ-ink font-medium">INCY</span>.
+              <span className="text-zoomer-neon font-medium">INCY</span> (рекомендуем) или{' '}
+              <span className="text-happ-ink font-medium">Happ</span>.
               Установите любое на это устройство и вернитесь сюда.
             </p>
 
             <div className="space-y-3">
               <a
-                href={downloads.happ}
+                href={downloads.incy}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={primaryBtnClass}
               >
-                <Monitor className="w-5 h-5 shrink-0" />
-                Happ — Скачать для {downloads.label}
+                <Download className="w-5 h-5 shrink-0" />
+                INCY — Скачать для {downloads.label}
               </a>
 
               <a
-                href={downloads.incy}
+                href={downloads.happ}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={secondaryBtnClass}
               >
-                <Download className="w-5 h-5 shrink-0" />
-                Скачать INCY (альтернатива)
+                <Monitor className="w-5 h-5 shrink-0" />
+                Скачать Happ (альтернатива)
               </a>
 
               <button
@@ -240,14 +240,14 @@ export default function OnboardingPage() {
 
             {isActive && subUrl ? (
               <div className="space-y-3 mb-6">
-                <a href={happImportUrl(subUrl)} className={primaryBtnClass}>
-                  <Smartphone className="w-5 h-5 shrink-0" />
-                  Добавить VPN в Happ
-                </a>
-
-                <a href={incyImportUrl(subUrl)} className={secondaryBtnClass}>
+                <a href={incyImportUrl(subUrl)} className={primaryBtnClass}>
                   <Smartphone className="w-5 h-5 shrink-0" />
                   Добавить VPN в INCY
+                </a>
+
+                <a href={happImportUrl(subUrl)} className={secondaryBtnClass}>
+                  <Smartphone className="w-5 h-5 shrink-0" />
+                  Добавить VPN в Happ
                 </a>
 
                 <div className="text-left pt-2">

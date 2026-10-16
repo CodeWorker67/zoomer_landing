@@ -48,6 +48,16 @@ const OnboardingGate = ({ children }) => {
   return children;
 };
 
+function scrollToHashTarget(hash, behavior = 'smooth') {
+  if (!hash) return false;
+  const id = hash.replace(/^#/, '');
+  if (!id) return false;
+  const el = document.getElementById(id);
+  if (!el) return false;
+  el.scrollIntoView({ behavior, block: 'start' });
+  return true;
+}
+
 function ScrollToTop() {
   const { pathname, search, hash } = useLocation();
   const navigate = useNavigate();
@@ -61,7 +71,20 @@ function ScrollToTop() {
       navigate(`${campaignLandingPath}${search}${hash}`, { replace: true });
       return;
     }
+
+    if (hash) {
+      const tryScroll = () => scrollToHashTarget(hash);
+      if (tryScroll()) return undefined;
+      const t1 = window.setTimeout(tryScroll, 50);
+      const t2 = window.setTimeout(tryScroll, 200);
+      return () => {
+        window.clearTimeout(t1);
+        window.clearTimeout(t2);
+      };
+    }
+
     window.scrollTo(0, 0);
+    return undefined;
   }, [pathname, search, hash, navigate]);
   return null;
 }
@@ -73,7 +96,7 @@ function AppShell() {
     || location.pathname === ROUTES.PROFILE;
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#fff', color: '#0F0F0F' }}>
+    <div className="min-h-screen flex flex-col">
       <ScrollToTop />
       <Header />
       <main className="flex-1">

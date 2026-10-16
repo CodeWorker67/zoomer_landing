@@ -39,7 +39,7 @@ export default function TariffRenewalSection({ showHeader = true, showPaymentMet
                   className={`flex-1 flex items-center justify-center gap-2 py-3 px-3 rounded-xl text-sm font-semibold border-2 transition-all ${
                     selected
                       ? 'border-happ-blue bg-happ-blue text-white shadow-[0_4px_14px_rgba(10,108,255,0.35)]'
-                      : 'border-happ-blue/30 bg-happ-gray text-happ-ink hover:border-happ-blue/55 hover:bg-white'
+                      : 'border-happ-blue/30 bg-happ-gray text-happ-ink hover:border-happ-blue/55 hover:bg-happ-gray/80'
                   }`}
                 >
                   {pm.id === 'card' && (

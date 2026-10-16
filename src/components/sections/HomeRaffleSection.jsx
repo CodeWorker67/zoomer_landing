@@ -27,7 +27,7 @@ const PRIZES = [
 function Quote({ children, className = '' }) {
   return (
     <div
-      className={`border-l-[3px] border-happ-blue/40 bg-happ-gray rounded-r-xl px-4 py-3 text-happ-muted text-sm md:text-[15px] leading-relaxed ${className}`}
+      className={`raffle-quote rounded-r-xl px-4 py-3 text-sm md:text-[15px] leading-relaxed ${className}`}
     >
       {children}
     </div>
@@ -125,11 +125,11 @@ export default function HomeRaffleSection() {
   }, []);
 
   return (
-    <section className="relative pt-10 pb-14 md:pt-14 md:pb-20" style={{ background: '#fff' }}>
+    <section className="relative pt-10 pb-14 md:pt-14 md:pb-20">
       <div className="absolute inset-0 bg-radial-glow pointer-events-none" />
       <div className="relative max-w-2xl mx-auto px-4 sm:px-6">
         <div className="flex justify-center mb-4">
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide bg-purple-500/15 text-purple-200 border border-purple-400/25">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wide bg-purple-500/20 text-purple-100 border border-purple-400/35">
             <Gift className="w-3.5 h-3.5" aria-hidden />
             День рождения — 2 года
           </span>
@@ -145,7 +145,7 @@ export default function HomeRaffleSection() {
             loop
             playsInline
             preload="auto"
-            aria-label="Розыгрыш призов Зумерский VPN для Happ"
+            aria-label="Розыгрыш призов Зумерский VPN"
           />
           <div
             className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 z-10 inline-flex items-center gap-1 rounded-full bg-[#222]/95 px-1.5 py-1 shadow-lg"
@@ -176,44 +176,50 @@ export default function HomeRaffleSection() {
           </div>
         </div>
 
-        <div className="card-dark text-left space-y-4 border-purple-500/20">
-          <p className="text-happ-ink text-base md:text-lg leading-relaxed">
+        <div className="card-dark text-left space-y-4 border-purple-400/25">
+          <p className="text-base md:text-lg leading-relaxed" style={{ color: 'var(--color-ink)' }}>
             <span className="mr-1" aria-hidden>
               🎁
             </span>
-            <strong className="font-bold text-happ-ink">ЗУМЕРСКИЙ ДАРИТ — 100 ПРИЗОВЫХ МЕСТ! iPhone 18 pro</strong>
-            , iPhone duo и еще 98 ценных призов!
+            <strong className="font-bold" style={{ color: 'var(--color-brand-ink)' }}>
+              ЗУМЕРСКИЙ ДАРИТ — 100 ПРИЗОВЫХ МЕСТ! iPhone 18 pro
+            </strong>
+            <span style={{ color: 'var(--color-ink-soft)' }}>
+              , iPhone duo и еще 98 ценных призов!
+            </span>
             <span className="ml-0.5" aria-hidden>
               ⚡️
             </span>
           </p>
 
-          <p className="text-happ-muted text-sm md:text-base leading-relaxed">
+          <p className="text-sm md:text-base leading-relaxed" style={{ color: 'var(--color-ink-soft)' }}>
             Нам 2 года! В честь дня рождения разыгрываем технику, игры, денежные призы и годовые подписки{' '}
             <span aria-hidden>🔥</span>
           </p>
 
-          <div className="rounded-xl border border-zoomer-border/80 overflow-hidden bg-happ-gray/80">
+          <div className="raffle-panel rounded-xl border border-[var(--color-line-strong)] overflow-hidden">
             <button
               type="button"
               onClick={() => setPrizesOpen((v) => !v)}
-              className="w-full flex items-center justify-between gap-3 px-4 py-3.5 text-left hover:bg-white/[0.03] transition-colors"
+              className="w-full flex items-center justify-between gap-3 px-4 py-3.5 text-left hover:bg-white/[0.04] transition-colors"
               aria-expanded={prizesOpen}
             >
-              <span className="text-happ-ink font-semibold text-sm md:text-base">Что можно выиграть:</span>
+              <span className="font-semibold text-sm md:text-base" style={{ color: 'var(--color-ink)' }}>
+                Что можно выиграть:
+              </span>
               <ChevronDown
                 className={`w-5 h-5 text-zoomer-neon shrink-0 transition-transform duration-200 ${prizesOpen ? 'rotate-180' : ''}`}
                 aria-hidden
               />
             </button>
             {prizesOpen && (
-              <ul className="px-4 pb-4 space-y-2.5 border-t border-zoomer-border/60 pt-3">
+              <ul className="px-4 pb-4 space-y-2.5 border-t border-[var(--color-line)] pt-3">
                 {PRIZES.map(({ places, prize, icon }) => (
-                  <li key={places} className="text-sm md:text-[15px] text-happ-muted leading-snug">
+                  <li key={places} className="text-sm md:text-[15px] leading-snug" style={{ color: 'var(--color-ink-soft)' }}>
                     <span className="mr-1.5" aria-hidden>
                       {icon}
                     </span>
-                    <strong className="text-happ-ink font-semibold">{places}:</strong> {prize}
+                    <strong className="font-semibold" style={{ color: 'var(--color-ink)' }}>{places}:</strong> {prize}
                   </li>
                 ))}
               </ul>
@@ -221,7 +227,7 @@ export default function HomeRaffleSection() {
           </div>
 
           <div className="space-y-3 pt-1">
-            <p className="text-happ-ink font-semibold text-sm md:text-base">
+            <p className="font-semibold text-sm md:text-base" style={{ color: 'var(--color-ink)' }}>
               <span className="mr-1" aria-hidden>
                 🎟
               </span>
@@ -229,10 +235,10 @@ export default function HomeRaffleSection() {
             </p>
             <Quote>Покупай или продлевай подписку, а также дари VPN близким на сайте или через бота.</Quote>
             <Quote>
-              <strong className="text-happ-ink">За каждый оплаченный месяц — 1 билетик:</strong>
+              <strong style={{ color: 'var(--color-ink)' }}>За каждый оплаченный месяц — 1 билетик:</strong>
             </Quote>
             <Quote>3 месяца = 3 билета, год = 12 билетов.</Quote>
-            <p className="text-happ-muted text-sm md:text-[15px] leading-relaxed pt-1">
+            <p className="text-sm md:text-[15px] leading-relaxed pt-1" style={{ color: 'var(--color-ink-soft)' }}>
               Все билетики складываются. Количество покупок и подарков не ограничено!
             </p>
           </div>

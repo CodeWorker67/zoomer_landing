@@ -1,39 +1,8 @@
+@import './styles/incy-home.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  background: #fff;
-  color: #0f0f0f;
-  font-family: Manrope, -apple-system, "Helvetica Neue", sans-serif;
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-
-a {
-  color: #0a6cff;
-  text-decoration: none;
-}
-
-a:hover {
-  color: #0052cc;
-}
-
-ul {
-  list-style: none;
-}
 
 .page-content ul {
   list-style: disc;
@@ -50,8 +19,12 @@ ul {
 }
 
 .page-content strong {
-  color: #0f0f0f;
+  color: var(--color-ink);
   font-weight: 800;
+}
+
+ul {
+  list-style: none;
 }
 
 button {
@@ -128,15 +101,16 @@ button {
   border-radius: 16px;
   font-size: 17px;
   font-weight: 800;
-  background: #0a6cff;
-  color: #fff;
-  box-shadow: 0 8px 26px rgba(10, 108, 255, 0.32);
-  transition: background 0.15s;
+  background: var(--gradient-accent);
+  color: #04140a;
+  box-shadow: 0 12px 30px -10px var(--color-glow);
+  transition: transform 0.18s var(--ease), box-shadow 0.22s var(--ease);
 }
 
 .btn-primary:hover {
-  background: #0052cc;
-  color: #fff;
+  color: #04140a;
+  box-shadow: 0 18px 44px -12px var(--color-glow);
+  transform: translateY(-2px);
 }
 
 .btn-outline {
@@ -147,15 +121,16 @@ button {
   border-radius: 16px;
   font-size: 17px;
   font-weight: 700;
-  background: #fff;
-  color: #0f0f0f;
-  border: 1.5px solid rgba(0, 0, 0, 0.14);
-  transition: background 0.15s;
+  background: #ffffff05;
+  color: var(--color-ink);
+  border: 1.5px solid var(--color-line-strong);
+  transition: background 0.15s, border-color 0.15s;
 }
 
 .btn-outline:hover {
-  background: #f4f5f9;
-  color: #0f0f0f;
+  background: var(--color-brand-tint);
+  color: var(--color-ink);
+  border-color: var(--color-brand);
 }
 
 .nav-login {
@@ -275,25 +250,6 @@ button {
   }
 }
 
-.hero-grid {
-  max-width: 1440px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(340px, 520px) minmax(0, 1fr);
-  gap: 48px;
-  align-items: center;
-}
-
-@media (max-width: 1039px) {
-  .hero-grid {
-    grid-template-columns: 1fr;
-  }
-  .hero-grid > :first-child {
-    min-width: 0;
-    max-width: 100%;
-  }
-}
-
 .three {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -312,7 +268,7 @@ button {
   gap: 16px;
   flex-wrap: nowrap;
   padding: 24px 28px;
-  border-bottom: 1.5px solid rgba(0, 0, 0, 0.07);
+  border-bottom: 1px solid var(--color-line);
 }
 
 .price-row:last-child {
@@ -320,8 +276,8 @@ button {
 }
 
 .price-row--hot {
-  background: #f0f5ff;
-  border-left: 3px solid #0a6cff;
+  background: #2fe06a0f;
+  border-left: 3px solid var(--color-brand);
   position: relative;
 }
 
@@ -341,25 +297,28 @@ button {
   border-radius: 12px;
   font-size: 14px;
   font-weight: 700;
-  background: #f4f5f9;
-  color: #0f0f0f;
-  transition: background 0.15s;
+  background: var(--color-brand-tint);
+  color: var(--color-ink);
+  border: 1px solid var(--color-line);
+  transition: background 0.15s, border-color 0.15s;
 }
 
 .price-btn:hover {
-  background: #e4e6ee;
-  color: #0f0f0f;
+  background: #2fe06a2e;
+  color: var(--color-ink);
+  border-color: var(--color-brand);
 }
 
 .price-btn--hot {
-  background: #0a6cff;
-  color: #fff;
-  box-shadow: 0 2px 8px rgba(10, 108, 255, 0.3);
+  background: var(--gradient-accent);
+  color: #04140a;
+  border: none;
+  box-shadow: 0 8px 24px -8px var(--color-glow);
 }
 
 .price-btn--hot:hover {
-  background: #0052cc;
-  color: #fff;
+  color: #04140a;
+  box-shadow: 0 12px 28px -6px var(--color-glow);
 }
 
 @media (max-width: 619px) {
@@ -378,10 +337,10 @@ button {
 }
 
 .faq-item {
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border: 1px solid var(--color-line);
   border-radius: 18px;
   overflow: hidden;
-  background: #181a21;
+  background: var(--color-panel);
 }
 
 .faq-q {
@@ -643,11 +602,11 @@ button {
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #0f0f0f;
+  color: var(--color-ink);
 }
 
 .brand:hover {
-  color: #0f0f0f;
+  color: var(--color-ink);
 }
 
 .brand-mark {
@@ -714,20 +673,7 @@ button {
   line-height: 1.08;
 }
 
-.feat-card,
-.step-card {
-  border-radius: 22px;
-  padding: 34px;
-}
-
-.feat-card {
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.07);
-}
-
-.step-card {
-  background: #f4f5f9;
-}
+/* feat-card / step-card — стили карточек из incy-home.css (.card) */
 
 .icon-wrap {
   width: 46px;
@@ -764,7 +710,7 @@ button {
 
 .card-text {
   font-size: 15px;
-  color: #5a5a6a;
+  color: var(--color-ink-soft);
   line-height: 1.6;
 }
 
@@ -816,21 +762,146 @@ button {
 }
 
 .card-dark {
-  background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.07);
+  background: color-mix(in srgb, var(--color-panel) 88%, #2fe06a0a);
+  border: 1px solid var(--color-line-strong);
   border-radius: 22px;
   padding: 1.5rem;
+  color: var(--color-ink-soft);
+}
+
+.card-dark strong,
+.card-dark h1,
+.card-dark h2,
+.card-dark h3 {
+  color: var(--color-ink);
+}
+
+.card-dark p,
+.card-dark li,
+.card-dark span:not([class*='text-']) {
+  color: inherit;
 }
 
 .text-gradient {
-  background: linear-gradient(90deg, #22b8f0 0%, #4a7bff 45%, #8b5cf6 100%);
+  background: linear-gradient(120deg, #4af07d 10%, #b4e600 92%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
 }
 
 .bg-radial-glow {
-  background: radial-gradient(ellipse at 50% 0%, rgba(10, 108, 255, 0.08) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 50% 0%, #2fe06a14 0%, transparent 60%);
+}
+
+.raffle-quote {
+  color: var(--color-ink-soft);
+  background: color-mix(in srgb, var(--color-bg-2) 70%, #2fe06a12);
+  border: 1px solid var(--color-line-strong);
+  border-left: 3px solid var(--color-brand);
+}
+
+.raffle-quote strong {
+  color: var(--color-ink);
+  font-weight: 700;
+}
+
+.raffle-panel {
+  background: color-mix(in srgb, var(--color-bg-2) 75%, #2fe06a10);
+}
+
+.cta-support-outline {
+  background: rgba(4, 20, 10, 0.14);
+  color: #04140a;
+  border: 2px solid rgba(4, 20, 10, 0.45);
+  font-weight: 700;
+}
+
+.cta-support-outline:hover {
+  background: rgba(4, 20, 10, 0.24);
+  color: #04140a;
+  border-color: rgba(4, 20, 10, 0.65);
+}
+
+.login-auth {
+  color: var(--color-ink-soft);
+}
+
+.login-auth__title {
+  color: var(--color-ink);
+  font-weight: 800;
+}
+
+.login-auth__lead {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+
+.login-auth__hint {
+  color: var(--color-ink-soft);
+}
+
+.login-auth__legal {
+  color: var(--color-ink-faint);
+}
+
+.login-auth__legal a {
+  color: var(--color-brand-ink);
+  font-weight: 600;
+}
+
+.login-auth__legal a:hover {
+  color: var(--color-brand);
+}
+
+.auth-method-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 1rem;
+  background: var(--color-panel);
+  border: 2px solid var(--color-line-strong);
+  box-shadow: 0 4px 16px rgba(47, 224, 106, 0.08);
+  transition:
+    border-color 0.2s var(--ease),
+    background 0.2s var(--ease),
+    box-shadow 0.2s var(--ease),
+    transform 0.2s var(--ease);
+}
+
+@media (min-width: 640px) {
+  .auth-method-btn {
+    width: 5rem;
+    height: 5rem;
+  }
+}
+
+.auth-method-btn:hover,
+.group:hover .auth-method-btn {
+  border-color: var(--color-brand);
+  background: color-mix(in srgb, var(--color-panel) 80%, #2fe06a18);
+  box-shadow: 0 4px 22px rgba(47, 224, 106, 0.22);
+}
+
+.auth-method-label {
+  font-size: 0.875rem;
+  color: var(--color-ink-soft);
+  font-weight: 600;
+  transition: color 0.2s var(--ease);
+}
+
+.group:hover .auth-method-label {
+  color: var(--color-ink);
+}
+
+.login-auth .card-dark label,
+.login-auth .card-dark p {
+  color: var(--color-ink-soft);
+}
+
+.login-auth .card-dark h2 {
+  color: var(--color-ink);
 }
 
 .btn-secondary {
@@ -841,27 +912,28 @@ button {
   border-radius: 16px;
   font-size: 17px;
   font-weight: 700;
-  background: #fff;
-  color: #0f0f0f;
-  border: 1.5px solid rgba(0, 0, 0, 0.14);
-  transition: background 0.15s;
+  background: #ffffff05;
+  color: var(--color-ink);
+  border: 1.5px solid var(--color-line-strong);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 
 .btn-secondary:hover {
-  background: #f4f5f9;
-  color: #0f0f0f;
+  background: var(--color-brand-tint);
+  border-color: var(--color-brand);
+  color: var(--color-ink);
 }
 
 .btn-ghost {
   font-size: 14px;
   font-weight: 600;
-  color: #5a5a6a;
+  color: var(--color-ink-soft);
   padding: 10px 16px;
   border-radius: 980px;
 }
 
 .btn-ghost:hover {
-  color: #0f0f0f;
+  color: var(--color-ink);
 }
 
 .auth-alt-btn {
@@ -873,20 +945,20 @@ button {
   gap: 12px;
   padding: 14px 16px;
   border-radius: 12px;
-  border: 1.5px solid rgba(0, 0, 0, 0.1);
-  background: #fff;
+  border: 1.5px solid var(--color-line-strong);
+  background: var(--color-panel);
   font-size: 14px;
   font-weight: 600;
-  color: #0f0f0f;
+  color: var(--color-ink);
   text-decoration: none;
   transition: background 0.15s, border-color 0.15s;
   cursor: pointer;
 }
 
 .auth-alt-btn:hover {
-  background: #f4f5f9;
-  border-color: rgba(10, 108, 255, 0.35);
-  color: #0f0f0f;
+  background: var(--color-brand-tint);
+  border-color: var(--color-brand);
+  color: var(--color-ink);
 }
 
 .video-volume-pill-slider {
