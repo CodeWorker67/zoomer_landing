@@ -38,17 +38,6 @@ import {
 
 const VALID_TABS = new Set(['overview', 'subscription', 'buy', 'support']);
 
-/** Кнопка триала: явный флаг API или эвристика, если бекенд ещё без trial_available. */
-function computeTrialAvailable(sub, me) {
-  const explicit = me?.trial_available ?? sub?.trial_available;
-  if (explicit === true) return true;
-  if (explicit === false) return false;
-  const isActive = sub?.active || sub?.pro?.active;
-  const hasPaid =
-    sub?.has_paid_subscription === true || sub?.pro?.has_paid_subscription === true;
-  return !isActive && !hasPaid;
-}
-
 export default function ProfilePage() {
   const location = useLocation();
   const initialTab = VALID_TABS.has(location.state?.tab) ? location.state.tab : 'overview';
@@ -113,27 +102,20 @@ function OverviewTab({ onGoTab }) {
   const [sub, setSub] = useState(null);
   const [raffleTickets, setRaffleTickets] = useState(0);
   const [loading, setLoading] = useState(true);
-  const [trialAvailable, setTrialAvailable] = useState(false);
   const [trialActivating, setTrialActivating] = useState(false);
 
   const loadOverview = useCallback(async () => {
-    let subData = null;
-    let meData = null;
     try {
       const [subRes, meRes] = await Promise.all([
         userApi.subscription(),
         authApi.me(),
       ]);
-      subData = subRes.data;
-      meData = meRes.data;
-      setSub(subData);
+      setSub(subRes.data);
       setRaffleTickets(
-        Math.max(parseRaffleTicketCount(subData), parseRaffleTicketCount(meData)),
+        Math.max(parseRaffleTicketCount(subRes.data), parseRaffleTicketCount(meRes.data)),
       );
-      setTrialAvailable(computeTrialAvailable(subData, meData));
     } catch {
       setSub(null);
-      setTrialAvailable(false);
     } finally {
       setLoading(false);
     }
@@ -149,15 +131,11 @@ function OverviewTab({ onGoTab }) {
       const { data } = await trialApi.activate();
       if (data?.success) {
         toast.success('Пробный доступ активирован!');
-        setTrialAvailable(false);
         await loadOverview();
       }
     } catch (err) {
       const msg = err.response?.data?.error || err.response?.data?.detail || 'Не удалось активировать пробный доступ';
       toast.error(msg);
-      if (String(msg).toLowerCase().includes('триал')) {
-        setTrialAvailable(false);
-      }
     } finally {
       setTrialActivating(false);
     }
@@ -171,6 +149,7 @@ function OverviewTab({ onGoTab }) {
     sub?.plan_name
     || sub?.pro?.plan_name
     || (isActive && !hasPaid ? 'Пробный' : 'Подписка');
+  const showTrialCta = !isActive && !hasPaid;
 
   if (loading) return <LoadingBlock />;
 
@@ -200,20 +179,6 @@ function OverviewTab({ onGoTab }) {
         </a>
       </div>
 
-      {trialAvailable && (
-        <button
-          type="button"
-          onClick={handleActivateTrial}
-          disabled={trialActivating}
-          className="w-full flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl border-2 border-happ-blue/50 bg-happ-blue/[0.08] text-happ-blue font-semibold hover:bg-happ-blue/12 hover:border-happ-blue/70 transition-colors disabled:opacity-60"
-        >
-          {trialActivating ? (
-            <Loader2 className="w-5 h-5 animate-spin shrink-0" aria-hidden />
-          ) : null}
-          Попробовать бесплатно
-        </button>
-      )}
-
       <Link
         to={`${ROUTES.ONBOARDING}?setup=1`}
         className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-zoomer-neon-dim to-zoomer-neon hover:opacity-95 transition-opacity group"
@@ -239,6 +204,19 @@ function OverviewTab({ onGoTab }) {
           <p className="text-sm text-zoomer-neon/90 mb-4">Активна до {expires}</p>
         ) : (
           <p className="text-sm text-red-400 mb-4">Подписка не активна</p>
+        )}
+        {showTrialCta && (
+          <button
+            type="button"
+            onClick={handleActivateTrial}
+            disabled={trialActivating}
+            className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl text-sm font-semibold bg-happ-blue text-white hover:bg-happ-blue-hover transition-colors disabled:opacity-60 mb-4"
+          >
+            {trialActivating ? (
+              <Loader2 className="w-4 h-4 animate-spin shrink-0" aria-hidden />
+            ) : null}
+            Попробовать бесплатно
+          </button>
         )}
         {isActive && (
           <div className="mb-5">
