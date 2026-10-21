@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { RouteMeta } from '@components/seo/PageMeta';
 import { Link, useLocation } from 'react-router-dom';
 import {
@@ -18,7 +18,7 @@ import {
   CreditCard,
 } from 'lucide-react';
 import useAuthStore from '@stores/authStore';
-import { authApi, userApi } from '@services/api';
+import { authApi, userApi, trialApi } from '@services/api';
 import Button from '@components/ui/Button';
 import toast from 'react-hot-toast';
 import DashboardLayout from '@components/dashboard/DashboardLayout';
@@ -102,18 +102,24 @@ function OverviewTab({ onGoTab }) {
   const [sub, setSub] = useState(null);
   const [raffleTickets, setRaffleTickets] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [trialAvailable, setTrialAvailable] = useState(false);
+  const [trialActivating, setTrialActivating] = useState(false);
 
-  useEffect(() => {
+  const loadOverview = useCallback(() => {
     let tickets = 0;
-    Promise.all([
+    return Promise.all([
       userApi.subscription()
         .then(({ data }) => {
           setSub(data);
+          if (data.trial_available === true) setTrialAvailable(true);
+          else if (data.trial_available === false) setTrialAvailable(false);
           tickets = Math.max(tickets, parseRaffleTicketCount(data));
         })
         .catch(() => setSub(null)),
       authApi.me()
         .then(({ data }) => {
+          if (data.trial_available === true) setTrialAvailable(true);
+          else if (data.trial_available === false) setTrialAvailable(false);
           tickets = Math.max(tickets, parseRaffleTicketCount(data));
         })
         .catch(() => {}),
@@ -122,6 +128,30 @@ function OverviewTab({ onGoTab }) {
       setLoading(false);
     });
   }, []);
+
+  useEffect(() => {
+    loadOverview();
+  }, [loadOverview]);
+
+  const handleActivateTrial = async () => {
+    setTrialActivating(true);
+    try {
+      const { data } = await trialApi.activate();
+      if (data?.success) {
+        toast.success('Пробный доступ активирован!');
+        setTrialAvailable(false);
+        await loadOverview();
+      }
+    } catch (err) {
+      const msg = err.response?.data?.error || err.response?.data?.detail || 'Не удалось активировать пробный доступ';
+      toast.error(msg);
+      if (String(msg).toLowerCase().includes('триал')) {
+        setTrialAvailable(false);
+      }
+    } finally {
+      setTrialActivating(false);
+    }
+  };
 
   const isActive = sub?.active || sub?.pro?.active;
   const expires = sub?.expires || sub?.pro?.expires;
@@ -159,6 +189,20 @@ function OverviewTab({ onGoTab }) {
           <ExternalLink className="w-3.5 h-3.5 shrink-0" aria-hidden />
         </a>
       </div>
+
+      {trialAvailable && (
+        <button
+          type="button"
+          onClick={handleActivateTrial}
+          disabled={trialActivating}
+          className="w-full flex items-center justify-center gap-2 py-3.5 px-5 rounded-xl border-2 border-happ-blue/50 bg-happ-blue/[0.08] text-happ-blue font-semibold hover:bg-happ-blue/12 hover:border-happ-blue/70 transition-colors disabled:opacity-60"
+        >
+          {trialActivating ? (
+            <Loader2 className="w-5 h-5 animate-spin shrink-0" aria-hidden />
+          ) : null}
+          Попробовать бесплатно
+        </button>
+      )}
 
       <Link
         to={`${ROUTES.ONBOARDING}?setup=1`}
@@ -370,7 +414,10 @@ function BuyTab() {
           Выберите срок продления текущей подписки. VLESS-ключ и ссылка в Happ останутся прежними —
           меняется только оплаченный период доступа.
         </p>
-        <p className="text-sm text-happ-muted leading-relaxed border-t border-zoomer-border pt-3">
+        <p className="text-sm font-semibold text-zoomer-neon leading-relaxed border-t border-zoomer-border pt-3 mb-3">
+          💯Мы даем гарантию возврата средств, если VPN не заработает!
+        </p>
+        <p className="text-sm text-happ-muted leading-relaxed">
           🎟️Покупая любой тариф от 1 месяца, вы автоматически участвуете в розыгрыше более 100
           призов🎟️
         </p>

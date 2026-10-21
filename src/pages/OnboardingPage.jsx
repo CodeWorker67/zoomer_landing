@@ -10,11 +10,10 @@ import {
   ArrowRight,
   Smartphone,
   Copy,
-  Loader2,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import useAuthStore from '@stores/authStore';
-import { userApi, trialApi } from '@services/api';
+import { userApi } from '@services/api';
 import { ROUTES, APP_DOWNLOAD, happImportUrl, incyImportUrl } from '@utils/constants';
 import { SITE_NAME } from '@utils/seo';
 import { detectPlatform } from '@utils/platform';
@@ -31,7 +30,7 @@ export default function OnboardingPage() {
   const [searchParams] = useSearchParams();
   const isSetupFlow = searchParams.get('setup') === '1';
   const { user } = useAuthStore();
-  const [step, setStep] = useState(isSetupFlow ? 'install' : 'loading');
+  const [step, setStep] = useState('install');
   const [sub, setSub] = useState(null);
   const [keys, setKeys] = useState(null);
   const [copied, setCopied] = useState(false);
@@ -43,6 +42,11 @@ export default function OnboardingPage() {
   const expires = sub?.expires || sub?.pro?.expires;
 
   useEffect(() => {
+    if (!isSetupFlow) {
+      navigate(ROUTES.DASHBOARD, { state: { tab: 'buy' }, replace: true });
+      return undefined;
+    }
+
     let cancelled = false;
 
     const fetchSubscriptionData = async () => {
@@ -63,31 +67,9 @@ export default function OnboardingPage() {
       }
     };
 
-    const init = async () => {
-      if (isSetupFlow) {
-        await fetchSubscriptionData();
-        return;
-      }
-
-      try {
-        const trialRes = await trialApi.activate();
-        if (!cancelled && trialRes.data?.success) {
-          toast.success('Пробный доступ активирован!');
-        }
-      } catch (err) {
-        const msg = err.response?.data?.error || err.response?.data?.detail || '';
-        if (!msg.toLowerCase().includes('триал')) {
-          console.warn('Trial activation:', msg);
-        }
-      }
-
-      await fetchSubscriptionData();
-      if (!cancelled) setStep('install');
-    };
-
-    init();
+    fetchSubscriptionData();
     return () => { cancelled = true; };
-  }, [isSetupFlow]);
+  }, [isSetupFlow, navigate]);
 
   const finishOnboarding = () => {
     if (user?.id) markOnboardingComplete(user.id);
@@ -102,19 +84,8 @@ export default function OnboardingPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  if (step === 'loading') {
-    return (
-      <>
-        <PageMeta path={ROUTES.ONBOARDING} title={`Загрузка — ${SITE_NAME}`} noindex />
-        <section className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
-          <div className="card-dark text-center py-16 px-8 max-w-md w-full">
-            <Loader2 className="w-10 h-10 text-zoomer-neon animate-spin mx-auto mb-4" />
-            <p className="text-happ-ink font-semibold mb-1">Подготовка личного кабинета</p>
-            <p className="text-happ-faint text-sm">Активируем пробный доступ...</p>
-          </div>
-        </section>
-      </>
-    );
+  if (!isSetupFlow) {
+    return null;
   }
 
   if (step === 'renew') {

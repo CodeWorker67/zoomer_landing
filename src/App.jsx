@@ -9,7 +9,6 @@ import Header from '@components/navigation/Header';
 import Footer from '@components/navigation/Footer';
 import Button from '@components/ui/Button';
 import { ROUTES } from '@utils/constants';
-import { isOnboardingComplete } from '@utils/onboarding';
 import { capturePartnerFromUrl } from '@utils/partner';
 
 import HomePage from '@pages/HomePage';
@@ -37,14 +36,6 @@ const queryClient = new QueryClient({
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuthStore();
   if (!isAuthenticated) return <Navigate to={ROUTES.LOGIN} replace />;
-  return children;
-};
-
-const OnboardingGate = ({ children }) => {
-  const { user } = useAuthStore();
-  if (user?.id && !isOnboardingComplete(user.id)) {
-    return <Navigate to={ROUTES.ONBOARDING} replace />;
-  }
   return children;
 };
 
@@ -92,10 +83,10 @@ function AppShell() {
             <Route path={ROUTES.TERMS} element={<TermsPage />} />
             <Route path={ROUTES.CHECKOUT} element={<CheckoutPage />} />
             <Route path={ROUTES.SUCCESS} element={<SuccessPage />} />
-            <Route path={ROUTES.PROFILE} element={<ProtectedRoute><OnboardingGate><ProfilePage /></OnboardingGate></ProtectedRoute>} />
-            <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute><OnboardingGate><ProfilePage /></OnboardingGate></ProtectedRoute>} />
-            <Route path={ROUTES.SETTINGS} element={<ProtectedRoute><OnboardingGate><SettingsPage /></OnboardingGate></ProtectedRoute>} />
-            <Route path={ROUTES.EARNINGS} element={<ProtectedRoute><OnboardingGate><EarningsPage /></OnboardingGate></ProtectedRoute>} />
+            <Route path={ROUTES.PROFILE} element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+            <Route path={ROUTES.DASHBOARD} element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+            <Route path={ROUTES.SETTINGS} element={<ProtectedRoute><SettingsPage /></ProtectedRoute>} />
+            <Route path={ROUTES.EARNINGS} element={<ProtectedRoute><EarningsPage /></ProtectedRoute>} />
             {/* Редиректы со старых маршрутов */}
             <Route path="/pricing" element={<Navigate to={ROUTES.HOME} replace />} />
             <Route path="/about" element={<Navigate to={ROUTES.HAPP} replace />} />

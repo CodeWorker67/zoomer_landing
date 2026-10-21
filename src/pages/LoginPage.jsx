@@ -7,6 +7,7 @@ import useAuthStore from '@stores/authStore';
 import Button from '@components/ui/Button';
 import toast from 'react-hot-toast';
 import { ROUTES, BRAND_META } from '@utils/constants';
+import { navigateAfterAuth } from '@utils/authRedirect';
 import { buildTelegramBotUrl } from '@utils/botLink';
 import {
   initGoogleAuth,
@@ -66,7 +67,10 @@ const METHODS = [
 export default function LoginPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const redirect = searchParams.get('redirect') || ROUTES.ONBOARDING;
+  const redirect = searchParams.get('redirect');
+  const goAfterAuth = useCallback(() => {
+    navigateAfterAuth(navigate, redirect);
+  }, [navigate, redirect]);
   const {
     isAuthenticated,
     sendCode,
@@ -91,18 +95,18 @@ export default function LoginPage() {
   const [phoneSession, setPhoneSession] = useState(null);
 
   useEffect(() => {
-    if (isAuthenticated) navigate(redirect);
-  }, [isAuthenticated, navigate, redirect]);
+    if (isAuthenticated) goAfterAuth();
+  }, [isAuthenticated, goAfterAuth]);
 
   const handleGoogleSuccess = useCallback(async (credential) => {
     const result = await googleLogin(credential);
     if (result.success) {
       toast.success('Вы вошли через Google!');
-      navigate(redirect);
+      goAfterAuth();
     } else {
       toast.error(result.error);
     }
-  }, [googleLogin, navigate, redirect]);
+  }, [googleLogin, goAfterAuth]);
 
   useEffect(() => {
     initGoogleAuth(handleGoogleSuccess);
@@ -158,7 +162,7 @@ export default function LoginPage() {
     const result = await passwordLogin(email, password);
     if (result.success) {
       toast.success('Вы вошли!');
-      navigate(redirect);
+      goAfterAuth();
     } else {
       toast.error(result.error);
     }
@@ -179,7 +183,7 @@ export default function LoginPage() {
     const result = await verifyCode(email, code);
     if (result.success) {
       toast.success('Вы вошли!');
-      navigate(redirect);
+      goAfterAuth();
     } else {
       toast.error(result.error);
     }
@@ -214,15 +218,15 @@ export default function LoginPage() {
 
   const handlePhoneAuthComplete = useCallback(async () => {
     toast.success('Вы вошли по телефону!');
-    navigate(redirect);
-  }, [navigate, redirect]);
+    goAfterAuth();
+  }, [goAfterAuth]);
 
   const handleWhatsappVerify = async (e) => {
     e.preventDefault();
     const result = await verifyWhatsAppCode(whatsappCode);
     if (result.success) {
       toast.success('Вы вошли через WhatsApp!');
-      navigate(redirect);
+      goAfterAuth();
     } else {
       toast.error(result.error);
     }
