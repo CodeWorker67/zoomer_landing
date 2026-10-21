@@ -38,6 +38,17 @@ import {
 
 const VALID_TABS = new Set(['overview', 'subscription', 'buy', 'support']);
 
+/** Кнопка триала: явный флаг API или эвристика, если бекенд ещё без trial_available. */
+function computeTrialAvailable(sub, me) {
+  const explicit = me?.trial_available ?? sub?.trial_available;
+  if (explicit === true) return true;
+  if (explicit === false) return false;
+  const isActive = sub?.active || sub?.pro?.active;
+  const hasPaid =
+    sub?.has_paid_subscription === true || sub?.pro?.has_paid_subscription === true;
+  return !isActive && !hasPaid;
+}
+
 export default function ProfilePage() {
   const location = useLocation();
   const initialTab = VALID_TABS.has(location.state?.tab) ? location.state.tab : 'overview';
@@ -105,28 +116,27 @@ function OverviewTab({ onGoTab }) {
   const [trialAvailable, setTrialAvailable] = useState(false);
   const [trialActivating, setTrialActivating] = useState(false);
 
-  const loadOverview = useCallback(() => {
-    let tickets = 0;
-    return Promise.all([
-      userApi.subscription()
-        .then(({ data }) => {
-          setSub(data);
-          if (data.trial_available === true) setTrialAvailable(true);
-          else if (data.trial_available === false) setTrialAvailable(false);
-          tickets = Math.max(tickets, parseRaffleTicketCount(data));
-        })
-        .catch(() => setSub(null)),
-      authApi.me()
-        .then(({ data }) => {
-          if (data.trial_available === true) setTrialAvailable(true);
-          else if (data.trial_available === false) setTrialAvailable(false);
-          tickets = Math.max(tickets, parseRaffleTicketCount(data));
-        })
-        .catch(() => {}),
-    ]).finally(() => {
-      setRaffleTickets(tickets);
+  const loadOverview = useCallback(async () => {
+    let subData = null;
+    let meData = null;
+    try {
+      const [subRes, meRes] = await Promise.all([
+        userApi.subscription(),
+        authApi.me(),
+      ]);
+      subData = subRes.data;
+      meData = meRes.data;
+      setSub(subData);
+      setRaffleTickets(
+        Math.max(parseRaffleTicketCount(subData), parseRaffleTicketCount(meData)),
+      );
+      setTrialAvailable(computeTrialAvailable(subData, meData));
+    } catch {
+      setSub(null);
+      setTrialAvailable(false);
+    } finally {
       setLoading(false);
-    });
+    }
   }, []);
 
   useEffect(() => {
