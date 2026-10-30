@@ -4,7 +4,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Loader2 } from 'lucide-react';
 import { paymentApi } from '@services/api';
 import useAuthStore from '@stores/authStore';
-import { ROUTES, TARIFFS, BRAND_META } from '@utils/constants';
+import { ROUTES, findTariffById, BRAND_META } from '@utils/constants';
 import Button from '@components/ui/Button';
 import toast from 'react-hot-toast';
 
@@ -25,7 +25,7 @@ export default function CheckoutPage() {
       return;
     }
 
-    if (!tariffId || !method || !TARIFFS.find((t) => t.id === tariffId) || !['sbp', 'card'].includes(method)) {
+    if (!tariffId || !method || !findTariffById(tariffId) || !['sbp', 'card'].includes(method)) {
       navigate(ROUTES.HOME);
       return;
     }
@@ -50,7 +50,7 @@ export default function CheckoutPage() {
     return () => { cancelled = true; };
   }, [tariffId, method, isAuthenticated, navigate]);
 
-  const tariff = TARIFFS.find((t) => t.id === tariffId);
+  const tariff = findTariffById(tariffId);
 
   return (
     <>

@@ -47,7 +47,7 @@ function defaultShareMessage(siteLink, telegramLink) {
     `Рекомендую ${BRAND} — быстрый VPN для Happ.\n\n`
     + `🌐 Сайт: ${siteLink}\n`
     + `📱 Telegram: ${telegramLink}\n\n`
-    + '1 день бесплатно после регистрации!'
+    + 'Триал 3 дня за 9 ₽ после регистрации!'
   );
 }
 

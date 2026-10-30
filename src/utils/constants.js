@@ -37,15 +37,36 @@ export const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 export const BRAND = 'Зумерский VPN';
 export const BRAND_META = 'Зумерский ВПН';
 
-/** Тарифы Zoomer (из dct_price бота), от большего срока к меньшему */
+/** Маркетинговое название платного триала на landing */
+export const TRIAL_OFFER_LABEL = 'Триал 3 дня за 9 ₽';
+export const TRIAL_OFFER_SHORT = '3 дня · 9 ₽';
+
+/** Тарифы Zoomer (из dct_price бота), по возрастанию срока */
+export const PAID_TRIAL_TARIFF = {
+  id: '3trial',
+  label: 'Триал 3 дня',
+  price: 9,
+  days: 3,
+  devices: 5,
+  traffic: 'Безлимит',
+  isPaidTrial: true,
+};
+
 export const TARIFFS = [
-  { id: '730', label: '2 года', price: 3699, days: 730, devices: 5, traffic: 'Безлимит' },
-  { id: '365', label: '365 дней', price: 2399, days: 365, devices: 5, traffic: 'Безлимит' },
-  { id: '180', label: '180 дней', price: 1349, days: 180, devices: 5, traffic: 'Безлимит' },
-  { id: '90', label: '90 дней', price: 749, days: 90, devices: 5, traffic: 'Безлимит', popular: true },
-  { id: '30', label: '30 дней', price: 299, days: 30, devices: 5, traffic: 'Безлимит' },
   { id: '7', label: '7 дней', price: 99, days: 7, devices: 5, traffic: 'Безлимит' },
+  { id: '30', label: '30 дней', price: 299, days: 30, devices: 5, traffic: 'Безлимит' },
+  { id: '90', label: '90 дней', price: 749, days: 90, devices: 5, traffic: 'Безлимит', popular: true },
+  { id: '180', label: '180 дней', price: 1349, days: 180, devices: 5, traffic: 'Безлимит' },
+  { id: '365', label: '365 дней', price: 2399, days: 365, devices: 5, traffic: 'Безлимит' },
+  { id: '730', label: '2 года', price: 3699, days: 730, devices: 5, traffic: 'Безлимит' },
 ];
+
+export const MY_HAPP_STAMP = 'my_happ';
+
+export function findTariffById(tariffId) {
+  if (tariffId === PAID_TRIAL_TARIFF.id) return PAID_TRIAL_TARIFF;
+  return TARIFFS.find((t) => t.id === tariffId) || null;
+}
 
 /** Все тарифы для страниц «Подписка» и главной */
 export const HOME_TARIFFS = TARIFFS;
@@ -58,7 +79,7 @@ export const PAYMENT_METHODS = [
 /** Пункты меню как на kavkazvpn.ru (без переключателя языка) */
 export const NAV_LINKS = [
   { path: ROUTES.HAPP, label: 'Подписка' },
-  { path: ROUTES.HAPP_FREE, label: 'Бесплатно' },
+  { path: ROUTES.HAPP_FREE, label: TRIAL_OFFER_LABEL },
   { path: ROUTES.HAPP_DOWNLOAD, label: 'Скачать Happ' },
 ];
 
