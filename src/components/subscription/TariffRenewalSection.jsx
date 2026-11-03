@@ -16,6 +16,7 @@ export default function TariffRenewalSection({
   showHeader = true,
   showPaymentMethod = true,
   showPaidTrial = false,
+  withRaffleTicketLabels = true,
 }) {
   const navigate = useNavigate();
   const [method, setMethod] = useState('sbp');
@@ -112,7 +113,7 @@ export default function TariffRenewalSection({
                   <span className="text-xs font-semibold text-happ-blue mb-1 block">Пробный</span>
                 )}
                 <div className="text-happ-ink font-semibold">
-                  {isTrial
+                  {isTrial || !withRaffleTicketLabels
                     ? tariff.label
                     : tariffLabelWithTickets(tariff.label, tariff.days)}
                 </div>
