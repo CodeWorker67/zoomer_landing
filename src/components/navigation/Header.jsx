@@ -46,9 +46,15 @@ export default function Header() {
   }, [isAuthenticated, inCabinet]);
 
   const navLinks = useMemo(() => {
-    if (!inCabinet || !isHappTimeStamp(profileStamp)) return NAV_LINKS;
-    return NAV_LINKS.filter((item) => item.path !== ROUTES.HAPP_FREE);
-  }, [inCabinet, profileStamp]);
+    let links = NAV_LINKS;
+    /** На странице входа не показываем промо платного триала в центральном меню. */
+    if (onLogin) {
+      links = links.filter((item) => item.path !== ROUTES.HAPP_FREE);
+    } else if (inCabinet && isHappTimeStamp(profileStamp)) {
+      links = links.filter((item) => item.path !== ROUTES.HAPP_FREE);
+    }
+    return links;
+  }, [onLogin, inCabinet, profileStamp]);
 
   const hideHappTimeTrialNav = inCabinet && isAuthenticated && isHappTimeStamp(profileStamp);
 
