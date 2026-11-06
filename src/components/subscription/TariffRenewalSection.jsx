@@ -8,6 +8,7 @@ import {
   PAID_TRIAL_TARIFF,
   PAYMENT_METHODS,
   MY_HAPP_STAMP,
+  isHappTimeStamp,
 } from '@utils/constants';
 import { userApi } from '@services/api';
 import { tariffLabelWithTickets } from '@utils/raffle';
@@ -42,7 +43,7 @@ export default function TariffRenewalSection({
     if (stamp === MY_HAPP_STAMP) {
       list = list.filter((t) => t.id !== '7');
     }
-    if (showPaidTrial && profileLoaded && !inPanel) {
+    if (showPaidTrial && profileLoaded && !inPanel && !isHappTimeStamp(stamp)) {
       list = [PAID_TRIAL_TARIFF, ...list];
     }
     return list;

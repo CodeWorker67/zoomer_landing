@@ -62,6 +62,12 @@ export const TARIFFS = [
 ];
 
 export const MY_HAPP_STAMP = 'my_happ';
+/** Кампания Happ Time: бесплатный триал 1 сутки вместо «3 дня за 9 ₽». */
+export const HAPP_TIME_STAMP = 'happ_time';
+
+export function isHappTimeStamp(stamp) {
+  return String(stamp || '').trim() === HAPP_TIME_STAMP;
+}
 
 export function findTariffById(tariffId) {
   if (tariffId === PAID_TRIAL_TARIFF.id) return PAID_TRIAL_TARIFF;
