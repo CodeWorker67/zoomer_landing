@@ -50,16 +50,19 @@ export const authApi = {
 
 export const configApi = {
   tariffs: () => api.get('/config/tariffs'),
+  trafficPackages: () => api.get('/config/traffic-packages'),
 };
 
 export const paymentApi = {
   createPayment: (data) => api.post('/payments/create', data),
+  createTrafficPayment: (data) => api.post('/payments/create-traffic', data),
   getStatus: (id) => api.get(`/payments/${id}/status`),
 };
 
 export const userApi = {
   subscription: () => api.get('/user/subscription'),
   keys: () => api.get('/user/keys'),
+  wlTraffic: () => api.get('/user/wl-traffic'),
   passwordStatus: () => api.get('/user/password-status'),
   setPassword: (data) => api.post('/user/set-password', data),
   changePassword: (data) => api.post('/user/change-password', data),

@@ -13,6 +13,7 @@ export const ROUTES = {
   SETTINGS: '/dashboard/settings',
   EARNINGS: '/dashboard/earnings',
   CHECKOUT: '/checkout',
+  TRAFFIC_BUY: '/traffic_buy',
   SUCCESS: '/success',
   PRIVACY: '/privacy',
   TERMS: '/terms',
@@ -80,6 +81,18 @@ export const HOME_TARIFFS = TARIFFS;
 export const PAYMENT_METHODS = [
   { id: 'sbp', label: 'СБП' },
   { id: 'card', label: 'Карта РФ' },
+];
+
+export const TRAFFIC_REQUIRES_ACTIVE_SUBSCRIPTION = 'В начале купите подписку!';
+
+/** Пакеты доп. трафика Антиглушилка (GB → ₽), как в боте */
+export const TRAFFIC_PACKAGES = [
+  { gb: '500', price: 1249 },
+  { gb: '250', price: 629 },
+  { gb: '100', price: 259 },
+  { gb: '50', price: 149 },
+  { gb: '20', price: 79 },
+  { gb: '10', price: 50 },
 ];
 
 /** Пункты меню как на kavkazvpn.ru (без переключателя языка) */

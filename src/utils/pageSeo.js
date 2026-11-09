@@ -71,6 +71,12 @@ export const PAGE_SEO = {
     title: 'Оплата — Зумерский VPN',
     noindex: true,
   },
+  [ROUTES.TRAFFIC_BUY]: {
+    title: 'Докупка трафика — Зумерский VPN',
+    description:
+      'Дополнительные пакеты трафика для мобильного доступа к VPN. Оплата СБП или картой РФ.',
+    noindex: true,
+  },
   [ROUTES.SUCCESS]: {
     title: 'Оплата успешна — Зумерский VPN',
     noindex: true,

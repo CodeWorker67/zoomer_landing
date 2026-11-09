@@ -101,22 +101,26 @@ export default function ProfilePage() {
 
 function OverviewTab({ onGoTab }) {
   const [sub, setSub] = useState(null);
+  const [wlTraffic, setWlTraffic] = useState(null);
   const [raffleTickets, setRaffleTickets] = useState(0);
   const [loading, setLoading] = useState(true);
   const [trialActivating, setTrialActivating] = useState(false);
 
   const loadOverview = useCallback(async () => {
     try {
-      const [subRes, meRes] = await Promise.all([
+      const [subRes, meRes, wlRes] = await Promise.all([
         userApi.subscription(),
         authApi.me(),
+        userApi.wlTraffic().catch(() => ({ data: null })),
       ]);
       setSub(subRes.data);
+      setWlTraffic(wlRes.data);
       setRaffleTickets(
         Math.max(parseRaffleTicketCount(subRes.data), parseRaffleTicketCount(meRes.data)),
       );
     } catch {
       setSub(null);
+      setWlTraffic(null);
     } finally {
       setLoading(false);
     }
@@ -155,6 +159,11 @@ function OverviewTab({ onGoTab }) {
   const happTimeFreeTrial = isHappTimeStamp(stamp);
   /** Триал в «Купить» доступен при !in_panel; та же аудитория на обзоре. */
   const showTrialCta = !inPanel && !isActive && !hasPaid;
+  const showWlUsage = isActive && wlTraffic && (wlTraffic.limit_gb > 0 || wlTraffic.used_gb > 0);
+  const wlLimitExhausted =
+    wlTraffic?.limit_exhausted
+    || (wlTraffic && wlTraffic.limit_gb > 0 && wlTraffic.used_gb >= wlTraffic.limit_gb);
+  const wlUnderLimit = isActive && showWlUsage && !wlLimitExhausted;
 
   if (loading) return <LoadingBlock />;
 
@@ -210,6 +219,14 @@ function OverviewTab({ onGoTab }) {
         ) : (
           <p className="text-sm text-red-400 mb-4">Подписка не активна</p>
         )}
+        {showWlUsage && (
+          <p className="text-xs text-happ-muted mb-3 flex justify-between gap-2">
+            <span>Антиглушилка</span>
+            <span className="text-happ-ink tabular-nums">
+              {wlTraffic.used_gb.toFixed(2)} / {wlTraffic.limit_gb.toFixed(2)} GB
+            </span>
+          </p>
+        )}
         {showTrialCta && happTimeFreeTrial && (
           <button
             type="button"
@@ -260,6 +277,51 @@ function OverviewTab({ onGoTab }) {
           </button>
         </div>
       </div>
+
+      {wlLimitExhausted && (
+        <div className="rounded-2xl border-2 border-red-500 bg-gradient-to-br from-red-600/20 via-red-800/30 to-red-950/40 p-5">
+          <div className="text-sm text-happ-ink leading-relaxed space-y-1">
+            <p className="font-medium">Сервер &quot;Антиглушилка&quot;: убран из списка серверов</p>
+            <p className="text-red-200/90 italic">
+              Для подключения к серверу необходимо пополнить трафик.
+            </p>
+          </div>
+          <Link to={ROUTES.TRAFFIC_BUY} className="block mt-5">
+            <button
+              type="button"
+              className="w-full py-2.5 px-4 rounded-xl text-sm font-semibold bg-red-500 hover:bg-red-400 text-white transition-colors"
+            >
+              Купить трафик
+            </button>
+          </Link>
+        </div>
+      )}
+
+      {wlUnderLimit && (
+        <div className="rounded-2xl border border-happ-blue/35 bg-happ-blue/[0.06] p-5">
+          <div className="text-sm text-happ-ink leading-relaxed space-y-1">
+            <p>Сервер &quot;Антиглушилка&quot;: активен</p>
+            <p>
+              Остаток трафика:{' '}
+              {typeof wlTraffic.remaining_gb === 'number'
+                ? wlTraffic.remaining_gb.toFixed(2)
+                : '—'}{' '}
+              GB
+            </p>
+            <p className="italic text-happ-muted">
+              Докупите трафик заранее для надёжного доступа к мобильному интернету
+            </p>
+          </div>
+          <Link to={ROUTES.TRAFFIC_BUY} className="block mt-5">
+            <button
+              type="button"
+              className="w-full py-2.5 px-4 rounded-xl text-sm font-semibold bg-gradient-to-r from-zoomer-neon-dim to-zoomer-neon text-zoomer-dark hover:opacity-90 transition-opacity"
+            >
+              Купить трафик
+            </button>
+          </Link>
+        </div>
+      )}
 
       <div>
         <h2 className="text-lg font-bold text-happ-ink mb-3">Быстрые действия</h2>
