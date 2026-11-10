@@ -63,11 +63,11 @@ export const TARIFFS = [
 ];
 
 export const MY_HAPP_STAMP = 'my_happ';
-/** Кампания Happ Time: бесплатный триал 1 сутки вместо «3 дня за 9 ₽». */
-export const HAPP_TIME_STAMP = 'happ_time';
+/** Метки кампаний: бесплатный триал 1 сутки вместо «3 дня за 9 ₽». */
+export const LANDING_FREE_TRIAL_STAMPS = new Set(['happ_time', 'happ_blog']);
 
 export function isHappTimeStamp(stamp) {
-  return String(stamp || '').trim() === HAPP_TIME_STAMP;
+  return LANDING_FREE_TRIAL_STAMPS.has(String(stamp || '').trim());
 }
 
 export function findTariffById(tariffId) {
